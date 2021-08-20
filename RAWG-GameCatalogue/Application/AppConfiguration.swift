@@ -10,12 +10,17 @@ import Foundation
 
 final class AppConfiguration {
     lazy var apiKey: String = {
-        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "api_key") as? String else {
+        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "apiKey") as? String else {
             fatalError("Api key must not be empty in plist")
         }
         
         return apiKey
     }()
     
-    let apiBaseUrl: String = "https://api.rawg.io/api/games"
+    lazy var apiBaseURL: String = {
+        guard let apiBaseURL = Bundle.main.object(forInfoDictionaryKey: "ApiBaseURL") as? String else {
+            fatalError("ApiBaseURL must not be empty in plist")
+        }
+        return apiBaseURL
+    }()
 }
