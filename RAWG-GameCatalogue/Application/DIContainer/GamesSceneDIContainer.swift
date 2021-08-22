@@ -5,11 +5,10 @@
 //  Created by Diffa Desyawan on 21/08/21.
 //
 
-import Foundation
+import UIKit
 
 
 final class GamesSceneDIContainer {
-    
     
     struct Dependencies {
         let apiDataTransferService: DataTransferService
@@ -20,20 +19,67 @@ final class GamesSceneDIContainer {
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
     }
-    
+    // MARK: - UseCase
     func makeSearchGamesUseCase() -> SearchGamesUseCase {
         return DefaultSearchGamesUseCase(gamesRepository: makeGamesRepository())
     }
     
+    // MARK: - Repository
     func makeGamesRepository() -> GamesRepository {
         return DefaultGamesRepository(dataTransferService: dependencies.apiDataTransferService)
     }
     
-    func makeBrowseGamesViewController(actions: BrowseGamesViewModelActions) -> BrowseGamesViewController {
-        return BrowseGamesViewController.create(with: makeBrowseGamesViewModel(actions: actions))
-    }
-    
+    // MARK: - ViewModel
     func makeBrowseGamesViewModel(actions: BrowseGamesViewModelActions) -> BrowseGamesViewModel {
         return DefaultBrowseGamesViewModel(searchGamesUseCase: makeSearchGamesUseCase(), actions: actions)
+    }
+    
+    func makeSearchGamesViewModel(actions: SearchViewModelActions) -> SearchViewModel {
+        return DefaultSearchViewModel(searchGamesUseCase: makeSearchGamesUseCase(), actions: actions)
+    }
+    
+    //MARK: - View controller
+    func makeBrowseGamesViewController() -> UIViewController {
+        let vc = BrowseGamesViewController()
+        let navController = UINavigationController(rootViewController: vc)
+        let appFlowCoordinator = makeGamesFlowCoordinator(navigationController: navController)
+        vc.viewModel = makeBrowseGamesViewModel(actions: appFlowCoordinator.makeActionsBrowseGames())
+        return navController
+    }
+    
+    func makeSearchViewController() -> UIViewController {
+        let vc = SearchViewController()
+        let navController = UINavigationController(rootViewController: vc)
+        let appFlowCoordinator = makeGamesFlowCoordinator(navigationController: navController)
+        vc.viewModel = makeSearchGamesViewModel(actions: appFlowCoordinator.makeActionsSearchGames())
+        return navController
+    }
+    
+    func makeMainTabBarViewController() -> MainTabBarViewController {
+        let viewControllers: [UIViewController] = [makeBrowseGamesViewController(), makeSearchViewController()]
+        return MainTabBarViewController.create(with: viewControllers)
+    }
+    
+    func makeAboutViewController() -> AboutViewController {
+        return AboutViewController()
+    }
+    
+    //MARK: Flow Coordinators
+    func makeGamesFlowCoordinator(navigationController: UINavigationController) -> GamesFlowCoordinator {
+        return GamesFlowCoordinator(navigationController: navigationController, dependencies: self)
+    }
+}
+
+extension GamesSceneDIContainer: GamesFlowCoordinatorDependencies {
+    func makeSeeAllGamesViewController(type: SeeAllGamesType) -> SeeAllViewController {
+        return SeeAllViewController()
+    }
+    
+    func makeGamesDetailViewController() -> DetailViewController {
+        return DetailViewController()
+    }
+    
+    func makeResultSearchViewController() -> ResultSearchViewController {
+        return ResultSearchViewController()
     }
 }

@@ -8,7 +8,9 @@
 import UIKit
 
 struct BrowseGamesViewModelActions {
-    let showGameDetails: (GamesResponseDTO) -> Void
+    let showGameDetails: (() -> Void)
+    let showSeeAllGames: ((SeeAllGamesType, String) -> Void)
+    let showAboutScene: (() -> Void)
 }
 
 enum BrowseGamesViewModelLoading {
@@ -19,8 +21,8 @@ enum BrowseGamesViewModelLoading {
 protocol BrowseGameViewModelInput {
     func viewDidLoad()
     func didLoadNextPage()
-    func didSearch(query: String)
-    func didCancelSearch()
+    func didTapRightBarItem()
+    func didTapSeeAll(type: SeeAllGamesType)
     func didSelectItem(at index: Int)
 }
 
@@ -90,16 +92,18 @@ extension DefaultBrowseGamesViewModel {
     func didLoadNextPage() {
         
     }
-    
-    func didSearch(query: String) {
         
-    }
-    
-    func didCancelSearch() {
-        
-    }
-    
     func didSelectItem(at index: Int) {
-        
+        print("Show Game Details")
+        actions?.showGameDetails()
+    }
+    
+    func didTapRightBarItem() {
+        actions?.showAboutScene()
+    }
+    
+    func didTapSeeAll(type: SeeAllGamesType) {
+        print("didTap")
+        actions?.showSeeAllGames(type, "")
     }
 }

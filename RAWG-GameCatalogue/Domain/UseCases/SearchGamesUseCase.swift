@@ -12,7 +12,6 @@ protocol SearchGamesUseCase {
                  completion: @escaping (Result<GamesResponseDTO, Error>) -> Void) -> Cancelable?
 }
 
-
 final class DefaultSearchGamesUseCase: SearchGamesUseCase {
     private let gamesRepository: GamesRepository
     
