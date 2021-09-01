@@ -110,6 +110,15 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
         checkNavigationBar()
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        
+    }
+    
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        
+    }
+    
     func checkNavigationBar() {
         let viewFrame = scrollView.convert(navigationTitle.bounds, from: navigationTitle)
         

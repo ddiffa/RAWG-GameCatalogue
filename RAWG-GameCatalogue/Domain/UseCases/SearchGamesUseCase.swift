@@ -9,7 +9,7 @@ import Foundation
 
 protocol SearchGamesUseCase {
     func execute(requestValue: SearchGamesUseCaseRequestValue,
-                 completion: @escaping (Result<GamesResponseDTO, Error>) -> Void) -> Cancelable?
+                 completion: @escaping (Result<GamesPage, Error>) -> Void) -> Cancelable?
 }
 
 final class DefaultSearchGamesUseCase: SearchGamesUseCase {
@@ -19,7 +19,7 @@ final class DefaultSearchGamesUseCase: SearchGamesUseCase {
         self.gamesRepository = gamesRepository
     }
     
-    func execute(requestValue: SearchGamesUseCaseRequestValue, completion: @escaping (Result<GamesResponseDTO, Error>) -> Void) -> Cancelable? {
+    func execute(requestValue: SearchGamesUseCaseRequestValue, completion: @escaping (Result<GamesPage, Error>) -> Void) -> Cancelable? {
         return gamesRepository.fetchGameList(query: requestValue.query, page: requestValue.page){ result in
             completion(result)
         }

@@ -10,7 +10,7 @@ import UIKit
 class GamesTableViewCell: UITableViewCell {
     static let identifier = "GamesTableViewCell"
     
-    private let _imageView: UIImageView = {
+    let thumbnail: UIImageView = {
         let view = UIImageView()
         view.layer.cornerRadius = 10
         view.clipsToBounds = true
@@ -19,30 +19,41 @@ class GamesTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let _titleLabel: UITitleLabel = {
+    private let titleLabel: UITitleLabel = {
         let view = UITitleLabel()
         return view
     }()
     
-    private let _yearAndCategoryLabel: UIDescriptionLabel = {
+    private let yearAndCategoryLabel: UIDescriptionLabel = {
         let view = UIDescriptionLabel()
         
         view.text = "2012 | Action"
         return view
     }()
     
-    private let _separator: UISeparatorView = {
+    private let separator: UISeparatorView = {
         let view = UISeparatorView()
         
         return view
     }()
     
-    private let _ratingView: UIRatingView = {
+    private let ratingView: UIRatingView = {
         let view = UIRatingView()
         
         return view
     }()
     
+    var game: Game? {
+        didSet {
+            guard let data = game else {
+                return
+            }
+            
+            titleLabel.text = data.name
+            ratingView.ratingValue = data.rating
+            thumbnail.image = data.image
+        }
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder: ) has not been implemented")
@@ -56,42 +67,43 @@ class GamesTableViewCell: UITableViewCell {
     }
     
     private func addView() {
-        contentView.addSubview(_imageView)
-        contentView.addSubview(_titleLabel)
-        contentView.addSubview(_yearAndCategoryLabel)
-        contentView.addSubview(_separator)
-        contentView.addSubview(_ratingView)
+        contentView.addSubview(thumbnail)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(yearAndCategoryLabel)
+        contentView.addSubview(separator)
+        contentView.addSubview(ratingView)
     }
     
     private func setUpLayoutConstraint() {
         NSLayoutConstraint.activate([
-            _imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            _imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            _imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
-            _imageView.widthAnchor.constraint(equalToConstant: 100),
+            thumbnail.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            thumbnail.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            thumbnail.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+            thumbnail.widthAnchor.constraint(equalToConstant: 100),
+            thumbnail.heightAnchor.constraint(equalToConstant: 80),
             
-            _titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            _titleLabel.leftAnchor.constraint(equalTo: _imageView.rightAnchor, constant: 8),
-            _titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16.0),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            titleLabel.leftAnchor.constraint(equalTo: thumbnail.rightAnchor, constant: 8),
+            titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16.0),
             
-            _yearAndCategoryLabel.topAnchor.constraint(equalTo: _titleLabel.bottomAnchor, constant: 4),
-            _yearAndCategoryLabel.leftAnchor.constraint(equalTo: _imageView.rightAnchor, constant: 8),
-            _yearAndCategoryLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
+            yearAndCategoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            yearAndCategoryLabel.leftAnchor.constraint(equalTo: thumbnail.rightAnchor, constant: 8),
+            yearAndCategoryLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
             
-            _ratingView.topAnchor.constraint(equalTo: _yearAndCategoryLabel.bottomAnchor, constant: 4),
-            _ratingView.leftAnchor.constraint(equalTo: _imageView.rightAnchor, constant: 8),
-            _ratingView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 16),
+            ratingView.topAnchor.constraint(equalTo: yearAndCategoryLabel.bottomAnchor, constant: 4),
+            ratingView.leftAnchor.constraint(equalTo: thumbnail.rightAnchor, constant: 8),
+            ratingView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 16),
             
-            _separator.topAnchor.constraint(equalTo: _ratingView.bottomAnchor, constant: 12),
-            _separator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            _separator.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            _separator.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 124)
+            separator.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 12),
+            separator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            separator.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            separator.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 124)
         ])
     }
     
     func setUpView(title: String){
-        _titleLabel.text = title
-        _imageView.image = UIImage(systemName: "house")
+        titleLabel.text = title
+        thumbnail.image = UIImage(systemName: "house")
     }
     
 }

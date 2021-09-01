@@ -17,7 +17,8 @@ final class DefaultGamesRepository {
 }
 
 extension DefaultGamesRepository: GamesRepository {
-    func fetchGameList(query: GameQuery, page: Int, completion: @escaping (Result<GamesResponseDTO, Error>) -> Void) -> Cancelable? {
+    
+    func fetchGameList(query: GameQuery, page: Int, completion: @escaping (Result<GamesPage, Error>) -> Void) -> Cancelable? {
         
         let requestDTO = GamesRequestDTO(page: 1, ordering: query.query)
         let task = RepositoryTask()
@@ -28,7 +29,7 @@ extension DefaultGamesRepository: GamesRepository {
         task.networkTask = self.dataTransferService.request(with: endpoint) { result in
             switch result {
                 case .success(let responseDTO):
-                    completion(.success(responseDTO))
+                    completion(.success(responseDTO.toDomain()))
                 case .failure(let error):
                     completion(.failure(error))
             }

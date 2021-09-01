@@ -16,19 +16,19 @@ struct GamesResponseDTO: Decodable {
         case games = "results"
     }
     
-    let count: Int
-    let next: Int
-    let previous: Int
+    let count: Int?
+    let next: String?
+    let previous: String?
     
-    let games: [Game]
+    let games: [GameResponse]
 }
 
 
 extension GamesResponseDTO {
     
-    struct Game: Decodable {
+    struct GameResponse: Decodable {
         let id: Int
-        let name: String
+        let name: String?
         var imagePath: String?
         var released: String?
         var rating: Double?
@@ -87,3 +87,18 @@ private let dateFormatter: DateFormatter = {
     formatter.locale = Locale(identifier: "en_US_POSIX")
     return formatter
 }()
+
+
+extension GamesResponseDTO {
+    func toDomain() -> GamesPage {
+        return .init(count: count, next: next, previous: previous, games: games.map {
+            $0.toDomain()
+        })
+    }
+}
+
+extension GamesResponseDTO.GameResponse {
+    func toDomain() -> Game {
+        return .init(id: id, name: name, imagePath: imagePath, released: released, rating: rating, description: description)
+    }
+}

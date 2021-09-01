@@ -24,9 +24,17 @@ final class GamesSceneDIContainer {
         return DefaultSearchGamesUseCase(gamesRepository: makeGamesRepository())
     }
     
+    func makeGenresUseCase() -> GenresUseCase {
+        return DefaultGenresUseCase(genresRepository: makeGenresRepository())
+    }
+    
     // MARK: - Repository
     func makeGamesRepository() -> GamesRepository {
         return DefaultGamesRepository(dataTransferService: dependencies.apiDataTransferService)
+    }
+    
+    func makeGenresRepository() -> GenresRepository {
+        return DefaultGenresRepository(dataTransferService: dependencies.apiDataTransferService)
     }
     
     // MARK: - ViewModel
@@ -35,7 +43,7 @@ final class GamesSceneDIContainer {
     }
     
     func makeSearchGamesViewModel(actions: SearchViewModelActions) -> SearchViewModel {
-        return DefaultSearchViewModel(searchGamesUseCase: makeSearchGamesUseCase(), actions: actions)
+        return DefaultSearchViewModel(genresUseCase: makeGenresUseCase(), actions: actions)
     }
     
     //MARK: - View controller

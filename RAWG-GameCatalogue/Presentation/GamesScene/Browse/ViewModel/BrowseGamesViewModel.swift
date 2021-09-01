@@ -14,8 +14,7 @@ struct BrowseGamesViewModelActions {
 }
 
 enum BrowseGamesViewModelLoading {
-    case fullScreen
-    case nextPage
+    case show
 }
 
 protocol BrowseGameViewModelInput {
@@ -24,53 +23,64 @@ protocol BrowseGameViewModelInput {
     func didTapRightBarItem()
     func didTapSeeAll(type: SeeAllGamesType)
     func didSelectItem(at index: Int)
+    func startDownloadImage(game: Game, indexPath: IndexPath, completion: @escaping()-> Void)
+    func toggleSuspendOperations(isSuspended: Bool)
 }
 
-//protocol BrowseGameViewModelOutput {
-//    var items: Observable<[]>
-//}
+protocol BrowseGameViewModelOutput {
+    var items: Observable<[Game]> { get }
+    var loading: Observable<BrowseGamesViewModelLoading?> { get }
+    var query: Observable<String> { get }
+    var isEmpty: Bool { get }
+    var error: Observable<String> { get }
+}
 
 
-protocol BrowseGamesViewModel: BrowseGameViewModelInput {}
+protocol BrowseGamesViewModel: BrowseGameViewModelInput, BrowseGameViewModelOutput {}
 
 final class DefaultBrowseGamesViewModel: BrowseGamesViewModel {
     private let searchGamesUseCase: SearchGamesUseCase
     private let actions: BrowseGamesViewModelActions?
     
+    
+    let _pendingOpearions = PendingOperations()
     var currentPage: Int = 0
     var totalPageCount: Int = 1
     var hasMorePages: Bool { currentPage < totalPageCount }
     var nextPage: Int { hasMorePages ? currentPage + 1 : currentPage }
     
-    private var pages: [GamesResponseDTO] = []
+    private var pages: [GamesPage] = []
     private var gamesLoadTask: Cancelable? { willSet { gamesLoadTask?.cancel() } }
     
+    let items: Observable<[Game]> = Observable([])
     let loading: Observable<BrowseGamesViewModelLoading?> = Observable(.none)
     let query: Observable<String> = Observable("")
     let error: Observable<String> = Observable("")
     var isEmpty: Bool { return false }
     let screenTitle = NSLocalizedString("Movies", comment: "")
-    let emptyDataTitle = NSLocalizedString("Search results", comment: "")
     let errorTitle = NSLocalizedString("Error", comment: "")
-    let searchBarPlaceholder = NSLocalizedString("Search Movies", comment: "")
     
     init(searchGamesUseCase: SearchGamesUseCase, actions: BrowseGamesViewModelActions? = nil) {
         self.searchGamesUseCase = searchGamesUseCase
         self.actions = actions
     }
     
+    private func appendPage(_ gamesPage: GamesPage) {
+        items.value = gamesPage.games
+    }
     
-    private func fetch(query: GameQuery, loading: BrowseGamesViewModelLoading) {
-        self.loading.value = loading
+    
+    private func fetch(query: GameQuery) {
+        self.loading.value = .show
         self.query.value = query.query
         
         gamesLoadTask = searchGamesUseCase.execute(requestValue: .init(query: query, page: nextPage)) { result in
             
             switch result {
                 case .success(let data):
-                    print(data.games)
+                    self.appendPage(data)
                 case .failure(let error):
-                    print(error)
+                    self.handle(error: error)
             }
             self.loading.value = .none
         }
@@ -86,7 +96,7 @@ final class DefaultBrowseGamesViewModel: BrowseGamesViewModel {
 
 extension DefaultBrowseGamesViewModel {
     func viewDidLoad() {
-        fetch(query: .init(query: query.value), loading: .nextPage)
+        fetch(query: .init(query: query.value))
     }
     
     func didLoadNextPage() {
@@ -105,5 +115,27 @@ extension DefaultBrowseGamesViewModel {
     func didTapSeeAll(type: SeeAllGamesType) {
         print("didTap")
         actions?.showSeeAllGames(type, "")
+    }
+    
+    func startDownloadImage(game: Game, indexPath: IndexPath, completion: @escaping () -> Void) {
+        guard _pendingOpearions.downloadInProgress[indexPath] == nil else { return }
+        
+        let downloader = ImageDownloader(game: game)
+        
+        downloader.completionBlock = {
+            if downloader.isCancelled  { return }
+            
+            DispatchQueue.main.async {
+                self._pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)
+                completion()
+            }
+        }
+        
+        _pendingOpearions.downloadInProgress[indexPath] = downloader
+        _pendingOpearions.downloadQueue.addOperation(downloader)
+    }
+    
+    func toggleSuspendOperations(isSuspended: Bool) {
+        _pendingOpearions.downloadQueue.isSuspended = isSuspended
     }
 }

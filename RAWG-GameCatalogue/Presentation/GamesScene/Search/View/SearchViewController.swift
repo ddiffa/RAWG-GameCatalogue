@@ -9,7 +9,7 @@ import UIKit
 
 class SearchViewController: UICustomViewControllerWithScrollView {
     
-    private lazy var _genreCollectionView: UICustomCollectionView = {
+    lazy var genreCollectionView: UICustomCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 5
@@ -27,7 +27,7 @@ class SearchViewController: UICustomViewControllerWithScrollView {
         return view
     }()
     
-    private let _browseGenresLabel: UIHeaderLabel = {
+    let browseGenresLabel: UIHeaderLabel = {
         let view = UIHeaderLabel()
         view.text = "Browse Genres"
         return view
@@ -46,7 +46,16 @@ class SearchViewController: UICustomViewControllerWithScrollView {
     //MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel?.viewDidLoad()
+        guard let viewModel = viewModel else {
+            return
+        }
+        bind(to: viewModel)
+        viewModel.viewDidLoad()
+    }
+    
+    private func bind(to viewModel: SearchViewModel) {
+        viewModel.items.observe(on: self) { [weak self] _ in self?.updateItems() }
+        viewModel.error.observe(on: self) { [weak self] in self?.showError($0)}
     }
     
     override func setUpView(showRighBarButtonItem: Bool) {
@@ -54,8 +63,8 @@ class SearchViewController: UICustomViewControllerWithScrollView {
         navigationItem.searchController = _searchViewController
         navigationItem.titleMode("Search", mode: .never)
         navigationTitle.text = "Search"
-        containerView.addSubview(_browseGenresLabel)
-        containerView.addSubview(_genreCollectionView)
+        containerView.addSubview(browseGenresLabel)
+        containerView.addSubview(genreCollectionView)
     }
     
     override func didTapRightButtonItem() {
@@ -66,14 +75,23 @@ class SearchViewController: UICustomViewControllerWithScrollView {
         super.setUpLayoutConstraint()
         NSLayoutConstraint.activate([
             
-            _browseGenresLabel.topAnchor.constraint(equalTo: navigationTitle.bottomAnchor, constant: 12),
-            _browseGenresLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16),
-            _browseGenresLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -16),
+            browseGenresLabel.topAnchor.constraint(equalTo: navigationTitle.bottomAnchor, constant: 12),
+            browseGenresLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16),
+            browseGenresLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -16),
             
-            _genreCollectionView.topAnchor.constraint(equalTo: _browseGenresLabel.bottomAnchor, constant: 10),
-            _genreCollectionView.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16),
-            _genreCollectionView.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -16),
-            _genreCollectionView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 16)
+            genreCollectionView.topAnchor.constraint(equalTo: browseGenresLabel.bottomAnchor, constant: 10),
+            genreCollectionView.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16),
+            genreCollectionView.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -16),
+            genreCollectionView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 16)
         ])
+    }
+    
+    private func updateItems() {
+        self.genreCollectionView.reloadData()
+    }
+    
+    private func showError(_ error: String) {
+        guard !error.isEmpty else { return }
+        // MARK: - Show alert
     }
 }

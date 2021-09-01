@@ -15,4 +15,9 @@ struct APIEndpoints {
                         method: .get,
                         queryParametersEncodable: gamesRequestDTO)
     }
+    
+    static func fetchGenresData() -> Endpoint<GenresResponseDTO> {
+        return Endpoint(path: "api/genres",
+                        method: .get)
+    }
 }
