@@ -54,6 +54,10 @@ class SeeAllViewController: UICustomViewControllerWithScrollView {
 
 extension SeeAllViewController: GamesViewControllerDelegate {
     func onLoading(_ isLoading: Bool) {
-        
+        self.updateLoading(isLoading)
+    }
+    
+    func getRootNavigationController() -> UINavigationController? {
+        return self.navigationController
     }
 }

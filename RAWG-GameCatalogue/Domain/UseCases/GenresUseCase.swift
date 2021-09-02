@@ -19,9 +19,7 @@ final class DefaultGenresUseCase: GenresUseCase {
     }
     
     func execute(completion: @escaping (Result<GenresPage, Error>) -> Void) -> Cancelable? {
-        return genresRepository.fetchGenres { result in
-            completion(result)
-        }
+        return genresRepository.fetchGenres(completion: completion)
     }
 }
 

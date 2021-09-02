@@ -8,10 +8,10 @@
 import UIKit
 
 struct SearchViewModelActions {
-    let showSellGames: ((UINavigationController, String) -> Void)
+    let showSeeAllGames: ((UINavigationController, String, String) -> Void)
     let showQueryGames: (() -> Void)
     let showAboutScene: (() -> Void)
-    let showGameDetails: (() -> Void)
+    let showGameDetails: ((String) -> Void)
 }
 
 protocol SearchViewModelInput {
@@ -21,7 +21,7 @@ protocol SearchViewModelInput {
     func didCancelSearch()
     func didTapRightBarItem()
     func didTapSeeAll(type: SeeAllGamesType)
-    func didSelectItem(navController: UINavigationController, at genre: String)
+    func didSelectItem(navController: UINavigationController, genreID: String, genre: String)
     func startDownloadImage(genre: Genre, indexPath: IndexPath, completion: @escaping()-> Void)
     func toggleSuspendOperations(isSuspended: Bool)
 }
@@ -29,7 +29,7 @@ protocol SearchViewModelInput {
 protocol SearchViewModelOutput {
     var items: Observable<[Genre]> { get }
     var error: Observable<String> { get }
-    
+    var loading: Observable<Bool> { get }
 }
 
 protocol SearchViewModel: SearchViewModelInput, SearchViewModelOutput {}
@@ -45,6 +45,7 @@ final class DefaultSearchViewModel: SearchViewModel {
     
     let items: Observable<[Genre]> = Observable([])
     let error: Observable<String> = Observable("")
+    let loading: Observable<Bool> = Observable(true)
 
     init(genresUseCase: GenresUseCase, actions: SearchViewModelActions) {
         self.genresUseCase = genresUseCase
@@ -52,6 +53,7 @@ final class DefaultSearchViewModel: SearchViewModel {
     }
     
     private func fetchGenres() {
+        self.loading.value = true
         genresLoadTask = genresUseCase.execute { result in
             switch result {
                 case .success(let data):
@@ -59,6 +61,8 @@ final class DefaultSearchViewModel: SearchViewModel {
                 case .failure(let error):
                     self.handle(error: error)
             }
+            
+            self.loading.value = false
         }
     }
     
@@ -97,8 +101,8 @@ extension DefaultSearchViewModel {
         actions?.showAboutScene()
     }
     
-    func didSelectItem(navController: UINavigationController, at genre: String) {
-        actions?.showSellGames(navController, genre)
+    func didSelectItem(navController: UINavigationController, genreID: String, genre: String) {
+        actions?.showSeeAllGames(navController, genreID, genre)
     }
     
     func startDownloadImage(genre: Genre, indexPath: IndexPath, completion: @escaping () -> Void) {

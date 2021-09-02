@@ -24,11 +24,6 @@ final class UICustomCollectionView: UICollectionView {
         setUpView()
     }
     
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        setUpView()
-//    }
-    
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         setUpView()

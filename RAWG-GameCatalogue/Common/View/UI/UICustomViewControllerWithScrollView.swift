@@ -138,4 +138,12 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
         _loadingView.isHidden = false
         scrollView.isHidden = true
     }
+    
+    func updateLoading(_ loading: Bool) {
+        if loading {
+            showLoading()
+        } else {
+            hideLoading()
+        }
+    }
 }

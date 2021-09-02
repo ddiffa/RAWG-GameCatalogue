@@ -40,8 +40,10 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let data = viewModel?.items.value[indexPath.row].id, let navController = self.navigationController {
-            self.viewModel?.didSelectItem(navController: navController, at: "\(data)")
+        if let id = viewModel?.items.value[indexPath.row].id,
+           let name = viewModel?.items.value[indexPath.row].name,
+           let navController = self.navigationController {
+            self.viewModel?.didSelectItem(navController: navController, genreID: "\(id)", genre: name)
         }
     }
     

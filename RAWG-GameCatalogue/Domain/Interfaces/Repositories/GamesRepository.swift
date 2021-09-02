@@ -11,5 +11,7 @@ import Foundation
 protocol GamesRepository {
     
     @discardableResult
-    func fetchGameList(query: GameQuery, page: Int, completion: @escaping (Result<GamesPage, Error>) -> Void) -> Cancelable?
+    func fetchGameList(query: GameQuery,
+                       page: Int,
+                       completion: @escaping (Result<GamesPage, Error>) -> Void) -> Cancelable?
 }

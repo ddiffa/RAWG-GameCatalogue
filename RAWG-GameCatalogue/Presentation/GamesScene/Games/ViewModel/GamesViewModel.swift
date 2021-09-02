@@ -8,17 +8,16 @@
 import UIKit
 
 struct GamesViewModelAction {
-    let showGameDetails: (() -> Void)
+    let showGameDetails: ((String) -> Void)
     let showAboutScene: (() -> Void)
 }
-
 
 protocol GamesViewModelInput {
     func viewDidLoad(genre: String, searchQueary: String)
     func didLoadNextPage()
     func didTapRightBarItem()
     func didTapSeeAll(type: SeeAllGamesType)
-    func didSelectItem(at index: Int)
+    func didSelectItem(navController: UINavigationController, at gamesID: String)
     func startDownloadImage(game: Game, indexPath: IndexPath, completion: @escaping()-> Void)
     func toggleSuspendOperations(isSuspended: Bool)
 }
@@ -37,8 +36,7 @@ final class DefaultGamesViewModel: GamesViewModel {
     private let searchGamesUseCase: SearchGamesUseCase
     private let actions: GamesViewModelAction?
     private let backgroundDownloaderImage: BackgroundDownloadImage = BackgroundDownloadImage()
-    
-    let _pendingOpearions = PendingOperations()
+    private let _pendingOpearions = PendingOperations()
     
     private var gamesLoadTask: Cancelable? { willSet { gamesLoadTask?.cancel() } }
     
@@ -90,8 +88,8 @@ extension DefaultGamesViewModel {
         
     }
     
-    func didSelectItem(at index: Int) {
-        actions?.showGameDetails()
+    func didSelectItem(navController: UINavigationController, at gamesID: String) {
+        actions?.showGameDetails(gamesID)
     }
     
     func didTapRightBarItem() {

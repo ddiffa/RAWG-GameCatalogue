@@ -1,14 +1,11 @@
 //
-//  DefaultGenresRepository.swift
+//  DefaultDetailGamesRepository.swift
 //  RAWG-GameCatalogue
 //
 //  Created by Diffa Desyawan on 02/09/21.
 //
 
-import Foundation
-
-
-final class DefaultGenresRepository {
+final class DefaultDetailGamesRepository {
     private let dataTransferService: DataTransferService
     
     init(dataTransferService: DataTransferService) {
@@ -16,12 +13,11 @@ final class DefaultGenresRepository {
     }
 }
 
-extension DefaultGenresRepository: GenresRepository {
+extension DefaultDetailGamesRepository: DetailGamesRepository {
     
-    func fetchGenres(completion: @escaping (Result<GenresPage, Error>) -> Void) -> Cancelable? {
-        
+    func fetchGameDetail(gameID: String, completion: @escaping (Result<DetailGame, Error>) -> Void) -> Cancelable? {
         let task = RepositoryTask()
-        let endpoint = APIEndpoints.fetchGenresData()
+        let endpoint = APIEndpoints.fetchDetailGames(id: gameID)
         
         task.networkTask = self.dataTransferService.request(with: endpoint) { result in
             switch result {

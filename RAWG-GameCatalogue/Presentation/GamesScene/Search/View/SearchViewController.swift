@@ -56,6 +56,7 @@ class SearchViewController: UICustomViewControllerWithScrollView {
     private func bind(to viewModel: SearchViewModel) {
         viewModel.items.observe(on: self) { [weak self] _ in self?.updateItems() }
         viewModel.error.observe(on: self) { [weak self] in self?.showError($0)}
+        viewModel.loading.observe(on: self) { [weak self] in self?.updateLoading($0)}
     }
     
     override func setUpView(showRighBarButtonItem: Bool) {

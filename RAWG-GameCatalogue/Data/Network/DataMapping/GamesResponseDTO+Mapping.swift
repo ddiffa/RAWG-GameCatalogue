@@ -33,8 +33,6 @@ extension GamesResponseDTO {
         var released: String?
         var rating: Double?
         var description: String?
-        
-        let developers: [Developers]?
         let genres: [Genres]?
         
         private enum CodingKeys: String, CodingKey {
@@ -44,23 +42,8 @@ extension GamesResponseDTO {
             case released
             case rating
             case genres
-//            case parentPlatforms = "parent_platforms"
             case description
-            case developers
-            
         }
-        
-//        init(from decoder: Decoder) throws {
-//            let container = try decoder.container(keyedBy: CodingKeys.self)
-//
-//            id = try container.decode(Int.self, forKey: .id)
-//            name = try container.decode(String.self, forKey: .name)
-//            imagePath = try container.decode(String?.self, forKey: .imagePath)
-//            released = try container.decode(String?.self, forKey: .released)
-//            rating = try container.decode(Double?.self, forKey: .rating)
-//            description = try container.decode(String?.self, forKey: .description)
-//
-//        }
     }
     
     struct Genres: Decodable {
@@ -71,23 +54,7 @@ extension GamesResponseDTO {
         }
     }
     
-    struct Developers: Decodable {
-        let name: String?
-        private enum CodingKeys: String, CodingKey {
-            case name
-        }
-    }
 }
-
-private let dateFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd"
-    formatter.calendar = Calendar(identifier: .iso8601)
-    formatter.timeZone = TimeZone(secondsFromGMT: 0)
-    formatter.locale = Locale(identifier: "en_US_POSIX")
-    return formatter
-}()
-
 
 extension GamesResponseDTO {
     func toDomain() -> GamesPage {
@@ -99,6 +66,21 @@ extension GamesResponseDTO {
 
 extension GamesResponseDTO.GameResponse {
     func toDomain() -> Game {
-        return .init(id: id, name: name, imagePath: imagePath, released: released, rating: rating, description: description)
+        return .init(id: id, name: name, imagePath: imagePath, released: released, rating: rating, description: description, genres: convertArrayGenreToString(genre: genres))
+    }
+    
+    func convertArrayGenreToString(genre: [GamesResponseDTO.Genres]?)  -> String {
+        var genreName: [String] = []
+        
+        genres?.forEach { data in
+            
+            if let name = data.name {
+                genreName.append(name)
+            }
+        }
+        
+        return genreName.joined(separator: ", ")
     }
 }
+
+

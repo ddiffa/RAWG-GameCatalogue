@@ -88,18 +88,14 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
         }
         //MARK: Show alert
     }
-    
-    private func updateLoading(_ loading: Bool) {
-        if loading {
-            showLoading()
-        } else {
-            hideLoading()
-        }
-    }
 }
 
 extension BrowseGamesViewController: GamesViewControllerDelegate {
     func onLoading(_ isLoading: Bool) {
-      updateLoading(isLoading)
+        self.updateLoading(isLoading)
+    }
+    
+    func getRootNavigationController() -> UINavigationController? {
+        return self.navigationController
     }
 }

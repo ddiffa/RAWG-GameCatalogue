@@ -28,6 +28,10 @@ final class GamesSceneDIContainer {
         return DefaultGenresUseCase(genresRepository: makeGenresRepository())
     }
     
+    func makeDetailGamesUseCase() -> DetailGamesUseCase {
+        return DefaultDetailGamesUseCase(detailGameRepository: makeDetailGamesRepository())
+    }
+    
     // MARK: - Repository
     func makeGamesRepository() -> GamesRepository {
         return DefaultGamesRepository(dataTransferService: dependencies.apiDataTransferService)
@@ -35,6 +39,10 @@ final class GamesSceneDIContainer {
     
     func makeGenresRepository() -> GenresRepository {
         return DefaultGenresRepository(dataTransferService: dependencies.apiDataTransferService)
+    }
+    
+    func makeDetailGamesRepository() -> DetailGamesRepository {
+        return DefaultDetailGamesRepository(dataTransferService: dependencies.apiDataTransferService)
     }
     
     // MARK: - ViewModel
@@ -46,6 +54,9 @@ final class GamesSceneDIContainer {
         return DefaultSearchViewModel(genresUseCase: makeGenresUseCase(), actions: actions)
     }
     
+    func makeDetailGamesViewModel() -> DetailGamesViewModel {
+        return DefaultDetailGamesViewModel(detailGamesUseCase: makeDetailGamesUseCase())
+    }
     //MARK: - View controller
     func makeBrowseGamesViewController() -> UIViewController {
         let vc = BrowseGamesViewController()
@@ -85,18 +96,23 @@ final class GamesSceneDIContainer {
 }
 
 extension GamesSceneDIContainer: GamesFlowCoordinatorDependencies {
-    func makeSeeAllGamesViewController(navController: UINavigationController, genre: String) -> SeeAllViewController {
+    func makeSeeAllGamesViewController(navController: UINavigationController,
+                                       genreID: String,
+                                       genre: String) -> SeeAllViewController {
         let vc = SeeAllViewController()
         let appFlowCoordinator = makeGamesFlowCoordinator(navigationController: navController)
         vc.gamesViewController = makeGamesViewController()
-        vc.gamesViewController?.genre = genre
+        vc.gamesViewController?.genre = genreID
         vc.gamesViewController?.viewModel = makeGamesViewModel(actions: appFlowCoordinator.makeActionsGames())
         vc.titleString = genre
         return vc
     }
     
-    func makeGamesDetailViewController() -> DetailViewController {
-        return DetailViewController()
+    func makeGamesDetailViewController(gamesID: String) -> DetailViewController {
+        let vc = DetailViewController()
+        vc.viewModel = makeDetailGamesViewModel()
+        vc.gamesID = gamesID
+        return vc
     }
     
     func makeResultSearchViewController() -> ResultSearchViewController {

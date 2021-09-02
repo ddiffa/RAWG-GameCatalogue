@@ -30,7 +30,6 @@ final class UICustomTableView: UITableView {
     }
     
     private func setUpView() {
-        register(GamesTableViewCell.self, forCellReuseIdentifier: GamesTableViewCell.identifier)
         backgroundColor = UIColor(named: ColorType.primary.rawValue)
         translatesAutoresizingMaskIntoConstraints = false
         autoresizingMask = [.flexibleWidth, .flexibleHeight]

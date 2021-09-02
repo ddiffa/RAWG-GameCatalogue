@@ -8,8 +8,12 @@
 import UIKit
 
 protocol GamesFlowCoordinatorDependencies {
-    func makeSeeAllGamesViewController(navController: UINavigationController, genre: String) -> SeeAllViewController
-    func makeGamesDetailViewController() -> DetailViewController
+    func makeSeeAllGamesViewController(navController: UINavigationController,
+                                       genreID: String,
+                                       genre: String) -> SeeAllViewController
+    
+    func makeGamesDetailViewController(gamesID: String) -> DetailViewController
+    
     func makeResultSearchViewController() -> ResultSearchViewController
 }
 
@@ -18,7 +22,8 @@ final class GamesFlowCoordinator {
     private let dependencies: GamesFlowCoordinatorDependencies
     
     
-    init(navigationController: UINavigationController, dependencies: GamesFlowCoordinatorDependencies) {
+    init(navigationController: UINavigationController,
+         dependencies: GamesFlowCoordinatorDependencies) {
         self.navigationController = navigationController
         self.dependencies = dependencies
     }
@@ -29,26 +34,31 @@ final class GamesFlowCoordinator {
     }
     
     func makeActionsGames() -> GamesViewModelAction {
-        let actions = GamesViewModelAction(showGameDetails: showGamesDetails, showAboutScene: showAboutScene)
-        
+        let actions = GamesViewModelAction(showGameDetails: showGamesDetails,
+                                           showAboutScene: showAboutScene)
         return actions
     }
     
     func makeActionsSearchGames() -> SearchViewModelActions {
-        let action = SearchViewModelActions(showSellGames: showSeeAllGames, showQueryGames: {}, showAboutScene: showAboutScene, showGameDetails: showGamesDetails)
-        
+        let action = SearchViewModelActions(showSeeAllGames: showSeeAllGames,
+                                            showQueryGames: {},
+                                            showAboutScene: showAboutScene,
+                                            showGameDetails: showGamesDetails)
         return action
     }
     
-    private func showGamesDetails() {
-        let vc = dependencies.makeGamesDetailViewController()
+    private func showGamesDetails(gamesID: String) {
+        let vc = dependencies.makeGamesDetailViewController(gamesID: gamesID)
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func showSeeAllGames(navController: UINavigationController, genres: String = "") {
-        let vc = dependencies.makeSeeAllGamesViewController(navController: navController, genre: genres)
+    private func showSeeAllGames(navController: UINavigationController,
+                                 genreID: String,
+                                 genres: String = "") {
+        let vc = dependencies.makeSeeAllGamesViewController(navController: navController,
+                                                            genreID: genreID,
+                                                            genre: genres)
         navigationController?.pushViewController(vc, animated: true)
     }
     
-
 }

@@ -20,9 +20,9 @@ final class DefaultSearchGamesUseCase: SearchGamesUseCase {
     }
     
     func execute(requestValue: SearchGamesUseCaseRequestValue, completion: @escaping (Result<GamesPage, Error>) -> Void) -> Cancelable? {
-        return gamesRepository.fetchGameList(query: requestValue.query, page: requestValue.page){ result in
-            completion(result)
-        }
+        return gamesRepository.fetchGameList(query: requestValue.query,
+                                             page: requestValue.page,
+                                             completion: completion)
     }
 }
 

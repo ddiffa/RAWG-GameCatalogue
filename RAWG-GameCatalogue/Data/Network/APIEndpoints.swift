@@ -21,12 +21,7 @@ struct APIEndpoints {
                         method: .get)
     }
     
-    static func fetchScreenShootGames(gamePK: String) -> Endpoint<String> {
-        return Endpoint(path: "api/games/\(gamePK)/screenshots",
-                        method: .get)
-    }
-    
-    static func fetchDetailGames(id: String) -> Endpoint<String> {
+    static func fetchDetailGames(id: String) -> Endpoint<DetailGamesResponseDTO> {
         return Endpoint(path: "api/games/\(id)",
                         method: .get)
     }

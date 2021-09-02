@@ -10,11 +10,9 @@ import UIKit
 class GamesTableViewCell: UITableViewCell {
     static let identifier = "GamesTableViewCell"
     
-    let thumbnail: UIImageView = {
-        let view = UIImageView()
-        view.layer.cornerRadius = 10
-        view.clipsToBounds = true
-        view.contentMode = .scaleToFill
+    let thumbnailView: UICustomImageView = {
+        let view = UICustomImageView()
+
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -51,7 +49,12 @@ class GamesTableViewCell: UITableViewCell {
             
             titleLabel.text = data.name
             ratingView.ratingValue = data.rating
-            thumbnail.image = data.image
+            thumbnailView.thumbnail.image = data.image
+            yearAndCategoryLabel.text = "\(data.released ?? "1997") | \(data.genres ?? "-")"
+            
+            if thumbnailView.thumbnail.image != nil {
+                thumbnailView.hideLoading()
+            }
         }
     }
     
@@ -67,7 +70,7 @@ class GamesTableViewCell: UITableViewCell {
     }
     
     private func addView() {
-        contentView.addSubview(thumbnail)
+        contentView.addSubview(thumbnailView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(yearAndCategoryLabel)
         contentView.addSubview(separator)
@@ -76,22 +79,21 @@ class GamesTableViewCell: UITableViewCell {
     
     private func setUpLayoutConstraint() {
         NSLayoutConstraint.activate([
-            thumbnail.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            thumbnail.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            thumbnail.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
-            thumbnail.widthAnchor.constraint(equalToConstant: 100),
-            thumbnail.heightAnchor.constraint(equalToConstant: 80),
+            thumbnailView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            thumbnailView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+            thumbnailView.widthAnchor.constraint(equalToConstant: 100),
+            thumbnailView.heightAnchor.constraint(equalToConstant: 80),
             
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            titleLabel.leftAnchor.constraint(equalTo: thumbnail.rightAnchor, constant: 8),
+            titleLabel.leftAnchor.constraint(equalTo: thumbnailView.rightAnchor, constant: 8),
             titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16.0),
             
-            yearAndCategoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
-            yearAndCategoryLabel.leftAnchor.constraint(equalTo: thumbnail.rightAnchor, constant: 8),
+            yearAndCategoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
+            yearAndCategoryLabel.leftAnchor.constraint(equalTo: thumbnailView.rightAnchor, constant: 8),
             yearAndCategoryLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
             
-            ratingView.topAnchor.constraint(equalTo: yearAndCategoryLabel.bottomAnchor, constant: 4),
-            ratingView.leftAnchor.constraint(equalTo: thumbnail.rightAnchor, constant: 8),
+            ratingView.topAnchor.constraint(equalTo: yearAndCategoryLabel.bottomAnchor, constant: 2),
+            ratingView.leftAnchor.constraint(equalTo: thumbnailView.rightAnchor, constant: 8),
             ratingView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 16),
             
             separator.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 12),
@@ -99,11 +101,6 @@ class GamesTableViewCell: UITableViewCell {
             separator.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             separator.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 124)
         ])
-    }
-    
-    func setUpView(title: String){
-        titleLabel.text = title
-        thumbnail.image = UIImage(systemName: "house")
     }
     
 }

@@ -9,6 +9,7 @@ import UIKit
 
 protocol GamesViewControllerDelegate {
     func onLoading(_ isLoading: Bool)
+    func getRootNavigationController() -> UINavigationController?
 }
 
 class GamesViewController: UIViewController {
@@ -16,6 +17,7 @@ class GamesViewController: UIViewController {
     // MARK: - Initialization Views
     lazy var gamesTableView: UICustomTableView = {
         let view = UICustomTableView()
+        view.register(GamesTableViewCell.self, forCellReuseIdentifier: GamesTableViewCell.identifier)
         view.delegate = self
         view.dataSource = self
         view.isScrollEnabled = false
@@ -48,7 +50,7 @@ class GamesViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        viewModel?.toggleSuspendOperations(isSuspended: true)
+//        viewModel?.toggleSuspendOperations(isSuspended: true)
     }
     
     func setUpLayoutConstraint() {
@@ -104,9 +106,7 @@ extension GamesViewController: UITableViewDelegate, UITableViewDataSource, UIScr
         if let cell = tableView.dequeueReusableCell(withIdentifier: GamesTableViewCell.identifier, for: indexPath) as? GamesTableViewCell {
             
             if viewModel?.items.value.count ?? 0 > 0, let game = viewModel?.items.value[indexPath.row] {
-                
                 cell.game = game
-                
                 if game.state == .new {
                     if !tableView.isDragging && !tableView.isDecelerating {
                         self.startOperations(game: game, indexPath: indexPath)
@@ -119,7 +119,10 @@ extension GamesViewController: UITableViewDelegate, UITableViewDataSource, UIScr
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel?.didSelectItem(at: indexPath.row)
+        if let id = viewModel?.items.value[indexPath.row].id,
+           let navController = delegate?.getRootNavigationController() {
+            viewModel?.didSelectItem(navController: navController, at: "\(id)")
+        }
     }
     
 }

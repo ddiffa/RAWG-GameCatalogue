@@ -11,15 +11,13 @@ class GenresCollectionViewCell: UICollectionViewCell {
     static let identifier: String = "GenresCollectionViewCell"
     
     // MARK: - Views
-    private let _imageView: UIImageView = {
-        let view = UIImageView()
-        view.clipsToBounds = true
-        view.contentMode = .scaleToFill
+    private let thumbnailView: UICustomImageView = {
+        let view = UICustomImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    private let _titleLabel: UIHeaderLabel = {
+    private let titleLabel: UIHeaderLabel = {
         let view = UIHeaderLabel()
         
         return view
@@ -29,14 +27,18 @@ class GenresCollectionViewCell: UICollectionViewCell {
     var title: String? {
         didSet {
             guard let value = title else { return }
-            _titleLabel.text = value
+            titleLabel.text = value
         }
     }
     
     var image: UIImage? {
         didSet {
             guard let value = image else { return }
-            _imageView.image = value
+            thumbnailView.thumbnail.image = value
+            
+            if thumbnailView.thumbnail.image != nil {
+                thumbnailView.hideLoading()
+            }
         }
     }
     
@@ -53,8 +55,8 @@ class GenresCollectionViewCell: UICollectionViewCell {
     private func setUpView() {
         
         contentView.layer.cornerRadius = 10
-        contentView.addSubview(_imageView)
-        contentView.addSubview(_titleLabel)
+        contentView.addSubview(thumbnailView)
+        contentView.addSubview(titleLabel)
         contentView.backgroundColor = .blue
         contentView.clipsToBounds = true
         
@@ -63,14 +65,14 @@ class GenresCollectionViewCell: UICollectionViewCell {
     
     private func setUpLayoutConstraints() {
         NSLayoutConstraint.activate([
-            _imageView.topAnchor.constraint(equalTo: self.topAnchor),
-            _imageView.leftAnchor.constraint(equalTo: self.leftAnchor),
-            _imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            _imageView.rightAnchor.constraint(equalTo: self.rightAnchor),
+            thumbnailView.topAnchor.constraint(equalTo: self.topAnchor),
+            thumbnailView.leftAnchor.constraint(equalTo: self.leftAnchor),
+            thumbnailView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            thumbnailView.rightAnchor.constraint(equalTo: self.rightAnchor),
             
-            _titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8),
-            _titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 8),
-            _titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8),
+            titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 8),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
         ])
     }
 }

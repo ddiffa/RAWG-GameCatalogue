@@ -20,18 +20,20 @@ class Game: Equatable, Identifiable {
     let released: String?
     let rating: Double?
     let description: String?
+    let genres: String?
     
     var image: UIImage?
     var state: DownloadState = .new
     
-    init(id: Identifier, name: String?, imagePath: String?, released: String?, rating: Double?, description: String?) {
+    init(id: Identifier, name: String?, imagePath: String?, released: String?, rating: Double?, description: String?, genres: String?) {
         self.id = id
         self.name = name
         let url = imagePath ?? ""
         self.imagePath = URL(string: url)
-        self.released = released
+        self.released = dateFormatter.date(from: released ?? "")?.getYear()
         self.rating = rating
         self.description = description
+        self.genres = genres
     }
 }
 

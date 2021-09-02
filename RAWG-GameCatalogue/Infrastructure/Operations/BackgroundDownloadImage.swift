@@ -1,12 +1,11 @@
-////
-////  BackgroundDownloadImage.swift
-////  RAWG-GameCatalogue
-////
-////  Created by Diffa Desyawan on 02/09/21.
-////
 //
-import Foundation
+//  BackgroundDownloadImage.swift
+//  RAWG-GameCatalogue
+//
+//  Created by Diffa Desyawan on 02/09/21.
+//
 
+import Foundation
 
 class BackgroundDownloadImage: NSObject {
     
