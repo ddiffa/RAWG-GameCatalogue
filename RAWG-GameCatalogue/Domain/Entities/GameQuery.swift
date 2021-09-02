@@ -8,5 +8,7 @@
 import Foundation
 
 struct GameQuery: Equatable {
-    let query: String
+    let ordering: String
+    let genres: String
+    let search: String
 }

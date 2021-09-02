@@ -94,7 +94,9 @@ extension Requestable {
         
         let queryParameters = try queryParametersEncodable?.toDictionary() ?? self.queryParameters
         queryParameters.forEach {
-            urlQueryItems.append(URLQueryItem(name: $0.key, value: "\($0.value)"))
+            if $0.value as? String != "" {
+                urlQueryItems.append(URLQueryItem(name: $0.key, value: "\($0.value)"))
+            }
         }
         config.queryParameters.forEach {
             urlQueryItems.append(URLQueryItem(name: $0.key, value: $0.value))

@@ -20,7 +20,7 @@ extension DefaultGamesRepository: GamesRepository {
     
     func fetchGameList(query: GameQuery, page: Int, completion: @escaping (Result<GamesPage, Error>) -> Void) -> Cancelable? {
         
-        let requestDTO = GamesRequestDTO(page: 1, ordering: query.query)
+        let requestDTO = GamesRequestDTO(page: 1, ordering: query.ordering, genres:query.genres, search: query.search)
         let task = RepositoryTask()
         
         

@@ -8,7 +8,7 @@
 import UIKit
 
 struct SearchViewModelActions {
-    let showSellGames: ((SeeAllGamesType, String) -> Void)
+    let showSellGames: ((UINavigationController, String) -> Void)
     let showQueryGames: (() -> Void)
     let showAboutScene: (() -> Void)
     let showGameDetails: (() -> Void)
@@ -21,7 +21,7 @@ protocol SearchViewModelInput {
     func didCancelSearch()
     func didTapRightBarItem()
     func didTapSeeAll(type: SeeAllGamesType)
-    func didSelectItem(at index: Int)
+    func didSelectItem(navController: UINavigationController, at genre: String)
     func startDownloadImage(genre: Genre, indexPath: IndexPath, completion: @escaping()-> Void)
     func toggleSuspendOperations(isSuspended: Bool)
 }
@@ -97,8 +97,8 @@ extension DefaultSearchViewModel {
         actions?.showAboutScene()
     }
     
-    func didSelectItem(at index: Int) {
-        actions?.showSellGames(SeeAllGamesType.genres, "action")
+    func didSelectItem(navController: UINavigationController, at genre: String) {
+        actions?.showSellGames(navController, genre)
     }
     
     func startDownloadImage(genre: Genre, indexPath: IndexPath, completion: @escaping () -> Void) {

@@ -9,31 +9,51 @@ import UIKit
 
 class SeeAllViewController: UICustomViewControllerWithScrollView {
         
-    lazy var _gamesTableView: UICustomTableView = {
-        let view = UICustomTableView()
-        view.delegate = self
-        view.dataSource = self
-        view.isScrollEnabled = false
+    let gamesContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
+    var gamesViewController: GamesViewController?
+    var titleString: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.titleMode("See all Missions", mode: .never)
+        navigationItem.titleMode(titleString ?? "", mode: .never)
     }
     
     override func setUpView(showRighBarButtonItem: Bool) {
         super.setUpView(showRighBarButtonItem: false)
-        containerView.addSubview(_gamesTableView)
+        containerView.addSubview(gamesContainer)
+        if let gamesViewController = gamesViewController {
+            gamesViewController.delegate = self
+            
+            gamesViewController.view.translatesAutoresizingMaskIntoConstraints = false
+            gamesContainer.addSubview(gamesViewController.view)
+            
+            NSLayoutConstraint.activate([
+                gamesViewController.view.leftAnchor.constraint(equalTo: gamesContainer.leftAnchor),
+                gamesViewController.view.rightAnchor.constraint(equalTo: gamesContainer.rightAnchor),
+                gamesViewController.view.topAnchor.constraint(equalTo: gamesContainer.topAnchor),
+                gamesViewController.view.bottomAnchor.constraint(equalTo: gamesContainer.bottomAnchor),
+            ])
+        }
     }
     
     override func setUpLayoutConstraint() {
         super.setUpLayoutConstraint()
         NSLayoutConstraint.activate([
-            _gamesTableView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
-            _gamesTableView.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 0),
-            _gamesTableView.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: 0),
-            _gamesTableView.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor)
+            gamesContainer.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+            gamesContainer.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 0),
+            gamesContainer.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: 0),
+            gamesContainer.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor)
         ])
+    }
+}
+
+extension SeeAllViewController: GamesViewControllerDelegate {
+    func onLoading(_ isLoading: Bool) {
+        
     }
 }

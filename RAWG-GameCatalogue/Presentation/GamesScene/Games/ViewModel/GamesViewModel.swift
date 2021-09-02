@@ -1,24 +1,20 @@
 //
-//  BrowseGamesViewModel.swift
+//  BaseGamesViewModel.swift
 //  RAWG-GameCatalogue
 //
-//  Created by Diffa Desyawan on 21/08/21.
+//  Created by Diffa Desyawan on 02/09/21.
 //
 
 import UIKit
 
-struct BrowseGamesViewModelActions {
+struct GamesViewModelAction {
     let showGameDetails: (() -> Void)
-    let showSeeAllGames: ((SeeAllGamesType, String) -> Void)
     let showAboutScene: (() -> Void)
 }
 
-enum BrowseGamesViewModelLoading {
-    case show
-}
 
-protocol BrowseGameViewModelInput {
-    func viewDidLoad()
+protocol GamesViewModelInput {
+    func viewDidLoad(genre: String, searchQueary: String)
     func didLoadNextPage()
     func didTapRightBarItem()
     func didTapSeeAll(type: SeeAllGamesType)
@@ -27,40 +23,33 @@ protocol BrowseGameViewModelInput {
     func toggleSuspendOperations(isSuspended: Bool)
 }
 
-protocol BrowseGameViewModelOutput {
+protocol GamesViewModelOutput {
     var items: Observable<[Game]> { get }
-    var loading: Observable<BrowseGamesViewModelLoading?> { get }
+    var loading: Observable<Bool> { get }
     var query: Observable<String> { get }
     var isEmpty: Bool { get }
     var error: Observable<String> { get }
 }
 
+protocol GamesViewModel: GamesViewModelInput, GamesViewModelOutput {}
 
-protocol BrowseGamesViewModel: BrowseGameViewModelInput, BrowseGameViewModelOutput {}
-
-final class DefaultBrowseGamesViewModel: BrowseGamesViewModel {
+final class DefaultGamesViewModel: GamesViewModel {
     private let searchGamesUseCase: SearchGamesUseCase
-    private let actions: BrowseGamesViewModelActions?
-    
+    private let actions: GamesViewModelAction?
+    private let backgroundDownloaderImage: BackgroundDownloadImage = BackgroundDownloadImage()
     
     let _pendingOpearions = PendingOperations()
-    var currentPage: Int = 0
-    var totalPageCount: Int = 1
-    var hasMorePages: Bool { currentPage < totalPageCount }
-    var nextPage: Int { hasMorePages ? currentPage + 1 : currentPage }
     
-    private var pages: [GamesPage] = []
     private var gamesLoadTask: Cancelable? { willSet { gamesLoadTask?.cancel() } }
     
     let items: Observable<[Game]> = Observable([])
-    let loading: Observable<BrowseGamesViewModelLoading?> = Observable(.none)
+    let loading: Observable<Bool> = Observable(true)
     let query: Observable<String> = Observable("")
     let error: Observable<String> = Observable("")
     var isEmpty: Bool { return false }
     let screenTitle = NSLocalizedString("Movies", comment: "")
-    let errorTitle = NSLocalizedString("Error", comment: "")
     
-    init(searchGamesUseCase: SearchGamesUseCase, actions: BrowseGamesViewModelActions? = nil) {
+    init(searchGamesUseCase: SearchGamesUseCase, actions: GamesViewModelAction? = nil) {
         self.searchGamesUseCase = searchGamesUseCase
         self.actions = actions
     }
@@ -71,40 +60,37 @@ final class DefaultBrowseGamesViewModel: BrowseGamesViewModel {
     
     
     private func fetch(query: GameQuery) {
-        self.loading.value = .show
-        self.query.value = query.query
-        
-        gamesLoadTask = searchGamesUseCase.execute(requestValue: .init(query: query, page: nextPage)) { result in
-            
+        self.loading.value = true
+        gamesLoadTask = searchGamesUseCase.execute(requestValue: .init(query: query, page: 1)) { result in
             switch result {
                 case .success(let data):
                     self.appendPage(data)
                 case .failure(let error):
                     self.handle(error: error)
             }
-            self.loading.value = .none
+            self.loading.value = false
         }
     }
     
     private func handle(error: Error) {
         self.error.value = error.isInternetConnectionError ? NSLocalizedString("No internet connection", comment: "") :
-         NSLocalizedString("Failed loading games data", comment: "")
+            NSLocalizedString("Failed loading games data", comment: "")
     }
     
 }
 
 
-extension DefaultBrowseGamesViewModel {
-    func viewDidLoad() {
-        fetch(query: .init(query: query.value))
+extension DefaultGamesViewModel {
+    
+    func viewDidLoad(genre: String, searchQueary: String) {
+        fetch(query: .init(ordering: "-rating", genres: genre, search: searchQueary))
     }
     
     func didLoadNextPage() {
         
     }
-        
+    
     func didSelectItem(at index: Int) {
-        print("Show Game Details")
         actions?.showGameDetails()
     }
     
@@ -113,26 +99,23 @@ extension DefaultBrowseGamesViewModel {
     }
     
     func didTapSeeAll(type: SeeAllGamesType) {
-        print("didTap")
-        actions?.showSeeAllGames(type, "")
+        
     }
     
     func startDownloadImage(game: Game, indexPath: IndexPath, completion: @escaping () -> Void) {
         guard _pendingOpearions.downloadInProgress[indexPath] == nil else { return }
         
-        let downloader = ImageDownloader(game: game)
-        
-        downloader.completionBlock = {
-            if downloader.isCancelled  { return }
-            
-            DispatchQueue.main.async {
-                self._pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)
-                completion()
+        backgroundDownloaderImage.downloader = ImageDownloader(game: game)
+        backgroundDownloaderImage.startDownloadImage(indexPath: indexPath) { downloader in
+            downloader.completionBlock = {
+                if downloader.isCancelled  { return }
+                
+                DispatchQueue.main.async {
+                    self._pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)
+                    completion()
+                }
             }
         }
-        
-        _pendingOpearions.downloadInProgress[indexPath] = downloader
-        _pendingOpearions.downloadQueue.addOperation(downloader)
     }
     
     func toggleSuspendOperations(isSuspended: Bool) {

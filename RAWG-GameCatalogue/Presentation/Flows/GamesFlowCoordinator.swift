@@ -8,7 +8,7 @@
 import UIKit
 
 protocol GamesFlowCoordinatorDependencies {
-    func makeSeeAllGamesViewController(type: SeeAllGamesType) -> SeeAllViewController
+    func makeSeeAllGamesViewController(navController: UINavigationController, genre: String) -> SeeAllViewController
     func makeGamesDetailViewController() -> DetailViewController
     func makeResultSearchViewController() -> ResultSearchViewController
 }
@@ -28,8 +28,8 @@ final class GamesFlowCoordinator {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    func makeActionsBrowseGames() -> BrowseGamesViewModelActions {
-        let actions = BrowseGamesViewModelActions(showGameDetails: showGamesDetails, showSeeAllGames: showSeeAllGames, showAboutScene: showAboutScene)
+    func makeActionsGames() -> GamesViewModelAction {
+        let actions = GamesViewModelAction(showGameDetails: showGamesDetails, showAboutScene: showAboutScene)
         
         return actions
     }
@@ -45,8 +45,8 @@ final class GamesFlowCoordinator {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func showSeeAllGames(type: SeeAllGamesType, genres: String = "") {
-        let vc = dependencies.makeSeeAllGamesViewController(type: type)
+    private func showSeeAllGames(navController: UINavigationController, genres: String = "") {
+        let vc = dependencies.makeSeeAllGamesViewController(navController: navController, genre: genres)
         navigationController?.pushViewController(vc, animated: true)
     }
     

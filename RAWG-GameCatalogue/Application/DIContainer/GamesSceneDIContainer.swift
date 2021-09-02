@@ -38,8 +38,8 @@ final class GamesSceneDIContainer {
     }
     
     // MARK: - ViewModel
-    func makeBrowseGamesViewModel(actions: BrowseGamesViewModelActions) -> BrowseGamesViewModel {
-        return DefaultBrowseGamesViewModel(searchGamesUseCase: makeSearchGamesUseCase(), actions: actions)
+    func makeGamesViewModel(actions: GamesViewModelAction) -> GamesViewModel {
+        return DefaultGamesViewModel(searchGamesUseCase: makeSearchGamesUseCase(), actions: actions)
     }
     
     func makeSearchGamesViewModel(actions: SearchViewModelActions) -> SearchViewModel {
@@ -51,7 +51,8 @@ final class GamesSceneDIContainer {
         let vc = BrowseGamesViewController()
         let navController = UINavigationController(rootViewController: vc)
         let appFlowCoordinator = makeGamesFlowCoordinator(navigationController: navController)
-        vc.viewModel = makeBrowseGamesViewModel(actions: appFlowCoordinator.makeActionsBrowseGames())
+        vc.gamesViewController = makeGamesViewController()
+        vc.gamesViewController?.viewModel = makeGamesViewModel(actions: appFlowCoordinator.makeActionsGames())
         return navController
     }
     
@@ -61,6 +62,11 @@ final class GamesSceneDIContainer {
         let appFlowCoordinator = makeGamesFlowCoordinator(navigationController: navController)
         vc.viewModel = makeSearchGamesViewModel(actions: appFlowCoordinator.makeActionsSearchGames())
         return navController
+    }
+    
+    func makeGamesViewController() -> GamesViewController {
+        let vc = GamesViewController()
+        return vc
     }
     
     func makeMainTabBarViewController() -> MainTabBarViewController {
@@ -79,8 +85,14 @@ final class GamesSceneDIContainer {
 }
 
 extension GamesSceneDIContainer: GamesFlowCoordinatorDependencies {
-    func makeSeeAllGamesViewController(type: SeeAllGamesType) -> SeeAllViewController {
-        return SeeAllViewController()
+    func makeSeeAllGamesViewController(navController: UINavigationController, genre: String) -> SeeAllViewController {
+        let vc = SeeAllViewController()
+        let appFlowCoordinator = makeGamesFlowCoordinator(navigationController: navController)
+        vc.gamesViewController = makeGamesViewController()
+        vc.gamesViewController?.genre = genre
+        vc.gamesViewController?.viewModel = makeGamesViewModel(actions: appFlowCoordinator.makeActionsGames())
+        vc.titleString = genre
+        return vc
     }
     
     func makeGamesDetailViewController() -> DetailViewController {
