@@ -14,9 +14,7 @@ struct GamesViewModelAction {
 
 protocol GamesViewModelInput {
     func viewDidLoad(genre: String, searchQueary: String)
-    func didLoadNextPage()
     func didTapRightBarItem()
-    func didTapSeeAll(type: SeeAllGamesType)
     func didSelectItem(navController: UINavigationController, at gamesID: String)
     func startDownloadImage(game: Game, indexPath: IndexPath, completion: @escaping()-> Void)
     func toggleSuspendOperations(isSuspended: Bool)
@@ -81,11 +79,7 @@ final class DefaultGamesViewModel: GamesViewModel {
 extension DefaultGamesViewModel {
     
     func viewDidLoad(genre: String, searchQueary: String) {
-        fetch(query: .init(ordering: "-rating", genres: genre, search: searchQueary))
-    }
-    
-    func didLoadNextPage() {
-        
+        fetch(query: .init(ordering: "-metacritic", genres: genre, search: searchQueary))
     }
     
     func didSelectItem(navController: UINavigationController, at gamesID: String) {
@@ -95,11 +89,7 @@ extension DefaultGamesViewModel {
     func didTapRightBarItem() {
         actions?.showAboutScene()
     }
-    
-    func didTapSeeAll(type: SeeAllGamesType) {
         
-    }
-    
     func startDownloadImage(game: Game, indexPath: IndexPath, completion: @escaping () -> Void) {
         guard _pendingOpearions.downloadInProgress[indexPath] == nil else { return }
         

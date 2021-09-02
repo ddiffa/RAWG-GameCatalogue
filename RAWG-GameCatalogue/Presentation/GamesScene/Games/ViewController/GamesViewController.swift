@@ -10,6 +10,7 @@ import UIKit
 protocol GamesViewControllerDelegate {
     func onLoading(_ isLoading: Bool)
     func getRootNavigationController() -> UINavigationController?
+    func tapProfileMenu(didTapProfile: Void)
 }
 
 class GamesViewController: UIViewController {
@@ -36,6 +37,7 @@ class GamesViewController: UIViewController {
         setUpLayoutConstraint()
         bind()
         viewModel?.viewDidLoad(genre: genre, searchQueary: searchQuery)
+        tapProfileMenu()
     }
     
     private func bind() {
@@ -50,7 +52,12 @@ class GamesViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-//        viewModel?.toggleSuspendOperations(isSuspended: true)
+        viewModel?.toggleSuspendOperations(isSuspended: true)
+    }
+    
+    func tapProfileMenu() {
+        guard let didTapProfile = viewModel?.didTapRightBarItem() else { return }
+        delegate?.tapProfileMenu(didTapProfile: didTapProfile)
     }
     
     func setUpLayoutConstraint() {
@@ -60,10 +67,6 @@ class GamesViewController: UIViewController {
             gamesTableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0),
             gamesTableView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -16)
         ])
-    }
-    
-    private func didTapSeeAllHandling(type: SeeAllGamesType) {
-        viewModel?.didTapSeeAll(type: type)
     }
     
     private func updateItems() {

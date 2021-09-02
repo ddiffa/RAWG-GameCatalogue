@@ -9,9 +9,9 @@ import UIKit
 
 class UINavigationHeaderView: UIView {
     
-    private let _profileButton: UIButton = {
+    let profileButton: UIButton = {
         let view = UIButton()
-        view.setBackgroundImage(UIImage(named: "gamer"), for: .normal)
+        view.setBackgroundImage(UIImage(systemName: "person.crop.circle"), for: .normal)
         view.tintColor = UIColor(named: ColorType.active.rawValue)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -24,10 +24,6 @@ class UINavigationHeaderView: UIView {
         return view
     }()
     
-    private let separatorView: UISeparatorView = {
-       let view = UISeparatorView()
-        return view
-    }()
     var didTapHandle: (() -> Void)?
     
     var text: String? {
@@ -48,27 +44,25 @@ class UINavigationHeaderView: UIView {
     }
     
     private func setup() {
-        addSubview(_profileButton)
-        addSubview(_headerLabel)
-        addSubview(separatorView)
         
-        _profileButton.addTarget(self, action: #selector(didTapAction), for: .touchUpInside)
+        addSubview(_headerLabel)
+        addSubview(profileButton)
+        
+        profileButton.addTarget(self, action: #selector(didTapAction), for: .touchUpInside)
         backgroundColor = UIColor(named: ColorType.primary.rawValue)
         
         NSLayoutConstraint.activate([
-            _profileButton.rightAnchor.constraint(equalTo: self.rightAnchor),
-            _profileButton.leftAnchor.constraint(equalTo: _headerLabel.rightAnchor),
-            _profileButton.bottomAnchor.constraint(equalTo: separatorView.topAnchor, constant: -10),
-            _profileButton.widthAnchor.constraint(equalToConstant: 32),
-            _profileButton.heightAnchor.constraint(equalToConstant: 32),
             
             _headerLabel.topAnchor.constraint(equalTo: self.topAnchor),
-            _headerLabel.bottomAnchor.constraint(equalTo: separatorView.topAnchor, constant: -10),
+            _headerLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
+            _headerLabel.rightAnchor.constraint(equalTo: profileButton.leftAnchor, constant: -16),
             _headerLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0),
             
-            separatorView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-            separatorView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
-            separatorView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
+            profileButton.rightAnchor.constraint(equalTo: self.rightAnchor),
+            profileButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
+            profileButton.widthAnchor.constraint(equalToConstant: 32),
+            profileButton.heightAnchor.constraint(equalToConstant: 32),
+            
         ])
     }
     

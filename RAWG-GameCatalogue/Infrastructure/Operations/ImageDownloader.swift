@@ -43,6 +43,7 @@ class ImageDownloader: Operation {
         if type == .genre {
             
             guard let url = _genre?.imageBackground, let imageData = try? Data(contentsOf: url) else {
+                _genre?.state = .failed
                 return
             }
             
@@ -51,6 +52,7 @@ class ImageDownloader: Operation {
         
         if type == .game {
             guard let url = _game?.imagePath, let imageData = try? Data(contentsOf: url) else {
+                _game?.state = .failed
                 return
             }
             
@@ -61,6 +63,8 @@ class ImageDownloader: Operation {
             guard let urlString = _detailGame?.backgroundImage,
                   let url = URL(string:  urlString),
                   let imageData = try? Data(contentsOf: url) else {
+                _detailGame?.state = .failed
+                setImageDetailGame()
                 return
             }
             handleDetailGameImage(imageData)
@@ -111,11 +115,15 @@ class ImageDownloader: Operation {
             _detailGame?.state = .failed
         }
         
+        setImageDetailGame()
+    }
+    
+    
+    private func setImageDetailGame() {
         DispatchQueue.main.async {
             self._detailGameDelegate?.setThumbnailImage(detailGame: self._detailGame)
         }
     }
-    
 }
 
 

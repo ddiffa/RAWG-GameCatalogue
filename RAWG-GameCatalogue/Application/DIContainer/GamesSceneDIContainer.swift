@@ -61,6 +61,7 @@ final class GamesSceneDIContainer {
     func makeBrowseGamesViewController() -> UIViewController {
         let vc = BrowseGamesViewController()
         let navController = UINavigationController(rootViewController: vc)
+        navController.navigationBar.prefersLargeTitles = true
         let appFlowCoordinator = makeGamesFlowCoordinator(navigationController: navController)
         vc.gamesViewController = makeGamesViewController()
         vc.gamesViewController?.viewModel = makeGamesViewModel(actions: appFlowCoordinator.makeActionsGames())
@@ -70,6 +71,7 @@ final class GamesSceneDIContainer {
     func makeSearchViewController() -> UIViewController {
         let vc = SearchViewController()
         let navController = UINavigationController(rootViewController: vc)
+        navController.navigationBar.prefersLargeTitles = true
         let appFlowCoordinator = makeGamesFlowCoordinator(navigationController: navController)
         vc.viewModel = makeSearchGamesViewModel(actions: appFlowCoordinator.makeActionsSearchGames())
         return navController

@@ -59,24 +59,24 @@ class SearchViewController: UICustomViewControllerWithScrollView {
         viewModel.loading.observe(on: self) { [weak self] in self?.updateLoading($0)}
     }
     
-    override func setUpView(showRighBarButtonItem: Bool) {
-        super.setUpView(showRighBarButtonItem: true)
+    override func setUpView() {
+        super.setUpView()
+        isHiddenLargeTitle = false
         navigationItem.searchController = _searchViewController
-        navigationItem.titleMode("Search", mode: .never)
-        navigationTitle.text = "Search"
+        navigationItem.titleMode("Search", mode: .automatic)
         containerView.addSubview(browseGenresLabel)
         containerView.addSubview(genreCollectionView)
     }
     
-    override func didTapRightButtonItem() {
-        viewModel?.didTapRightBarItem()
-    }
+//    override func didTapRightButtonItem() {
+//        viewModel?.didTapRightBarItem()
+//    }
     
     override func setUpLayoutConstraint() {
         super.setUpLayoutConstraint()
         NSLayoutConstraint.activate([
             
-            browseGenresLabel.topAnchor.constraint(equalTo: navigationTitle.bottomAnchor, constant: 12),
+            browseGenresLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12),
             browseGenresLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16),
             browseGenresLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -16),
             

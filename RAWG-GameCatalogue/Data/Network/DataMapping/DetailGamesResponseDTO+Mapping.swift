@@ -9,18 +9,18 @@ import Foundation
 
 
 struct DetailGamesResponseDTO: Decodable {
-    let id: Int64
-    let name: String
-    let description: String
-    let released: String
-    let backgroundImage: String
-    let rating: Double
-    let playTime: Int
-    let reviewCount: Int
+    let id: Int64?
+    let name: String?
+    let description: String?
+    let released: String?
+    let backgroundImage: String?
+    let rating: Double?
+    let playTime: Int?
+    let reviewCount: Int?
     
-    let parentPlatform: [ParentPlatforms]
+    let parentPlatform: [ParentPlatforms]?
     let genres: [Genres]?
-    let developers: [Developers]
+    let developers: [Developers]?
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -85,7 +85,7 @@ extension DetailGamesResponseDTO {
                      playTime: playTime,
                      parentPlatform: convertArrayPlatformToString(platform: parentPlatform),
                      genres: convertArrayGenreToString(genre: genres),
-                     developers: developers.first?.name ?? "-",
+                     developers: developers?.first?.name,
                      reviewCount: reviewCount)
     }
     

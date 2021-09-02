@@ -1,0 +1,20 @@
+PODS:
+  - Cosmos (23.0.0)
+  - SwiftLint (0.43.1)
+
+DEPENDENCIES:
+  - Cosmos (~> 23.0)
+  - SwiftLint
+
+SPEC REPOS:
+  trunk:
+    - Cosmos
+    - SwiftLint
+
+SPEC CHECKSUMS:
+  Cosmos: b5c6a9a637e28a061b54c8f8b1d8529d7d4db73f
+  SwiftLint: 99f82d07b837b942dd563c668de129a03fc3fb52
+
+PODFILE CHECKSUM: 903204ed9e34bd31d42d2b15b0b8693014acada8
+
+COCOAPODS: 1.10.1

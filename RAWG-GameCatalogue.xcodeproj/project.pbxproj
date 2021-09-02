@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -84,9 +84,12 @@
 		94F628A326D02E9100BAF79D /* GamesSceneDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F628A226D02E9100BAF79D /* GamesSceneDIContainer.swift */; };
 		94F628A526D0300C00BAF79D /* AppAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F628A426D0300C00BAF79D /* AppAppearance.swift */; };
 		94F628AC26D034AD00BAF79D /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F628AB26D034AD00BAF79D /* Observable.swift */; };
+		AD57E5F3BDF98BA72E2B16C5 /* Pods_RAWG_GameCatalogue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 289E9CA99FB417AD9C53D09D /* Pods_RAWG_GameCatalogue.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		289E9CA99FB417AD9C53D09D /* Pods_RAWG_GameCatalogue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RAWG_GameCatalogue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		49C4BA10353C5004136B6495 /* Pods-RAWG-GameCatalogue.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RAWG-GameCatalogue.debug.xcconfig"; path = "Target Support Files/Pods-RAWG-GameCatalogue/Pods-RAWG-GameCatalogue.debug.xcconfig"; sourceTree = "<group>"; };
 		943A653A26E0DEC400091B4F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		943A653C26E0E67000091B4F /* UICustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICustomImageView.swift; sourceTree = "<group>"; };
 		943A654026E0EAEA00091B4F /* UIHeaderImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHeaderImageView.swift; sourceTree = "<group>"; };
@@ -166,6 +169,7 @@
 		94F628A226D02E9100BAF79D /* GamesSceneDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesSceneDIContainer.swift; sourceTree = "<group>"; };
 		94F628A426D0300C00BAF79D /* AppAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAppearance.swift; sourceTree = "<group>"; };
 		94F628AB26D034AD00BAF79D /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		A24DD722DABE5812E0323B6A /* Pods-RAWG-GameCatalogue.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RAWG-GameCatalogue.release.xcconfig"; path = "Target Support Files/Pods-RAWG-GameCatalogue/Pods-RAWG-GameCatalogue.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,12 +177,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD57E5F3BDF98BA72E2B16C5 /* Pods_RAWG_GameCatalogue.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		67A57A4D0CFD97F1269F5D7C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				289E9CA99FB417AD9C53D09D /* Pods_RAWG_GameCatalogue.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		943A653E26E0EA5100091B4F /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -379,14 +392,14 @@
 		94ED70D926D2A3D400E2C94A /* GamesScene */ = {
 			isa = PBXGroup;
 			children = (
-				94C6853026E0C0FB009547A9 /* Games */,
 				94ED70E426D2BEB000E2C94A /* About */,
-				94ED70DF26D2A4B600E2C94A /* Detail */,
 				94F6286626D007BB00BAF79D /* Browse */,
+				94ED70DF26D2A4B600E2C94A /* Detail */,
+				94C6853026E0C0FB009547A9 /* Games */,
+				943CE67E26D13F6F0010AE19 /* MainTabBarViewController.swift */,
 				94ED70C926D2680200E2C94A /* ResultSearch */,
 				94F6286A26D007FE00BAF79D /* Search */,
 				94ED70D226D2A28400E2C94A /* SeeAllGames */,
-				943CE67E26D13F6F0010AE19 /* MainTabBarViewController.swift */,
 			);
 			path = GamesScene;
 			sourceTree = "<group>";
@@ -422,6 +435,8 @@
 			children = (
 				94F6284426D004A900BAF79D /* RAWG-GameCatalogue */,
 				94F6284326D004A900BAF79D /* Products */,
+				96AADBDE51E7CD4C1BFBA794 /* Pods */,
+				67A57A4D0CFD97F1269F5D7C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -664,6 +679,15 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		96AADBDE51E7CD4C1BFBA794 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				49C4BA10353C5004136B6495 /* Pods-RAWG-GameCatalogue.debug.xcconfig */,
+				A24DD722DABE5812E0323B6A /* Pods-RAWG-GameCatalogue.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -671,9 +695,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 94F6285626D004AA00BAF79D /* Build configuration list for PBXNativeTarget "RAWG-GameCatalogue" */;
 			buildPhases = (
+				5BFE58CD7F50CE7BA04A73FE /* [CP] Check Pods Manifest.lock */,
 				94F6283E26D004A900BAF79D /* Sources */,
 				94F6283F26D004A900BAF79D /* Frameworks */,
 				94F6284026D004A900BAF79D /* Resources */,
+				DF63BB9B425DB2F27A6D2DD2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -727,6 +753,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5BFE58CD7F50CE7BA04A73FE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RAWG-GameCatalogue-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DF63BB9B425DB2F27A6D2DD2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RAWG-GameCatalogue/Pods-RAWG-GameCatalogue-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RAWG-GameCatalogue/Pods-RAWG-GameCatalogue-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RAWG-GameCatalogue/Pods-RAWG-GameCatalogue-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		94F6283E26D004A900BAF79D /* Sources */ = {
@@ -943,6 +1011,7 @@
 		};
 		94F6285726D004AA00BAF79D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 49C4BA10353C5004136B6495 /* Pods-RAWG-GameCatalogue.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -962,6 +1031,7 @@
 		};
 		94F6285826D004AA00BAF79D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A24DD722DABE5812E0323B6A /* Pods-RAWG-GameCatalogue.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

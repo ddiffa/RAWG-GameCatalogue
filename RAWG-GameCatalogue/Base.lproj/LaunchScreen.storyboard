@@ -16,8 +16,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="gamer" translatesAutoresizingMaskIntoConstraints="NO" id="uSR-gO-WS2">
-                                <rect key="frame" x="186" y="427" width="64" height="64"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon" translatesAutoresizingMaskIntoConstraints="NO" id="uSR-gO-WS2">
+                                <rect key="frame" x="175" y="416" width="64" height="64"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="64" id="FXR-Ma-1YA"/>
                                     <constraint firstAttribute="height" constant="64" id="tZM-mF-biZ"/>
@@ -27,8 +27,8 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="PrimaryColor"/>
                         <constraints>
-                            <constraint firstItem="uSR-gO-WS2" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="OgF-E2-0RK"/>
-                            <constraint firstItem="uSR-gO-WS2" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="qEh-7s-w01"/>
+                            <constraint firstItem="uSR-gO-WS2" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="N8l-vX-JaZ"/>
+                            <constraint firstItem="uSR-gO-WS2" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="hKJ-HK-4ie"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -38,7 +38,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="gamer" width="32" height="32"/>
+        <image name="icon" width="16" height="16"/>
         <namedColor name="PrimaryColor">
             <color red="0.098039215686274508" green="0.15294117647058825" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

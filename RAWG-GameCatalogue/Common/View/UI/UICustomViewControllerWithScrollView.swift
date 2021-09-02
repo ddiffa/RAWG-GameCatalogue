@@ -35,40 +35,43 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
     
     lazy var navigationTitle: UINavigationHeaderView = {
         let view = UINavigationHeaderView()
+        view.backgroundColor = .white
+        
         view.didTapHandle = self.didTapRightButtonItem
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    private var isHiddenLargeTitle: Bool = false
+    var isHiddenLargeTitle: Bool = false {
+        didSet {
+            self.navigationController?.navigationBar.prefersLargeTitles = isHiddenLargeTitle
+            if isHiddenLargeTitle {
+                navigationItem.rightBarButtonItem = nil
+            }
+        }
+    }
+    
+    var didTapProfileMenu: (() -> Void)?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if isHiddenLargeTitle {
-            checkNavigationBar()
-        }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle =  .dark
-        setUpView(showRighBarButtonItem: false)
+        setUpView()
         setUpLayoutConstraint()
     }
     
-    func setUpView(showRighBarButtonItem: Bool) {
-        isHiddenLargeTitle = showRighBarButtonItem
+    func setUpView() {
         view.backgroundColor = UIColor(named: ColorType.primary.rawValue)
         view.addSubview(_loadingView)
         view.addSubview(scrollView)
         scrollView.delegate = self
         scrollView.addSubview(containerView)
         
-        if showRighBarButtonItem {
-            containerView.addSubview(navigationTitle)
-            self.navigationController?.setNavigationBarHidden(true, animated: false)
-        } else {
-            self.navigationController?.setNavigationBarHidden(false, animated: false)
-        }
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle"), style: .plain, target: self, action: #selector(didTapRightButtonItem))
     }
     
     func setUpLayoutConstraint() {
@@ -90,24 +93,28 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
             containerView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
             containerView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0)
         ])
-        
-        if isHiddenLargeTitle {
-            NSLayoutConstraint.activate([
-            
-                navigationTitle.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
-                navigationTitle.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16),
-                navigationTitle.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -16)
-            ])
-        }
     }
     
-    func didTapRightButtonItem() {
-        
+    @objc private func didTapRightButtonItem() {
+        (didTapProfileMenu ?? {})() 
     }
-    
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        checkNavigationBar()
+        if !isHiddenLargeTitle {
+            let magicalSafeAreaTop: CGFloat = UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.safeAreaInsets.top ?? 0
+            
+            let offset = scrollView.contentOffset.y + (magicalSafeAreaTop - (navigationController?.navigationBar.frame.height ?? 0) )
+            
+            let alpha: CGFloat = 1 - ((offset) / magicalSafeAreaTop)
+            
+            if alpha > 0.9 {
+                self.navigationController?.navigationBar.prefersLargeTitles = true
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle"), style: .plain, target: self, action: #selector(didTapRightButtonItem))
+            } else {
+                self.navigationController?.navigationBar.prefersLargeTitles = false
+                navigationItem.rightBarButtonItem = nil
+            }
+        }
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -117,16 +124,6 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         
-    }
-    
-    func checkNavigationBar() {
-        let viewFrame = scrollView.convert(navigationTitle.bounds, from: navigationTitle)
-        
-        if !viewFrame.intersects(scrollView.bounds) {
-            navigationController?.setNavigationBarHidden(false, animated: true)
-        } else {
-            navigationController?.setNavigationBarHidden(true, animated: true)
-        }
     }
     
     func hideLoading() {

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import Cosmos
 class UIRatingsAndReviewView: UIView {
     
     private let _headersLabel: UIHeaderLabel = {
@@ -16,10 +16,15 @@ class UIRatingsAndReviewView: UIView {
         return view
     }()
     
-    private let _imageView: UIImageView = {
-        let view = UIImageView()
-        view.image = UIImage(systemName: "star.fill")
-        view.tintColor = UIColor(named: ColorType.active.rawValue)
+    private let _ratingView: CosmosView = {
+        let view = CosmosView()
+        view.rating = 0.0
+        view.settings.starSize = 24
+        view.settings.updateOnTouch = false
+        view.settings.fillMode = .precise
+        view.settings.filledColor = UIColor(named: ColorType.active.rawValue) ?? .orange
+        view.settings.emptyBorderColor = UIColor(named: ColorType.active.rawValue) ?? .orange
+        view.settings.emptyColor = UIColor(named: ColorType.primary.rawValue) ?? .systemGray
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -47,6 +52,7 @@ class UIRatingsAndReviewView: UIView {
         didSet {
             guard let value = ratingValue else { return }
             _ratingLabel.text = "\(value)"
+            _ratingView.rating = value
         }
     }
     
@@ -63,7 +69,7 @@ class UIRatingsAndReviewView: UIView {
     private func setup() {
         self.translatesAutoresizingMaskIntoConstraints = false
         addSubview(_headersLabel)
-        addSubview(_imageView)
+        addSubview(_ratingView)
         addSubview(_ratingLabel)
         addSubview(_reviewCount)
         
@@ -77,15 +83,16 @@ class UIRatingsAndReviewView: UIView {
             _ratingLabel.topAnchor.constraint(equalTo: _headersLabel.bottomAnchor, constant: 16),
             _ratingLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             _ratingLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
+            _ratingLabel.widthAnchor.constraint(equalToConstant: 110),
             
-            _imageView.leftAnchor.constraint(equalTo: self._ratingLabel.rightAnchor, constant: 16),
-            _imageView.topAnchor.constraint(equalTo: _headersLabel.bottomAnchor, constant: 24),
-            _imageView.heightAnchor.constraint(equalToConstant: 24),
-            _imageView.widthAnchor.constraint(equalToConstant: 24),
+            _ratingView.leftAnchor.constraint(equalTo: self._ratingLabel.rightAnchor, constant: 16),
+            _ratingView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
+            _ratingView.topAnchor.constraint(equalTo: _headersLabel.bottomAnchor, constant: 24),
+            
             
             _reviewCount.leftAnchor.constraint(equalTo: _ratingLabel.rightAnchor, constant: 16),
-//            _reviewCount.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
-            _reviewCount.topAnchor.constraint(equalTo: _imageView.bottomAnchor, constant: 2)
+            _reviewCount.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
+            _reviewCount.topAnchor.constraint(equalTo: _ratingView.bottomAnchor, constant: 2)
         ])
     }
 }

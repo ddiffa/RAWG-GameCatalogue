@@ -37,9 +37,9 @@ class AboutViewController: UICustomViewControllerWithScrollView {
         navigationItem.titleMode("About", mode: .never)
     }
     
-    
-    override func setUpView(showRighBarButtonItem: Bool) {
-        super.setUpView(showRighBarButtonItem: showRighBarButtonItem)
+    override func setUpView() {
+        super.setUpView()
+        isHiddenLargeTitle = true
         containerView.addSubview(profileImage)
         containerView.addSubview(nameLabel)
         containerView.addSubview(descLabel)

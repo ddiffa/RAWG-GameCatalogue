@@ -55,6 +55,11 @@ class GamesTableViewCell: UITableViewCell {
             if thumbnailView.thumbnail.image != nil {
                 thumbnailView.hideLoading()
             }
+            
+            if data.state == .none || data.state == .failed {
+                thumbnailView.thumbnail.image = UIImage(named: "error")
+                thumbnailView.hideLoading()
+            }
         }
     }
     

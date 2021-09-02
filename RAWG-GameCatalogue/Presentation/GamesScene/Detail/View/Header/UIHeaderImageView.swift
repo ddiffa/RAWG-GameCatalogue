@@ -42,7 +42,11 @@ class UIHeaderImageView: UIView {
     
     var image: UIImage? {
         didSet {
-            guard let data = image else { return }
+            guard let data = image else {
+                _thumbnailView.thumbnail.image = UIImage(named: "error")
+                _thumbnailView.hideLoading()
+                return
+            }
             _thumbnailView.thumbnail.image = data
             
             if _thumbnailView.thumbnail.image != nil {

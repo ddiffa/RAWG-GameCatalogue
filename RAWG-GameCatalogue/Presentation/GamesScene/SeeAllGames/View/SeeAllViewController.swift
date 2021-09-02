@@ -23,8 +23,9 @@ class SeeAllViewController: UICustomViewControllerWithScrollView {
         navigationItem.titleMode(titleString ?? "", mode: .never)
     }
     
-    override func setUpView(showRighBarButtonItem: Bool) {
-        super.setUpView(showRighBarButtonItem: false)
+    override func setUpView() {
+        super.setUpView()
+        isHiddenLargeTitle = true
         containerView.addSubview(gamesContainer)
         if let gamesViewController = gamesViewController {
             gamesViewController.delegate = self
@@ -53,6 +54,12 @@ class SeeAllViewController: UICustomViewControllerWithScrollView {
 }
 
 extension SeeAllViewController: GamesViewControllerDelegate {
+    func tapProfileMenu(didTapProfile: Void) {
+            didTapProfileMenu = {
+                didTapProfile
+            }
+    }
+    
     func onLoading(_ isLoading: Bool) {
         self.updateLoading(isLoading)
     }

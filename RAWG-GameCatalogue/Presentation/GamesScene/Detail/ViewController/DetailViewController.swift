@@ -48,8 +48,9 @@ class DetailViewController: UICustomViewControllerWithScrollView {
         viewModel?.viewDidLoad(gamesID: gamesID)
     }
 
-    override func setUpView(showRighBarButtonItem: Bool) {
-        super.setUpView(showRighBarButtonItem: false)
+    override func setUpView() {
+        super.setUpView()
+        isHiddenLargeTitle = true
         containerView.addSubview(headerView)
         containerView.addSubview(screenShootView)
         containerView.addSubview(ratingView)
@@ -101,10 +102,10 @@ class DetailViewController: UICustomViewControllerWithScrollView {
         ratingView.ratingValue = data.rating
         ratingView.reviewCountValue = data.reviewCount
         
-        informationView.developers =  data.developers
-        informationView.platforms = data.parentPlatform
-        informationView.released = data.released
-        informationView.playtime = "\(data.playTime)h"
+        informationView.developers =  data.developers ?? "-"
+        informationView.platforms = data.parentPlatform ?? "-"
+        informationView.released = data.released ?? "-"
+        informationView.playtime = "\(data.playTime ?? 0)h"
         informationView.reloadData()
         
         screenShootView.descriptionText = data.description
@@ -118,7 +119,7 @@ class DetailViewController: UICustomViewControllerWithScrollView {
 
 extension DetailViewController: DetailGameDelegate {
     func setThumbnailImage(detailGame: DetailGame?) {
-        guard let detailGame = detailGame else { return }
-        self.headerView.image = detailGame.image
+//        guard let detailGame = detailGame else { return }
+        self.headerView.image = detailGame?.image
     }
 }

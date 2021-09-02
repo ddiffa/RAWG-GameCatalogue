@@ -36,10 +36,10 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
     var gamesViewController: GamesViewController?
     
     // MARK: - View Controller Lifecyle
-    override func setUpView(showRighBarButtonItem: Bool) {
-        super.setUpView(showRighBarButtonItem: true)
-        navigationItem.titleMode("Browse Games", mode: .never)
-        navigationTitle.text = "Browse Games"
+    override func setUpView() {
+        super.setUpView()
+        isHiddenLargeTitle = false
+        navigationItem.titleMode( "Browse Games", mode: .automatic)
         containerView.addSubview(descLabel)
         containerView.addSubview(allGamesLabel)
         containerView.addSubview(gamesContainer)
@@ -62,7 +62,7 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
         super.setUpLayoutConstraint()
         NSLayoutConstraint.activate([
             
-            descLabel.topAnchor.constraint(equalTo: navigationTitle.bottomAnchor, constant: 4),
+            descLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4),
             descLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16.0),
             descLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -16.0),
             
@@ -75,11 +75,6 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
             gamesContainer.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: 0),
             gamesContainer.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -16)
         ])
-    }
-    
-    override func didTapRightButtonItem() {
-        super.didTapRightButtonItem()
-//        viewModel?.didTapRightBarItem()
     }
     
     private func showError(_ error: String) {
@@ -97,5 +92,11 @@ extension BrowseGamesViewController: GamesViewControllerDelegate {
     
     func getRootNavigationController() -> UINavigationController? {
         return self.navigationController
+    }
+    
+    func tapProfileMenu(didTapProfile: Void) {
+        didTapProfileMenu = {
+            didTapProfile
+        }
     }
 }
