@@ -9,12 +9,10 @@ import UIKit
 
 struct GamesViewModelAction {
     let showGameDetails: ((String) -> Void)
-    let showAboutScene: (() -> Void)
 }
 
 protocol GamesViewModelInput {
     func viewDidLoad(genre: String, searchQueary: String)
-    func didTapRightBarItem()
     func didSelectItem(navController: UINavigationController, at gamesID: String)
     func startDownloadImage(game: Game, indexPath: IndexPath, completion: @escaping()-> Void)
     func toggleSuspendOperations(isSuspended: Bool)
@@ -24,7 +22,6 @@ protocol GamesViewModelOutput {
     var items: Observable<[Game]> { get }
     var loading: Observable<Bool> { get }
     var query: Observable<String> { get }
-    var isEmpty: Bool { get }
     var error: Observable<String> { get }
 }
 
@@ -42,7 +39,6 @@ final class DefaultGamesViewModel: GamesViewModel {
     let loading: Observable<Bool> = Observable(true)
     let query: Observable<String> = Observable("")
     let error: Observable<String> = Observable("")
-    var isEmpty: Bool { return false }
     let screenTitle = NSLocalizedString("Movies", comment: "")
     
     init(searchGamesUseCase: SearchGamesUseCase, actions: GamesViewModelAction? = nil) {
@@ -84,10 +80,6 @@ extension DefaultGamesViewModel {
     
     func didSelectItem(navController: UINavigationController, at gamesID: String) {
         actions?.showGameDetails(gamesID)
-    }
-    
-    func didTapRightBarItem() {
-        actions?.showAboutScene()
     }
         
     func startDownloadImage(game: Game, indexPath: IndexPath, completion: @escaping () -> Void) {

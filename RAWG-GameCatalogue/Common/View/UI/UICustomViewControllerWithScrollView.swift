@@ -51,8 +51,6 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
         }
     }
     
-    var didTapProfileMenu: (() -> Void)?
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
@@ -95,8 +93,8 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
         ])
     }
     
-    @objc private func didTapRightButtonItem() {
-        (didTapProfileMenu ?? {})() 
+    @objc func didTapRightButtonItem() {
+
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -142,5 +140,12 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
         } else {
             hideLoading()
         }
+    }
+    
+    func showError(_ error: String) {
+        guard !error.isEmpty else {
+            return
+        }
+        //MARK: Show alert
     }
 }

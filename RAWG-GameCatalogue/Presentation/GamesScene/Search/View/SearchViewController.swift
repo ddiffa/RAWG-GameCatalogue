@@ -68,9 +68,6 @@ class SearchViewController: UICustomViewControllerWithScrollView {
         containerView.addSubview(genreCollectionView)
     }
     
-//    override func didTapRightButtonItem() {
-//        viewModel?.didTapRightBarItem()
-//    }
     
     override func setUpLayoutConstraint() {
         super.setUpLayoutConstraint()
@@ -87,12 +84,11 @@ class SearchViewController: UICustomViewControllerWithScrollView {
         ])
     }
     
-    private func updateItems() {
-        self.genreCollectionView.reloadData()
+    override func didTapRightButtonItem() {
+        self.viewModel?.didTapRightBarItem()
     }
     
-    private func showError(_ error: String) {
-        guard !error.isEmpty else { return }
-        // MARK: - Show alert
+    private func updateItems() {
+        self.genreCollectionView.reloadData()
     }
 }

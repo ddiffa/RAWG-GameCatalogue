@@ -57,6 +57,11 @@ final class GamesSceneDIContainer {
     func makeDetailGamesViewModel() -> DetailGamesViewModel {
         return DefaultDetailGamesViewModel(detailGamesUseCase: makeDetailGamesUseCase())
     }
+    
+    func makeBrowseGamesViewModel(actions: BrowseGamesViewModelActions) -> BrowseGamesViewModel {
+        return DefaultBrowseGamesViewModel(actions: actions)
+    }
+    
     //MARK: - View controller
     func makeBrowseGamesViewController() -> UIViewController {
         let vc = BrowseGamesViewController()
@@ -65,6 +70,7 @@ final class GamesSceneDIContainer {
         let appFlowCoordinator = makeGamesFlowCoordinator(navigationController: navController)
         vc.gamesViewController = makeGamesViewController()
         vc.gamesViewController?.viewModel = makeGamesViewModel(actions: appFlowCoordinator.makeActionsGames())
+        vc.viewModel = makeBrowseGamesViewModel(actions: appFlowCoordinator.makeActionsProfile())
         return navController
     }
     

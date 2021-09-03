@@ -12,7 +12,7 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
     // MARK: - Initialization Views
     let descLabel: UILabel = {
         let view = UILabel()
-        view.text = "From modern multi-player action games to classics you can download for free."
+        view.text = "From modern multi-player action games to classics you can you can find here."
         view.textColor = .white
         view.numberOfLines = 0
         view.font = UIFont.systemFont(ofSize: 18)
@@ -34,6 +34,7 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
     }()
     
     var gamesViewController: GamesViewController?
+    var viewModel: BrowseGamesViewModel?
     
     // MARK: - View Controller Lifecyle
     override func setUpView() {
@@ -77,11 +78,8 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
         ])
     }
     
-    private func showError(_ error: String) {
-        guard !error.isEmpty else {
-            return
-        }
-        //MARK: Show alert
+    override func didTapRightButtonItem() {
+        viewModel?.didTapProfileMenu()
     }
 }
 
@@ -92,11 +90,5 @@ extension BrowseGamesViewController: GamesViewControllerDelegate {
     
     func getRootNavigationController() -> UINavigationController? {
         return self.navigationController
-    }
-    
-    func tapProfileMenu(didTapProfile: Void) {
-        didTapProfileMenu = {
-            didTapProfile
-        }
     }
 }

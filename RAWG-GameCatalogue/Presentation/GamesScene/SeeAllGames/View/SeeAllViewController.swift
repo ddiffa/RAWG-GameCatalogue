@@ -54,12 +54,6 @@ class SeeAllViewController: UICustomViewControllerWithScrollView {
 }
 
 extension SeeAllViewController: GamesViewControllerDelegate {
-    func tapProfileMenu(didTapProfile: Void) {
-            didTapProfileMenu = {
-                didTapProfile
-            }
-    }
-    
     func onLoading(_ isLoading: Bool) {
         self.updateLoading(isLoading)
     }

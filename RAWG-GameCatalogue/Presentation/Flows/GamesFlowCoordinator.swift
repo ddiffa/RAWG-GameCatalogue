@@ -34,8 +34,7 @@ final class GamesFlowCoordinator {
     }
     
     func makeActionsGames() -> GamesViewModelAction {
-        let actions = GamesViewModelAction(showGameDetails: showGamesDetails,
-                                           showAboutScene: showAboutScene)
+        let actions = GamesViewModelAction(showGameDetails: showGamesDetails)
         return actions
     }
     
@@ -44,6 +43,11 @@ final class GamesFlowCoordinator {
                                             showQueryGames: {},
                                             showAboutScene: showAboutScene,
                                             showGameDetails: showGamesDetails)
+        return action
+    }
+    
+    func makeActionsProfile() -> BrowseGamesViewModelActions {
+        let action = BrowseGamesViewModelActions(showAboutScene: showAboutScene)
         return action
     }
     
