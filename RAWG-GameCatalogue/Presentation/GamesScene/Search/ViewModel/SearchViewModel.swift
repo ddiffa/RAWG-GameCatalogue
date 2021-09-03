@@ -9,21 +9,17 @@ import UIKit
 
 struct SearchViewModelActions {
     let showSeeAllGames: ((UINavigationController, String, String) -> Void)
-    let showQueryGames: (() -> Void)
     let showAboutScene: (() -> Void)
     let showGameDetails: ((String) -> Void)
 }
 
 protocol SearchViewModelInput {
     func viewDidLoad()
-    func didLoadNextPage()
-    func didSearch(query: String)
-    func didCancelSearch()
     func didTapRightBarItem()
-    func didTapSeeAll(type: SeeAllGamesType)
     func didSelectItem(navController: UINavigationController, genreID: String, genre: String)
-    func startDownloadImage(genre: Genre, indexPath: IndexPath, completion: @escaping()-> Void)
+    func startDownloadImage(genre: Genre, indexPath: IndexPath, containerSize: CGSize, completion: @escaping()-> Void)
     func toggleSuspendOperations(isSuspended: Bool)
+    func cancelOperations()
 }
 
 protocol SearchViewModelOutput {
@@ -66,12 +62,10 @@ final class DefaultSearchViewModel: SearchViewModel {
         }
     }
     
-    private func searchGames(query: String) {
-        
-    }
-    
     private func handle(error: Error) {
-        
+        self.error.value = error.isInternetConnectionError ?
+            NSLocalizedString("No internet connection", comment: "") :
+            NSLocalizedString("Failed loading games data", comment: "")
     }
 }
 
@@ -79,22 +73,6 @@ final class DefaultSearchViewModel: SearchViewModel {
 extension DefaultSearchViewModel {
     func viewDidLoad() {
         fetchGenres()
-    }
-    
-    func didLoadNextPage() {
-        
-    }
-    
-    func didSearch(query: String) {
-        searchGames(query: query)
-    }
-    
-    func didCancelSearch() {
-        
-    }
-    
-    func didTapSeeAll(type: SeeAllGamesType) {
-        
     }
     
     func didTapRightBarItem() {
@@ -105,10 +83,10 @@ extension DefaultSearchViewModel {
         actions?.showSeeAllGames(navController, genreID, genre)
     }
     
-    func startDownloadImage(genre: Genre, indexPath: IndexPath, completion: @escaping () -> Void) {
+    func startDownloadImage(genre: Genre, indexPath: IndexPath, containerSize: CGSize, completion: @escaping () -> Void) {
         guard _pendingOpearions.downloadInProgress[indexPath] == nil else { return }
         
-        let downloader = ImageDownloader(genre: genre)
+        let downloader = ImageDownloader(genre: genre, containerSize: containerSize)
         
         downloader.completionBlock = {
             if downloader.isCancelled  { return }
@@ -125,6 +103,10 @@ extension DefaultSearchViewModel {
     
     func toggleSuspendOperations(isSuspended: Bool) {
         _pendingOpearions.downloadQueue.isSuspended = isSuspended
+    }
+    
+    func cancelOperations() {
+        _pendingOpearions.downloadQueue.cancelAllOperations()
     }
 
 }

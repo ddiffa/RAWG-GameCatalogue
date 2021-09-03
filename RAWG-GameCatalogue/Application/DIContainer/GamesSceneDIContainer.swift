@@ -80,7 +80,17 @@ final class GamesSceneDIContainer {
         navController.navigationBar.prefersLargeTitles = true
         let appFlowCoordinator = makeGamesFlowCoordinator(navigationController: navController)
         vc.viewModel = makeSearchGamesViewModel(actions: appFlowCoordinator.makeActionsSearchGames())
+        vc.resultSearchViewController = makeResultSearchViewController(gamesActions: appFlowCoordinator.makeActionsGames(), rootNavController: navController)
         return navController
+    }
+    
+    func makeResultSearchViewController(gamesActions: GamesViewModelAction, rootNavController: UINavigationController) -> ResultSearchViewController {
+        let vc = ResultSearchViewController()
+        vc.rootNavigationController = rootNavController
+        vc.gamesViewController = makeGamesViewController()
+        vc.gamesViewController?.viewModel = makeGamesViewModel(actions: gamesActions)
+        vc.gamesViewController?.isSearchGames  = true
+        return vc
     }
     
     func makeGamesViewController() -> GamesViewController {

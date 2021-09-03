@@ -85,7 +85,9 @@ class DetailViewController: UICustomViewControllerWithScrollView {
             guard let data = $0 else { return }
             self?.setUpValue(data)
         }
-        viewModel?.error.observe(on: self) { [weak self] in self?.showError(error: $0) }
+        viewModel?.error.observe(on: self) { [weak self] in
+            self?.showError($0, completion: { self?.viewModel?.viewDidLoad(gamesID: self?.gamesID ?? "") })
+        }
         viewModel?.loading.observe(on: self) { [weak self] in self?.updateLoading($0) }
     }
     
@@ -94,9 +96,8 @@ class DetailViewController: UICustomViewControllerWithScrollView {
         headerView.genreText = data.genres
         
         if data.state == .new {
-            self.viewModel?.startDownloadImage(delegate: self) {
-                
-            }
+            self.viewModel?.startDownloadImage(delegate: self,
+                                               containerSize: headerView.contentImageSize)
         }
         
         ratingView.ratingValue = data.rating
@@ -111,15 +112,10 @@ class DetailViewController: UICustomViewControllerWithScrollView {
         screenShootView.descriptionText = data.description
     }
     
-    private func showError(error: String?) {
-        
-    }
-    
 }
 
 extension DetailViewController: DetailGameDelegate {
     func setThumbnailImage(detailGame: DetailGame?) {
-//        guard let detailGame = detailGame else { return }
         self.headerView.image = detailGame?.image
     }
 }

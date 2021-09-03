@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelegate {
+class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelegate, Alertable {
     
     lazy var scrollView: UIScrollView = {
         let view = UIScrollView(frame: .zero)
@@ -32,16 +32,7 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    lazy var navigationTitle: UINavigationHeaderView = {
-        let view = UINavigationHeaderView()
-        view.backgroundColor = .white
         
-        view.didTapHandle = self.didTapRightButtonItem
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     var isHiddenLargeTitle: Bool = false {
         didSet {
             self.navigationController?.navigationBar.prefersLargeTitles = isHiddenLargeTitle
@@ -69,7 +60,11 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
         scrollView.delegate = self
         scrollView.addSubview(containerView)
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle"), style: .plain, target: self, action: #selector(didTapRightButtonItem))
+        if (navigationController?.navigationBar.frame.height ?? 0) <= 96 {
+            self.navigationItem.rightBarButtonItem = nil
+        } else {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle"), style: .plain, target: self, action: #selector(didTapRightButtonItem))
+        }
     }
     
     func setUpLayoutConstraint() {
@@ -142,10 +137,13 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
         }
     }
     
-    func showError(_ error: String) {
+    func showError(_ error: String, completion: @escaping() -> Void) {
         guard !error.isEmpty else {
             return
         }
-        //MARK: Show alert
+        
+        showAlert(message: error) {
+            completion()
+        }
     }
 }

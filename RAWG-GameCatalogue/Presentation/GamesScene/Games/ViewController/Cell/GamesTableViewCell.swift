@@ -43,23 +43,10 @@ class GamesTableViewCell: UITableViewCell {
     
     var game: Game? {
         didSet {
-            guard let data = game else {
+            guard let game = game else {
                 return
             }
-            
-            titleLabel.text = data.name
-            ratingView.ratingValue = data.rating
-            thumbnailView.thumbnail.image = data.image
-            yearAndCategoryLabel.text = "\(data.released ?? "1997") | \(data.genres ?? "-")"
-            
-            if thumbnailView.thumbnail.image != nil {
-                thumbnailView.hideLoading()
-            }
-            
-            if data.state == .none || data.state == .failed {
-                thumbnailView.thumbnail.image = UIImage(named: "error")
-                thumbnailView.hideLoading()
-            }
+            setData(game: game)
         }
     }
     
@@ -106,6 +93,27 @@ class GamesTableViewCell: UITableViewCell {
             separator.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             separator.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 124)
         ])
+    }
+    
+    private func setData(game: Game) {
+        
+        if game.state == .new {
+            thumbnailView.showLoading()
+        }
+        
+        titleLabel.text = game.name
+        ratingView.ratingValue = game.rating
+        thumbnailView.thumbnail.image = game.image
+        yearAndCategoryLabel.text = "\(game.released ?? "1997") | \(game.genres ?? "-")"
+        
+        
+        if game.state != .new {
+            thumbnailView.hideLoading()
+        }
+        
+        if game.state == .failed {
+            thumbnailView.thumbnail.image = UIImage(named: "error")
+        }
     }
     
 }

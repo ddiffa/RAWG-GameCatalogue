@@ -15,22 +15,25 @@ class ImageDownloader: Operation {
     private var _genre: Genre?
     private var _detailGame: DetailGame?
     private var _detailGameDelegate: DetailGameDelegate?
-    
+    private var _containerSize: CGSize
     private var type: ImageDownloaderType = .none
     
-    init(game: Game) {
+    init(game: Game, containerSize: CGSize) {
         _game = game
+        _containerSize = containerSize
         type = .game
     }
     
-    init(genre: Genre) {
+    init(genre: Genre, containerSize: CGSize) {
         _genre = genre
+        _containerSize = containerSize
         type = .genre
     }
     
-    init(detailGame: DetailGame, delegate: DetailGameDelegate) {
+    init(detailGame: DetailGame, delegate: DetailGameDelegate, containerSize: CGSize) {
         _detailGame = detailGame
         _detailGameDelegate = delegate
+        _containerSize = containerSize
         type = .detail
     }
     
@@ -78,7 +81,7 @@ class ImageDownloader: Operation {
         }
         
         if !imageData.isEmpty {
-            _game?.image = UIImage(data: imageData)
+            _game?.image = try? imageData.downsample(to: _containerSize, scale: 1)
             _game?.state = .downloaded
         } else {
             _game?.image = nil
@@ -93,7 +96,7 @@ class ImageDownloader: Operation {
         }
         
         if !imageData.isEmpty {
-            _genre?.image = UIImage(data: imageData)
+            _genre?.image = try? imageData.downsample(to: _containerSize, scale: 1)
             _genre?.state = .downloaded
         } else {
             _genre?.image = nil
@@ -108,7 +111,7 @@ class ImageDownloader: Operation {
         }
         
         if !imageData.isEmpty {
-            _detailGame?.image = UIImage(data: imageData)
+            _detailGame?.image = try? imageData.downsample(to: _containerSize, scale: 1)
             _detailGame?.state = .downloaded
         } else {
             _detailGame?.image = nil

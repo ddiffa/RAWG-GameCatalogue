@@ -24,17 +24,22 @@ class AboutViewController: UICustomViewControllerWithScrollView {
         return view
     }()
     
-    let profileImage: UIImageView = {
+    
+    private lazy var profileImage: UIImageView = {
         let view = UIImageView()
-        
-        view.image = UIImage(systemName: "house")
+        view.layer.borderWidth = 1
+        view.layer.masksToBounds = false
+        view.layer.borderColor = UIColor.white.cgColor
+        view.layer.cornerRadius = 75
+        view.clipsToBounds = true
+        view.image = UIImage(named: "profile")
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.titleMode("About", mode: .never)
+        navigationItem.titleMode("About Me", mode: .never)
     }
     
     override func setUpView() {
@@ -48,10 +53,9 @@ class AboutViewController: UICustomViewControllerWithScrollView {
     override func setUpLayoutConstraint() {
         super.setUpLayoutConstraint()
         NSLayoutConstraint.activate([
-            profileImage.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16),
-            profileImage.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -16),
-            profileImage.widthAnchor.constraint(equalToConstant: 100),
-            profileImage.heightAnchor.constraint(equalToConstant: 100),
+            profileImage.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            profileImage.widthAnchor.constraint(equalToConstant: 150),
+            profileImage.heightAnchor.constraint(equalToConstant: 150),
             profileImage.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
             
             nameLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16),
@@ -60,7 +64,7 @@ class AboutViewController: UICustomViewControllerWithScrollView {
             
             descLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16),
             descLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -16),
-            descLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 16)
+            descLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8)
         ])
     }
 }

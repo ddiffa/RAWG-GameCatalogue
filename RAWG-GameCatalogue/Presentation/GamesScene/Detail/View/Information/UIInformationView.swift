@@ -9,12 +9,7 @@ import UIKit
 
 class UIInformationView: UIView {
     
-    private var informations: [InformationModel] = [
-        InformationModel(key: "Developers", value: ""),
-        InformationModel(key: "Released", value: ""),
-        InformationModel(key: "Playtime", value: ""),
-        InformationModel(key: "Platforms", value: ""),
-    ]
+    private var informations: [Information] = Information.initialData()
     
     private let _headersLabel: UIHeaderLabel = {
         let view = UIHeaderLabel()
@@ -107,16 +102,5 @@ extension UIInformationView: UITableViewDelegate, UITableViewDataSource {
         }
 
         return UITableViewCell()
-    }
-}
-
-
-class InformationModel {
-    var key: String
-    var value: String
-    
-    init(key: String, value: String) {
-        self.key = key
-        self.value = value
     }
 }

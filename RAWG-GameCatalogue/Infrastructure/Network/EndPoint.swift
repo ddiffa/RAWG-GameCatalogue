@@ -19,38 +19,27 @@ public enum BodyEncoding {
 
 public class Endpoint<R>: ResponseRequestable {
     
+    
     public typealias Response = R
     
     public let path: String
     public let isFullPath: Bool
     public let method: HTTPMethodType
-    public let headerParamaters: [String: String]
     public let queryParametersEncodable: Encodable?
-    public let queryParameters: [String: Any]
-    public let bodyParamatersEncodable: Encodable?
-    public let bodyParamaters: [String: Any]
-    public let bodyEncoding: BodyEncoding
+    public var queryParameters: [String : Any]
     public let responseDecoder: ResponseDecoder
     
     init(path: String,
          isFullPath: Bool = false,
          method: HTTPMethodType,
-         headerParamaters: [String: String] = [:],
          queryParametersEncodable: Encodable? = nil,
          queryParameters: [String: Any] = [:],
-         bodyParamatersEncodable: Encodable? = nil,
-         bodyParamaters: [String: Any] = [:],
-         bodyEncoding: BodyEncoding = .jsonSerializationData,
          responseDecoder: ResponseDecoder = JSONResponseDecoder()) {
         self.path = path
         self.isFullPath = isFullPath
         self.method = method
-        self.headerParamaters = headerParamaters
         self.queryParametersEncodable = queryParametersEncodable
         self.queryParameters = queryParameters
-        self.bodyParamatersEncodable = bodyParamatersEncodable
-        self.bodyParamaters = bodyParamaters
-        self.bodyEncoding = bodyEncoding
         self.responseDecoder = responseDecoder
     }
 }
@@ -61,12 +50,8 @@ public protocol Requestable {
     var path: String { get }
     var isFullPath: Bool { get }
     var method: HTTPMethodType { get }
-    var headerParamaters: [String: String] { get }
     var queryParametersEncodable: Encodable? { get }
     var queryParameters: [String: Any] { get }
-    var bodyParamatersEncodable: Encodable? { get }
-    var bodyParamaters: [String: Any] { get }
-    var bodyEncoding: BodyEncoding { get }
     
     func urlRequest(with networkConfig: NetworkConfigurable) throws -> URLRequest
 }
@@ -107,16 +92,9 @@ extension Requestable {
     }
     
     public func urlRequest(with config: NetworkConfigurable) throws -> URLRequest {
-        
         let url = try self.url(with: config)
         var urlRequest = URLRequest(url: url)
-        var allHeaders: [String: String] = config.headers
-        headerParamaters.forEach { allHeaders.updateValue($1, forKey: $0) }
-        
-        let params = try bodyParamatersEncodable?.toDictionary() ?? bodyParamaters
-        if !params.isEmpty {
-            urlRequest.httpBody = encodeBody(bodyParamaters: params, bodyEncoding: bodyEncoding)
-        }
+        let allHeaders: [String: String] = config.headers
         urlRequest.httpMethod = method.rawValue
         urlRequest.allHTTPHeaderFields = allHeaders
         return urlRequest

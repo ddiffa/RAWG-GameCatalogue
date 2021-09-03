@@ -12,10 +12,14 @@ struct GamesViewModelAction {
 }
 
 protocol GamesViewModelInput {
-    func viewDidLoad(genre: String, searchQueary: String)
+    func fetchData(genre: String, searchQueary: String)
     func didSelectItem(navController: UINavigationController, at gamesID: String)
-    func startDownloadImage(game: Game, indexPath: IndexPath, completion: @escaping()-> Void)
+    func startDownloadImage(game: Game,
+                            indexPath: IndexPath,
+                            containerSize: CGSize,
+                            completion: @escaping()-> Void)
     func toggleSuspendOperations(isSuspended: Bool)
+    func cancelDownloadImage()
 }
 
 protocol GamesViewModelOutput {
@@ -30,13 +34,12 @@ protocol GamesViewModel: GamesViewModelInput, GamesViewModelOutput {}
 final class DefaultGamesViewModel: GamesViewModel {
     private let searchGamesUseCase: SearchGamesUseCase
     private let actions: GamesViewModelAction?
-    private let backgroundDownloaderImage: BackgroundDownloadImage = BackgroundDownloadImage()
     private let _pendingOpearions = PendingOperations()
     
     private var gamesLoadTask: Cancelable? { willSet { gamesLoadTask?.cancel() } }
     
     let items: Observable<[Game]> = Observable([])
-    let loading: Observable<Bool> = Observable(true)
+    let loading: Observable<Bool> = Observable(false)
     let query: Observable<String> = Observable("")
     let error: Observable<String> = Observable("")
     let screenTitle = NSLocalizedString("Movies", comment: "")
@@ -46,17 +49,19 @@ final class DefaultGamesViewModel: GamesViewModel {
         self.actions = actions
     }
     
-    private func appendPage(_ gamesPage: GamesPage) {
-        items.value = gamesPage.games
-    }
-    
-    
     private func fetch(query: GameQuery) {
         self.loading.value = true
+        
+        if !query.search.isEmpty {
+            gamesLoadTask?.cancel()
+            _pendingOpearions.downloadInProgress.removeAll()
+            _pendingOpearions.downloadQueue.cancelAllOperations()
+        }
+        
         gamesLoadTask = searchGamesUseCase.execute(requestValue: .init(query: query, page: 1)) { result in
             switch result {
                 case .success(let data):
-                    self.appendPage(data)
+                    self.items.value = data.games
                 case .failure(let error):
                     self.handle(error: error)
             }
@@ -65,7 +70,8 @@ final class DefaultGamesViewModel: GamesViewModel {
     }
     
     private func handle(error: Error) {
-        self.error.value = error.isInternetConnectionError ? NSLocalizedString("No internet connection", comment: "") :
+        self.error.value = error.isInternetConnectionError ?
+            NSLocalizedString("No internet connection", comment: "") :
             NSLocalizedString("Failed loading games data", comment: "")
     }
     
@@ -74,7 +80,7 @@ final class DefaultGamesViewModel: GamesViewModel {
 
 extension DefaultGamesViewModel {
     
-    func viewDidLoad(genre: String, searchQueary: String) {
+    func fetchData(genre: String, searchQueary: String) {
         fetch(query: .init(ordering: "-metacritic", genres: genre, search: searchQueary))
     }
     
@@ -82,16 +88,22 @@ extension DefaultGamesViewModel {
         actions?.showGameDetails(gamesID)
     }
         
-    func startDownloadImage(game: Game, indexPath: IndexPath, completion: @escaping () -> Void) {
+    func startDownloadImage(game: Game,
+                            indexPath: IndexPath,
+                            containerSize: CGSize,
+                            completion: @escaping () -> Void) {
         guard _pendingOpearions.downloadInProgress[indexPath] == nil else { return }
-        
-        backgroundDownloaderImage.downloader = ImageDownloader(game: game)
+        let backgroundDownloaderImage = BackgroundDownloadImage()
+        backgroundDownloaderImage.downloader = ImageDownloader(game: game, containerSize: containerSize)
         backgroundDownloaderImage.startDownloadImage(indexPath: indexPath) { downloader in
             downloader.completionBlock = {
                 if downloader.isCancelled  { return }
                 
                 DispatchQueue.main.async {
                     self._pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)
+                    if downloader.isCancelled {
+                        return
+                    }
                     completion()
                 }
             }
@@ -100,5 +112,9 @@ extension DefaultGamesViewModel {
     
     func toggleSuspendOperations(isSuspended: Bool) {
         _pendingOpearions.downloadQueue.isSuspended = isSuspended
+    }
+    
+    func cancelDownloadImage() {
+        _pendingOpearions.downloadInProgress.removeAll()
     }
 }

@@ -36,7 +36,6 @@ public protocol NetworkSessionManager {
 
 public protocol NetworkErrorLogger {
     func log(request: URLRequest)
-    func log(responseData data: Data?, response: URLResponse?)
     func log(error: Error)
 }
 
@@ -70,7 +69,6 @@ public final class DefaultNetworkService {
                 self.logger.log(error: error)
                 completion(.failure(error))
             } else {
-                self.logger.log(responseData: data, response: response)
                 completion(.success(data))
             }
         }
@@ -118,22 +116,7 @@ public final class DefaultNetworkErrorLogger: NetworkErrorLogger {
     
     public func log(request: URLRequest) {
         printIfDebug("request: \(request.url!)")
-        printIfDebug("headers: \(request.allHTTPHeaderFields!)")
         printIfDebug("method: \(request.httpMethod!)")
-        
-        if let httpBody = request.httpBody, let result = ((try? JSONSerialization.jsonObject(with: httpBody, options: []) as? [String: AnyObject]) as [String: AnyObject]??){
-            printIfDebug("body: \(String(describing: result))")
-        } else if let httpBody = request.httpBody, let resultString = String(data: httpBody, encoding: .utf8) {
-            print("body: \(String(describing: resultString))")
-        }
-    }
-    
-    public func log(responseData data: Data?, response: URLResponse?) {
-        guard let data = data else { return }
-        
-        if let dataDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-            print("responseData: \(String(describing: dataDict))")
-        }
     }
     
     public func log(error: Error){

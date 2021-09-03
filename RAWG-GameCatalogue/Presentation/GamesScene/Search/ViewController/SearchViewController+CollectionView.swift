@@ -12,9 +12,12 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     fileprivate func startOperations(genre: Genre, indexPath: IndexPath) {
         if genre.state == .new {
-            self.viewModel?.startDownloadImage(genre: genre, indexPath: indexPath) {
-                self.genreCollectionView.reloadItems(at: [indexPath])
-            }
+            self.viewModel?.startDownloadImage(genre: genre,
+                                               indexPath: indexPath,
+                                               containerSize: genreCollectionView.contentSize,
+                                               completion: {
+                                                self.genreCollectionView.reloadItems(at: [indexPath])
+                                               })
         }
     }
     

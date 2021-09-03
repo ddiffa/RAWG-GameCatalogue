@@ -5,11 +5,12 @@
 //  Created by Diffa Desyawan on 02/09/21.
 //
 
-import Foundation
+import UIKit
 
 protocol DetailGamesViewModelInput {
     func viewDidLoad(gamesID: String)
-    func startDownloadImage(delegate: DetailGameDelegate, completion: @escaping() -> Void)
+    func startDownloadImage(delegate: DetailGameDelegate,
+                            containerSize: CGSize)
     func toggleSuspendOperations(isSuspended: Bool)
 }
 
@@ -69,19 +70,20 @@ extension DefaultDetailGamesViewModel {
         
     }
     
-    func startDownloadImage(delegate: DetailGameDelegate, completion: @escaping() -> Void) {
+    func startDownloadImage(delegate: DetailGameDelegate, containerSize: CGSize) {
         let indexPath = IndexPath.init(index: 0)
         guard _pendingOpearions.downloadInProgress[indexPath] == nil,
               let data = items.value else { return }
         
-        _backgroundDownloaderImage.downloader = ImageDownloader(detailGame: data, delegate: delegate)
+        _backgroundDownloaderImage.downloader = ImageDownloader(detailGame: data,
+                                                                delegate: delegate,
+                                                                containerSize: containerSize)
         _backgroundDownloaderImage.startDownloadImage(indexPath: indexPath) { downloader in
             downloader.completionBlock = {
                 if downloader.isCancelled  { return }
                 
                 DispatchQueue.main.async {
                     self._pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)
-                    completion()
                 }
             }
         }

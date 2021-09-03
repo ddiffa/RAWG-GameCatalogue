@@ -14,8 +14,16 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
             return
         }
         
-        if let vc = searchController.searchResultsController as? ResultSearchViewController {
-            vc.text = text
+        if text.isEmpty {
+            resultSearchViewController?.clearData()
         }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text else {
+            return
+        }
+        
+        resultSearchViewController?.updateSearchResult(query: text)
     }
 }

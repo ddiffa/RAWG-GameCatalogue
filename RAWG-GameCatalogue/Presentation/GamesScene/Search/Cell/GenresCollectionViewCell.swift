@@ -10,7 +10,6 @@ import UIKit
 class GenresCollectionViewCell: UICollectionViewCell {
     static let identifier: String = "GenresCollectionViewCell"
     
-    // MARK: - Views
     private let thumbnailView: UICustomImageView = {
         let view = UICustomImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -20,10 +19,14 @@ class GenresCollectionViewCell: UICollectionViewCell {
     private let titleLabel: UIHeaderLabel = {
         let view = UIHeaderLabel()
         
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowRadius = 3.0
+        view.layer.shadowOpacity = 1.0
+        view.layer.shadowOffset = CGSize(width: 4, height: 4)
+
         return view
     }()
     
-    // MARK: - Properties
     var title: String? {
         didSet {
             guard let value = title else { return }
@@ -35,7 +38,7 @@ class GenresCollectionViewCell: UICollectionViewCell {
         didSet {
             guard let value = image else { return }
             thumbnailView.thumbnail.image = value
-            
+        
             if thumbnailView.thumbnail.image != nil {
                 thumbnailView.hideLoading()
             }

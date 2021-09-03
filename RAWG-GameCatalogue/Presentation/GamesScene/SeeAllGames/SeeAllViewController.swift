@@ -42,6 +42,16 @@ class SeeAllViewController: UICustomViewControllerWithScrollView {
         }
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        gamesViewController?.suspendOperations()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        gamesViewController?.resumeOperations()
+    }
+    
     override func setUpLayoutConstraint() {
         super.setUpLayoutConstraint()
         NSLayoutConstraint.activate([

@@ -40,7 +40,6 @@ final class GamesFlowCoordinator {
     
     func makeActionsSearchGames() -> SearchViewModelActions {
         let action = SearchViewModelActions(showSeeAllGames: showSeeAllGames,
-                                            showQueryGames: {},
                                             showAboutScene: showAboutScene,
                                             showGameDetails: showGamesDetails)
         return action

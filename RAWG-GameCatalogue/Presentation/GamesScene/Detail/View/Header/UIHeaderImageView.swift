@@ -77,8 +77,8 @@ class UIHeaderImageView: UIView {
             _thumbnailView.topAnchor.constraint(equalTo: self.topAnchor),
             _thumbnailView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             _thumbnailView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
-            _thumbnailView.widthAnchor.constraint(equalToConstant: 150),
-            _thumbnailView.heightAnchor.constraint(equalToConstant: 140),
+            _thumbnailView.widthAnchor.constraint(equalToConstant: contentImageSize.width),
+            _thumbnailView.heightAnchor.constraint(equalToConstant: contentImageSize.height),
             
             _titleGames.topAnchor.constraint(equalTo: self.topAnchor),
             _titleGames.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
@@ -90,4 +90,9 @@ class UIHeaderImageView: UIView {
         ])
     }
     
+    var contentImageSize: CGSize {
+        get {
+            return CGSize(width: 150, height: 140)
+        }
+    }
 }

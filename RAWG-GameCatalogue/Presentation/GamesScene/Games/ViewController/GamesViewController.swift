@@ -12,9 +12,8 @@ protocol GamesViewControllerDelegate {
     func getRootNavigationController() -> UINavigationController?
 }
 
-class GamesViewController: UIViewController {
-    
-    // MARK: - Initialization Views
+class GamesViewController: UIViewController, Alertable {
+
     lazy var gamesTableView: UICustomTableView = {
         let view = UICustomTableView()
         view.register(GamesTableViewCell.self, forCellReuseIdentifier: GamesTableViewCell.identifier)
@@ -24,18 +23,33 @@ class GamesViewController: UIViewController {
         return view
     }()
     
-    // MARK: - Properties
     var viewModel: GamesViewModel?
     var delegate: GamesViewControllerDelegate?
     var genre: String = ""
-    var searchQuery: String = ""
-    // MARK: - View Controller Lifecyle
+    
+    var searchQuery: String = "" {
+        didSet {
+            if !searchQuery.isEmpty {
+                viewModel?.fetchData(genre: genre, searchQueary: searchQuery)
+            }
+        }
+    }
+    
+    var isSearchGames: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
         setUpLayoutConstraint()
         bind()
-        viewModel?.viewDidLoad(genre: genre, searchQueary: searchQuery)
+        if !isSearchGames {
+            viewModel?.fetchData(genre: genre, searchQueary: searchQuery)
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        viewModel?.toggleSuspendOperations(isSuspended: true)
     }
     
     private func bind() {
@@ -44,16 +58,11 @@ class GamesViewController: UIViewController {
         viewModel?.loading.observe(on: self) { [weak self] in self?.delegate?.onLoading($0)}
     }
     
-    func setUpView() {
+    private func setUpView() {
         view.addSubview(gamesTableView)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        viewModel?.toggleSuspendOperations(isSuspended: true)
-    }
-    
-    func setUpLayoutConstraint() {
+    private func setUpLayoutConstraint() {
         NSLayoutConstraint.activate([
             gamesTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 10.0),
             gamesTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0),
@@ -70,27 +79,45 @@ class GamesViewController: UIViewController {
         guard !error.isEmpty else {
             return
         }
-        //MARK: Show alert
+        
+        showAlert(message: error) {
+            self.viewModel?.fetchData(genre: self.genre, searchQueary: self.searchQuery)
+        }
+    }
+    
+    func resumeOperations() {
+        viewModel?.toggleSuspendOperations(isSuspended: false)
+    }
+    
+    func suspendOperations() {
+        viewModel?.toggleSuspendOperations(isSuspended: true)
+    }
+    
+    func clearData() {
+        viewModel?.items.value.removeAll()
+        updateItems()
     }
 }
 
 extension GamesViewController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        viewModel?.toggleSuspendOperations(isSuspended: true)
+        suspendOperations()
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        viewModel?.toggleSuspendOperations(isSuspended: false)
+        resumeOperations()
     }
     
-    
     fileprivate func startOperations(game: Game, indexPath: IndexPath) {
-        if game.state == .new {
-            self.viewModel?.startDownloadImage(game: game, indexPath: indexPath) {
-                self.gamesTableView.reloadRows(at: [indexPath], with: .automatic)
-            }
-        }
+        self.viewModel?.startDownloadImage(game: game,
+                                           indexPath: indexPath,
+                                           containerSize: gamesTableView.contentSize,
+                                           completion: {
+                                            if indexPath.row < self.viewModel?.items.value.count ?? 0 {
+                                                self.gamesTableView.reloadRows(at: [indexPath], with: .none)
+                                            }
+                                           })
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -101,7 +128,8 @@ extension GamesViewController: UITableViewDelegate, UITableViewDataSource, UIScr
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: GamesTableViewCell.identifier, for: indexPath) as? GamesTableViewCell {
             
-            if viewModel?.items.value.count ?? 0 > 0, let game = viewModel?.items.value[indexPath.row] {
+            if viewModel?.items.value.count ?? 0 > 0,
+               let game = viewModel?.items.value[indexPath.row] {
                 cell.game = game
                 if game.state == .new {
                     if !tableView.isDragging && !tableView.isDecelerating {

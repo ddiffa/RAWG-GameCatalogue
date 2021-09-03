@@ -34,14 +34,16 @@ class SearchViewController: UICustomViewControllerWithScrollView {
     }()
     
     private lazy var _searchViewController: UISearchController = {
-        let view = UISearchController(searchResultsController: ResultSearchViewController())
+        let view = UISearchController(searchResultsController: resultSearchViewController)
         view.searchResultsUpdater = self
         view.searchBar.delegate = self
+        view.searchBar.placeholder = "Grand Theft Auto V"
         return view
     }()
     
     //MARK: - Properties
     var viewModel: SearchViewModel?
+    var resultSearchViewController: ResultSearchViewController?
     
     //MARK: - View Controller Lifecycle
     override func viewDidLoad() {
@@ -55,7 +57,9 @@ class SearchViewController: UICustomViewControllerWithScrollView {
     
     private func bind(to viewModel: SearchViewModel) {
         viewModel.items.observe(on: self) { [weak self] _ in self?.updateItems() }
-        viewModel.error.observe(on: self) { [weak self] in self?.showError($0)}
+        viewModel.error.observe(on: self) { [weak self] in
+            self?.showError($0, completion: { self?.viewModel?.viewDidLoad() })
+        }
         viewModel.loading.observe(on: self) { [weak self] in self?.updateLoading($0)}
     }
     
@@ -68,6 +72,15 @@ class SearchViewController: UICustomViewControllerWithScrollView {
         containerView.addSubview(genreCollectionView)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        viewModel?.toggleSuspendOperations(isSuspended: true)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel?.toggleSuspendOperations(isSuspended: false)
+    }
     
     override func setUpLayoutConstraint() {
         super.setUpLayoutConstraint()
