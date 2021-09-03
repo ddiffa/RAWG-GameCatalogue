@@ -11,7 +11,7 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
     
     let descLabel: UILabel = {
         let view = UILabel()
-        view.text = "From modern multi-player action games to classics you can you can find here."
+        view.text = "From modern multi-player action games to classics you can find here."
         view.textColor = .white
         view.numberOfLines = 0
         view.font = UIFont.systemFont(ofSize: 18)
@@ -79,7 +79,7 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
         if !hasScrolled {
             isPrefersLargeTitle = true
         }
-        navigationItem.titleMode( "Browse Games", mode: .automatic)
+        navigationItem.titleMode("Browse Games", mode: .automatic)
         gamesViewController?.resumeOperations()
     }
     
