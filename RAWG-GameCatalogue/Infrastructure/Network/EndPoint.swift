@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 public enum HTTPMethodType: String {
     case get = "GET"
 }
@@ -19,9 +18,7 @@ public enum BodyEncoding {
 
 public class Endpoint<R>: ResponseRequestable {
     
-    
     public typealias Response = R
-    
     public let path: String
     public let isFullPath: Bool
     public let method: HTTPMethodType
@@ -44,8 +41,6 @@ public class Endpoint<R>: ResponseRequestable {
     }
 }
 
-
-
 public protocol Requestable {
     var path: String { get }
     var isFullPath: Bool { get }
@@ -58,14 +53,12 @@ public protocol Requestable {
 
 public protocol ResponseRequestable: Requestable {
     associatedtype Response
-    
     var responseDecoder: ResponseDecoder { get }
 }
 
 enum RequestGenerationError: Error {
     case components
 }
-
 
 extension Requestable {
     
@@ -76,7 +69,6 @@ extension Requestable {
         
         guard var urlComponents = URLComponents(string: endpoint) else { throw RequestGenerationError.components }
         var urlQueryItems = [URLQueryItem]()
-        
         let queryParameters = try queryParametersEncodable?.toDictionary() ?? self.queryParameters
         queryParameters.forEach {
             if $0.value as? String != "" {
@@ -113,7 +105,7 @@ extension Requestable {
 
 private extension Dictionary {
     var queryString: String {
-        return self.map{ "\($0.key)=\($0.value)"}
+        return self.map { "\($0.key)=\($0.value)" }
             .joined(separator: "&")
             .addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed) ?? ""
     }

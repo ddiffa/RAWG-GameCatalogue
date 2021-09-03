@@ -20,12 +20,12 @@ class SeeAllViewController: UICustomViewControllerWithScrollView {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        isPrefersLargeTitle = false
         navigationItem.titleMode(titleString ?? "", mode: .never)
     }
     
     override func setUpView() {
         super.setUpView()
-        isHiddenLargeTitle = true
         containerView.addSubview(gamesContainer)
         if let gamesViewController = gamesViewController {
             gamesViewController.delegate = self
@@ -37,7 +37,7 @@ class SeeAllViewController: UICustomViewControllerWithScrollView {
                 gamesViewController.view.leftAnchor.constraint(equalTo: gamesContainer.leftAnchor),
                 gamesViewController.view.rightAnchor.constraint(equalTo: gamesContainer.rightAnchor),
                 gamesViewController.view.topAnchor.constraint(equalTo: gamesContainer.topAnchor),
-                gamesViewController.view.bottomAnchor.constraint(equalTo: gamesContainer.bottomAnchor),
+                gamesViewController.view.bottomAnchor.constraint(equalTo: gamesContainer.bottomAnchor)
             ])
         }
     }
@@ -70,5 +70,9 @@ extension SeeAllViewController: GamesViewControllerDelegate {
     
     func getRootNavigationController() -> UINavigationController? {
         return self.navigationController
+    }
+    
+    func onEmptySearchResult(_ isEmpty: Bool) {
+        
     }
 }

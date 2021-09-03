@@ -22,4 +22,3 @@ final class DefaultGenresUseCase: GenresUseCase {
         return genresRepository.fetchGenres(completion: completion)
     }
 }
-

@@ -52,7 +52,7 @@ class UIDescriptionView: UIView {
             descriptionLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
             descriptionLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
             descriptionLabel.topAnchor.constraint(equalTo: headersLabel.bottomAnchor, constant: 8),
-            descriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            descriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
 }

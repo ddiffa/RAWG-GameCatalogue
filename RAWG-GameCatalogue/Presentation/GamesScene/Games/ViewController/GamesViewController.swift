@@ -7,9 +7,10 @@
 
 import UIKit
 
-protocol GamesViewControllerDelegate {
+protocol GamesViewControllerDelegate: AnyObject {
     func onLoading(_ isLoading: Bool)
     func getRootNavigationController() -> UINavigationController?
+    func onEmptySearchResult(_ isEmpty: Bool)
 }
 
 class GamesViewController: UIViewController, Alertable {
@@ -24,7 +25,7 @@ class GamesViewController: UIViewController, Alertable {
     }()
     
     var viewModel: GamesViewModel?
-    var delegate: GamesViewControllerDelegate?
+    weak var delegate: GamesViewControllerDelegate?
     var genre: String = ""
     
     var searchQuery: String = "" {
@@ -72,6 +73,11 @@ class GamesViewController: UIViewController, Alertable {
     }
     
     private func updateItems() {
+        if viewModel?.items.value.count ?? 0 > 0 {
+            self.delegate?.onEmptySearchResult(false)
+        } else {
+            self.delegate?.onEmptySearchResult(true)
+        }
         gamesTableView.reloadData()
     }
     

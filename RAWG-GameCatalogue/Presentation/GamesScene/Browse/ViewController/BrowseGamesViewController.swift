@@ -37,8 +37,6 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
     
     override func setUpView() {
         super.setUpView()
-        isHiddenLargeTitle = false
-        navigationItem.titleMode( "Browse Games", mode: .automatic)
         containerView.addSubview(descLabel)
         containerView.addSubview(allGamesLabel)
         containerView.addSubview(gamesContainer)
@@ -52,7 +50,7 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
                 gamesViewController.view.leftAnchor.constraint(equalTo: gamesContainer.leftAnchor),
                 gamesViewController.view.rightAnchor.constraint(equalTo: gamesContainer.rightAnchor),
                 gamesViewController.view.topAnchor.constraint(equalTo: gamesContainer.topAnchor),
-                gamesViewController.view.bottomAnchor.constraint(equalTo: gamesContainer.bottomAnchor),
+                gamesViewController.view.bottomAnchor.constraint(equalTo: gamesContainer.bottomAnchor)
             ])
         }
     }
@@ -78,6 +76,10 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if !hasScrolled {
+            isPrefersLargeTitle = true
+        }
+        navigationItem.titleMode( "Browse Games", mode: .automatic)
         gamesViewController?.resumeOperations()
     }
     
@@ -98,5 +100,9 @@ extension BrowseGamesViewController: GamesViewControllerDelegate {
     
     func getRootNavigationController() -> UINavigationController? {
         return self.navigationController
+    }
+    
+    func onEmptySearchResult(_ isEmpty: Bool) {
+        
     }
 }

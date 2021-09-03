@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 class Game: Equatable, Identifiable {
     static func == (lhs: Game, rhs: Game) -> Bool {
         return false
@@ -36,7 +35,6 @@ class Game: Equatable, Identifiable {
         self.genres = genres
     }
 }
-
 
 class GamesPage: Equatable {
     static func == (lhs: GamesPage, rhs: GamesPage) -> Bool {

@@ -17,7 +17,7 @@ class UILoadingView: UIView {
         return view
     }()
     
-    private let _descLabel: UITitleLabel = {
+    private let descLabel: UITitleLabel = {
         let view = UITitleLabel()
         view.text = "Please wait"
         view.textAlignment = .center
@@ -37,22 +37,27 @@ class UILoadingView: UIView {
     }
     
     private func setUpView() {
-        
         backgroundColor = UIColor(named: ColorType.primary.rawValue)
         addSubview(activityIndicator)
-        addSubview(_descLabel)
+        addSubview(descLabel)
     }
     
     private func setUpLayoutConstraint() {
-        let centerYAnchor = NSLayoutConstraint.init(item: activityIndicator, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 0.8, constant: 0)
+        let centerYAnchor = NSLayoutConstraint
+            .init(item: activityIndicator,
+                  attribute: .centerY,
+                  relatedBy: .equal,
+                  toItem: self,
+                  attribute: .centerY,
+                  multiplier: 0.8,
+                  constant: 0)
         
         NSLayoutConstraint.activate([
             centerYAnchor,
             activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
-            
-            _descLabel.leftAnchor.constraint(equalTo: leftAnchor),
-            _descLabel.rightAnchor.constraint(equalTo: rightAnchor),
-            _descLabel.topAnchor.constraint(equalTo: activityIndicator.bottomAnchor, constant: 10)
+            descLabel.leftAnchor.constraint(equalTo: leftAnchor),
+            descLabel.rightAnchor.constraint(equalTo: rightAnchor),
+            descLabel.topAnchor.constraint(equalTo: activityIndicator.bottomAnchor, constant: 10)
         ])
     }
 }

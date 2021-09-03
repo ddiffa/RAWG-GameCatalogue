@@ -44,19 +44,21 @@ final class UICustomImageView: UIView {
         addSubview(thumbnail)
         addSubview(activityIndicator)
         
-        
-        let centerYAnchor = NSLayoutConstraint.init(item: activityIndicator, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0)
+        let centerYAnchor = NSLayoutConstraint.init(item: activityIndicator,
+                                                    attribute: .centerY,
+                                                    relatedBy: .equal,
+                                                    toItem: self,
+                                                    attribute: .centerY,
+                                                    multiplier: 1,
+                                                    constant: 0)
         
         NSLayoutConstraint.activate([
             thumbnail.topAnchor.constraint(equalTo: self.topAnchor),
             thumbnail.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             thumbnail.leftAnchor.constraint(equalTo: self.leftAnchor),
             thumbnail.rightAnchor.constraint(equalTo: self.rightAnchor),
-            
-            
             centerYAnchor,
-            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
-            
+            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
     

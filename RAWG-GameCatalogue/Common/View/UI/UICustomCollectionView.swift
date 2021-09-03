@@ -8,16 +8,6 @@
 import UIKit
 
 final class UICustomCollectionView: UICollectionView {
-    override var contentSize:CGSize {
-        didSet {
-            invalidateIntrinsicContentSize()
-        }
-    }
-    
-    override var intrinsicContentSize: CGSize {
-        layoutIfNeeded()
-        return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height + 32)
-    }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -29,10 +19,20 @@ final class UICustomCollectionView: UICollectionView {
         setUpView()
     }
     
+    override var contentSize: CGSize {
+        didSet {
+            invalidateIntrinsicContentSize()
+        }
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        layoutIfNeeded()
+        return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height + 32)
+    }
+    
     private func setUpView() {
         backgroundColor = UIColor(named: ColorType.primary.rawValue)
         translatesAutoresizingMaskIntoConstraints = false
         autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
 }
-

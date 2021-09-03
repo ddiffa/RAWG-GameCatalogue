@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 enum ColorType: String {
     case primary = "PrimaryColor"
     case tabBar = "TabBarColor"

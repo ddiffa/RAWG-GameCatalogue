@@ -16,8 +16,13 @@ struct SearchViewModelActions {
 protocol SearchViewModelInput {
     func viewDidLoad()
     func didTapRightBarItem()
-    func didSelectItem(navController: UINavigationController, genreID: String, genre: String)
-    func startDownloadImage(genre: Genre, indexPath: IndexPath, containerSize: CGSize, completion: @escaping()-> Void)
+    func didSelectItem(navController: UINavigationController,
+                       genreID: String,
+                       genre: String)
+    func startDownloadImage(genre: Genre,
+                            indexPath: IndexPath,
+                            containerSize: CGSize,
+                            completion: @escaping() -> Void)
     func toggleSuspendOperations(isSuspended: Bool)
 }
 
@@ -29,7 +34,6 @@ protocol SearchViewModelOutput {
 
 protocol SearchViewModel: SearchViewModelInput, SearchViewModelOutput {}
 
-
 final class DefaultSearchViewModel: SearchViewModel {
     let pendingOpearions = PendingOperations()
     
@@ -40,7 +44,7 @@ final class DefaultSearchViewModel: SearchViewModel {
     
     let items: Observable<[Genre]> = Observable([])
     let error: Observable<String> = Observable("")
-    let loading: Observable<Bool> = Observable(true)
+    let loading: Observable<Bool> = Observable(false)
 
     init(genresUseCase: GenresUseCase, actions: SearchViewModelActions) {
         self.genresUseCase = genresUseCase
@@ -62,12 +66,9 @@ final class DefaultSearchViewModel: SearchViewModel {
     }
     
     private func handle(error: Error) {
-        self.error.value = error.isInternetConnectionError ?
-            NSLocalizedString("No internet connection", comment: "") :
-            NSLocalizedString("Failed loading games data", comment: "")
+        self.error.value = error.getErrorMessage()
     }
 }
-
 
 extension DefaultSearchViewModel {
     func viewDidLoad() {
@@ -82,13 +83,16 @@ extension DefaultSearchViewModel {
         actions?.showSeeAllGames(navController, genreID, genre)
     }
     
-    func startDownloadImage(genre: Genre, indexPath: IndexPath, containerSize: CGSize, completion: @escaping () -> Void) {
+    func startDownloadImage(genre: Genre,
+                            indexPath: IndexPath,
+                            containerSize: CGSize,
+                            completion: @escaping () -> Void) {
         guard pendingOpearions.downloadInProgress[indexPath] == nil else { return }
         
         let downloader = ImageDownloader(genre: genre, containerSize: containerSize)
         
         downloader.completionBlock = {
-            if downloader.isCancelled  { return }
+            if downloader.isCancelled { return }
             
             DispatchQueue.main.async {
                 self.pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)

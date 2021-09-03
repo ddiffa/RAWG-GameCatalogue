@@ -90,9 +90,5 @@ class UIHeaderImageView: UIView {
         ])
     }
     
-    var contentImageSize: CGSize {
-        get {
-            return CGSize(width: 150, height: 140)
-        }
-    }
+    let contentImageSize: CGSize = CGSize(width: 150, height: 140)
 }

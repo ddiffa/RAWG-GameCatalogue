@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 final class GamesSceneDIContainer {
     
     struct Dependencies {
@@ -62,7 +61,6 @@ final class GamesSceneDIContainer {
         return DefaultBrowseGamesViewModel(actions: actions)
     }
     
-    //MARK: - View controller
     func makeBrowseGamesViewController() -> UIViewController {
         let vc = BrowseGamesViewController()
         let navController = UINavigationController(rootViewController: vc)
@@ -80,11 +78,13 @@ final class GamesSceneDIContainer {
         navController.navigationBar.prefersLargeTitles = true
         let appFlowCoordinator = makeGamesFlowCoordinator(navigationController: navController)
         vc.viewModel = makeSearchGamesViewModel(actions: appFlowCoordinator.makeActionsSearchGames())
-        vc.resultSearchViewController = makeResultSearchViewController(gamesActions: appFlowCoordinator.makeActionsGames(), rootNavController: navController)
+        vc.resultSearchVC = makeResultSearchVC(gamesActions: appFlowCoordinator
+                                                .makeActionsGames(),
+                                               rootNavController: navController)
         return navController
     }
     
-    func makeResultSearchViewController(gamesActions: GamesViewModelAction, rootNavController: UINavigationController) -> ResultSearchViewController {
+    func makeResultSearchVC(gamesActions: GamesViewModelAction, rootNavController: UINavigationController) -> ResultSearchViewController {
         let vc = ResultSearchViewController()
         vc.rootNavigationController = rootNavController
         vc.gamesViewController = makeGamesViewController()
@@ -101,13 +101,14 @@ final class GamesSceneDIContainer {
     func makeMainTabBarViewController() -> MainTabBarViewController {
         let viewControllers: [UIViewController] = [makeBrowseGamesViewController(), makeSearchViewController()]
         return MainTabBarViewController.create(with: viewControllers)
+        
     }
     
     func makeAboutViewController() -> AboutViewController {
         return AboutViewController()
     }
     
-    //MARK: Flow Coordinators
+    // MARK: - Flow Coordinators
     func makeGamesFlowCoordinator(navigationController: UINavigationController) -> GamesFlowCoordinator {
         return GamesFlowCoordinator(navigationController: navigationController, dependencies: self)
     }

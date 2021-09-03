@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 protocol GamesRepository {
     @discardableResult
     func fetchGameList(query: GameQuery,

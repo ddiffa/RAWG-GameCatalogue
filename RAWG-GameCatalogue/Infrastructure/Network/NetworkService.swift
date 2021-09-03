@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 public enum NetworkError: Error {
     case error(statusCode: Int, data: Data?)
     case notConnected
@@ -38,7 +37,6 @@ public protocol NetworkErrorLogger {
     func log(request: URLRequest)
     func log(error: Error)
 }
-
 
 public final class DefaultNetworkService {
     
@@ -119,7 +117,7 @@ public final class DefaultNetworkErrorLogger: NetworkErrorLogger {
         printIfDebug("method: \(request.httpMethod!)")
     }
     
-    public func log(error: Error){
+    public func log(error: Error) {
         printIfDebug("\(error)")
     }
 }
@@ -150,7 +148,7 @@ extension Dictionary where Key == String {
     }
 }
 
-func printIfDebug(_ string: String){
+func printIfDebug(_ string: String) {
     #if DEBUG
     print(string)
     #endif

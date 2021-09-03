@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 public enum DataTransferError: Error {
     case noResponse
     case parsing(Error)
@@ -19,7 +18,9 @@ public protocol DataTransferService {
     typealias CompletionHandler<T> = (Result<T, DataTransferError>) -> Void
     
     @discardableResult
-    func request<T: Decodable, E: ResponseRequestable>(with endpoint: E, completion: @escaping CompletionHandler<T>) -> NetworkCancellable? where E.Response == T
+    func request<T: Decodable,
+                 E: ResponseRequestable>(with endpoint: E,
+                                         completion: @escaping CompletionHandler<T>) -> NetworkCancellable? where E.Response == T
 }
 
 public protocol ResponseDecoder {
@@ -35,7 +36,6 @@ public protocol DataTransferErrorLogger {
 }
 
 public final class DefaultDataTrasnferService {
-    
     private let networkService: NetworkService
     private let errorResolver: DataTransferErrorResolver
     private let errorLogger: DataTransferErrorLogger
@@ -47,12 +47,12 @@ public final class DefaultDataTrasnferService {
         self.errorResolver = errorResolver
         self.errorLogger = errorLogger
     }
-    
 }
 
 extension DefaultDataTrasnferService: DataTransferService {
     
-    public func request<T, E>(with endpoint: E, completion: @escaping CompletionHandler<T>) -> NetworkCancellable? where T : Decodable, T == E.Response, E : ResponseRequestable {
+    public func request<T, E>(with endpoint: E,
+                              completion: @escaping CompletionHandler<T>) -> NetworkCancellable? where T : Decodable, T == E.Response, E : ResponseRequestable {
         return self.networkService.request(endpoint: endpoint) { result in
             switch result {
                 case .success(let data):
@@ -69,7 +69,6 @@ extension DefaultDataTrasnferService: DataTransferService {
     private func decode<T: Decodable>(data: Data?, decoder: ResponseDecoder) -> Result<T, DataTransferError> {
         do {
             guard let data = data else { return .failure(.noResponse) }
-            
             let result: T = try decoder.decode(data)
             return .success(result)
         } catch {
@@ -92,25 +91,20 @@ public class JSONResponseDecoder: ResponseDecoder {
     }
 }
 
-
 public final class DefaultDataTransferErrorLogger: DataTransferErrorLogger {
     public init() {}
-    
     public func log(error: Error) {
         printIfDebug("------------------")
         printIfDebug("\(error)")
     }
 }
 
-
 public class DefaultDataTransferErrorResolver: DataTransferErrorResolver {
     public init() {}
-    
     public func resolve(error: NetworkError) -> Error {
         return error
     }
 }
-
 
 public class RawDataResponseDecoder: ResponseDecoder {
     public init() {}

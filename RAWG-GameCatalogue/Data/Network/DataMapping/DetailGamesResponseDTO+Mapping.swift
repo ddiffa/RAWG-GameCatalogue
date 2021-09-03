@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct DetailGamesResponseDTO: Decodable {
     let id: Int64?
     let name: String?
@@ -72,7 +71,6 @@ extension DetailGamesResponseDTO {
     }
 }
 
-
 extension DetailGamesResponseDTO {
     
     func toDomain() -> DetailGame {
@@ -89,7 +87,7 @@ extension DetailGamesResponseDTO {
                      reviewCount: reviewCount)
     }
     
-    func convertArrayPlatformToString(platform: [DetailGamesResponseDTO.ParentPlatforms]?)  -> String {
+    func convertArrayPlatformToString(platform: [DetailGamesResponseDTO.ParentPlatforms]?) -> String {
         var platformName: [String] = []
         
         platform?.forEach { data in
@@ -102,8 +100,7 @@ extension DetailGamesResponseDTO {
         return platformName.joined(separator: ", ")
     }
     
-    
-    func convertArrayGenreToString(genre: [DetailGamesResponseDTO.Genres]?)  -> String {
+    func convertArrayGenreToString(genre: [DetailGamesResponseDTO.Genres]?) -> String {
         var genreName: [String] = []
         
         genres?.forEach { data in

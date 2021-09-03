@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct APIEndpoints {
     
     static func fetchGamesData(with gamesRequestDTO: GamesRequestDTO) -> Endpoint<GamesResponseDTO> {
@@ -25,6 +24,5 @@ struct APIEndpoints {
         return Endpoint(path: "api/games/\(id)",
                         method: .get)
     }
-    
     
 }

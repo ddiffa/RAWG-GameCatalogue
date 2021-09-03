@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct BrowseGamesViewModelActions {
     let showAboutScene: (() -> Void)
 }
@@ -30,5 +29,3 @@ final class DefaultBrowseGamesViewModel: BrowseGamesViewModel {
         actions.showAboutScene()
     }
 }
-
-

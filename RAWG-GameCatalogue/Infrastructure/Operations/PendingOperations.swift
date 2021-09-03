@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 class PendingOperations {
     lazy var downloadInProgress: [IndexPath: Operation] = [:]
     

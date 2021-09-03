@@ -34,7 +34,7 @@ class SearchViewController: UICustomViewControllerWithScrollView {
     }()
     
     private lazy var searchViewController: UISearchController = {
-        let view = UISearchController(searchResultsController: resultSearchViewController)
+        let view = UISearchController(searchResultsController: resultSearchVC)
         view.searchResultsUpdater = self
         view.searchBar.delegate = self
         view.searchBar.placeholder = "Grand Theft Auto V"
@@ -42,7 +42,7 @@ class SearchViewController: UICustomViewControllerWithScrollView {
     }()
     
     var viewModel: SearchViewModel?
-    var resultSearchViewController: ResultSearchViewController?
+    var resultSearchVC: ResultSearchViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,9 +63,7 @@ class SearchViewController: UICustomViewControllerWithScrollView {
     
     override func setUpView() {
         super.setUpView()
-        isHiddenLargeTitle = false
         navigationItem.searchController = searchViewController
-        navigationItem.titleMode("Search", mode: .automatic)
         containerView.addSubview(browseGenresLabel)
         containerView.addSubview(genreCollectionView)
     }
@@ -77,13 +75,16 @@ class SearchViewController: UICustomViewControllerWithScrollView {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if !hasScrolled {
+            isPrefersLargeTitle = true
+        }
+        navigationItem.titleMode("Search", mode: .automatic)
         viewModel?.toggleSuspendOperations(isSuspended: false)
     }
     
     override func setUpLayoutConstraint() {
         super.setUpLayoutConstraint()
         NSLayoutConstraint.activate([
-            
             browseGenresLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12),
             browseGenresLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16),
             browseGenresLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -16),

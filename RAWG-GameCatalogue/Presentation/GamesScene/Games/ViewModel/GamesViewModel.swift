@@ -17,14 +17,13 @@ protocol GamesViewModelInput {
     func startDownloadImage(game: Game,
                             indexPath: IndexPath,
                             containerSize: CGSize,
-                            completion: @escaping()-> Void)
+                            completion: @escaping() -> Void)
     func toggleSuspendOperations(isSuspended: Bool)
 }
 
 protocol GamesViewModelOutput {
     var items: Observable<[Game]> { get }
     var loading: Observable<Bool> { get }
-    var query: Observable<String> { get }
     var error: Observable<String> { get }
 }
 
@@ -39,9 +38,7 @@ final class DefaultGamesViewModel: GamesViewModel {
     
     let items: Observable<[Game]> = Observable([])
     let loading: Observable<Bool> = Observable(false)
-    let query: Observable<String> = Observable("")
     let error: Observable<String> = Observable("")
-    let screenTitle = NSLocalizedString("Movies", comment: "")
     
     init(searchGamesUseCase: SearchGamesUseCase, actions: GamesViewModelAction? = nil) {
         self.searchGamesUseCase = searchGamesUseCase
@@ -69,13 +66,10 @@ final class DefaultGamesViewModel: GamesViewModel {
     }
     
     private func handle(error: Error) {
-        self.error.value = error.isInternetConnectionError ?
-            NSLocalizedString("No internet connection", comment: "") :
-            NSLocalizedString("Failed loading games data", comment: "")
+        self.error.value = error.getErrorMessage()
     }
     
 }
-
 
 extension DefaultGamesViewModel {
     
@@ -96,8 +90,7 @@ extension DefaultGamesViewModel {
         backgroundDownloaderImage.downloader = ImageDownloader(game: game, containerSize: containerSize)
         backgroundDownloaderImage.startDownloadImage(indexPath: indexPath) { downloader in
             downloader.completionBlock = {
-                if downloader.isCancelled  { return }
-                
+                if downloader.isCancelled { return }
                 DispatchQueue.main.async {
                     self.pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)
                     if downloader.isCancelled {

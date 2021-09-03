@@ -106,7 +106,6 @@ class GamesTableViewCell: UITableViewCell {
         thumbnailView.thumbnail.image = game.image
         yearAndCategoryLabel.text = "\(game.released ?? "1997") | \(game.genres ?? "-")"
         
-        
         if game.state != .new {
             thumbnailView.hideLoading()
         }

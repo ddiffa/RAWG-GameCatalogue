@@ -5,7 +5,6 @@
 //  Created by Diffa Desyawan on 22/08/21.
 //
 
-
 import UIKit
 
 extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
@@ -15,7 +14,7 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
         }
         
         if text.isEmpty {
-            resultSearchViewController?.clearData()
+            resultSearchVC?.clearData()
         }
     }
     
@@ -24,6 +23,6 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
             return
         }
         
-        resultSearchViewController?.updateSearchResult(query: text)
+        resultSearchVC?.updateSearchResult(query: text)
     }
 }

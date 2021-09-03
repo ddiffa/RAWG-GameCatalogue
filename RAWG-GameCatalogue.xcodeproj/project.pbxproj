@@ -701,6 +701,7 @@
 			buildConfigurationList = 94F6285626D004AA00BAF79D /* Build configuration list for PBXNativeTarget "RAWG-GameCatalogue" */;
 			buildPhases = (
 				5BFE58CD7F50CE7BA04A73FE /* [CP] Check Pods Manifest.lock */,
+				9418DF6726E26538001E59B1 /* Run Swiftlint */,
 				94F6283E26D004A900BAF79D /* Sources */,
 				94F6283F26D004A900BAF79D /* Frameworks */,
 				94F6284026D004A900BAF79D /* Resources */,
@@ -781,6 +782,24 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		9418DF6726E26538001E59B1 /* Run Swiftlint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Swiftlint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		DF63BB9B425DB2F27A6D2DD2 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

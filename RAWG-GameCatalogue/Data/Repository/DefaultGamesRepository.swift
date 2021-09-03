@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 final class DefaultGamesRepository {
     private let dataTransferService: DataTransferService
     
@@ -24,7 +23,6 @@ extension DefaultGamesRepository: GamesRepository {
                                          genres:query.genres,
                                          search: query.search)
         let task = RepositoryTask()
-        
         
         let endpoint = APIEndpoints.fetchGamesData(with: requestDTO)
         

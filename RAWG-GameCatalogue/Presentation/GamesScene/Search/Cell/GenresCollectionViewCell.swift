@@ -75,7 +75,7 @@ class GenresCollectionViewCell: UICollectionViewCell {
             
             titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8),
             titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 8),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
         ])
     }
 }

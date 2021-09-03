@@ -26,6 +26,4 @@ class UITitleLabel: UILabel {
         self.numberOfLines = 1
         self.translatesAutoresizingMaskIntoConstraints = false
     }
-    
 }
-

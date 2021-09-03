@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 class UIHeaderLabel: UILabel {
     
     override init(frame: CGRect) {

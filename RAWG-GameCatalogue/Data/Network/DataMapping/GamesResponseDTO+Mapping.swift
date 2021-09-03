@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct GamesResponseDTO: Decodable {
     private enum CodingKeys: String, CodingKey {
         case count
@@ -22,7 +21,6 @@ struct GamesResponseDTO: Decodable {
     
     let games: [GameResponse]
 }
-
 
 extension GamesResponseDTO {
     
@@ -66,10 +64,16 @@ extension GamesResponseDTO {
 
 extension GamesResponseDTO.GameResponse {
     func toDomain() -> Game {
-        return .init(id: id, name: name, imagePath: imagePath, released: released, rating: rating, description: description, genres: convertArrayGenreToString(genre: genres))
+        return .init(id: id,
+                     name: name,
+                     imagePath: imagePath,
+                     released: released,
+                     rating: rating,
+                     description: description,
+                     genres: convertArrayGenreToString(genre: genres))
     }
     
-    func convertArrayGenreToString(genre: [GamesResponseDTO.Genres]?)  -> String {
+    func convertArrayGenreToString(genre: [GamesResponseDTO.Genres]?) -> String {
         var genreName: [String] = []
         
         genres?.forEach { data in
@@ -82,5 +86,3 @@ extension GamesResponseDTO.GameResponse {
         return genreName.joined(separator: ", ")
     }
 }
-
-

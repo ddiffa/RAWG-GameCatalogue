@@ -9,7 +9,6 @@ import UIKit
 
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
-    
     fileprivate func startOperations(genre: Genre, indexPath: IndexPath) {
         self.viewModel?.startDownloadImage(genre: genre,
                                            indexPath: indexPath,
@@ -24,9 +23,11 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenresCollectionViewCell.identifier, for: indexPath) as? GenresCollectionViewCell, viewModel?.items.value.count ?? 0 > 0, let data = viewModel?.items.value[indexPath.item] {
-            
+        if let cell = collectionView
+            .dequeueReusableCell(withReuseIdentifier: GenresCollectionViewCell.identifier,
+                                 for: indexPath) as? GenresCollectionViewCell,
+           viewModel?.items.value.count ?? 0 > 0,
+           let data = viewModel?.items.value[indexPath.item] {
             cell.image = data.image
             cell.title = data.name
             
@@ -47,5 +48,4 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
             self.viewModel?.didSelectItem(navController: navController, genreID: "\(id)", genre: name)
         }
     }
-    
 }

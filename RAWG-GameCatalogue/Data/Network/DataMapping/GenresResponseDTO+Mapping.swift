@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct GenresResponseDTO: Decodable {
     private enum CodingKeys: String, CodingKey {
         case count
@@ -30,7 +29,6 @@ extension GenresResponseDTO {
         let name: String?
         var imageBackground: String?
         
-        
         private enum CodingKeys: String, CodingKey {
             case id
             case name
@@ -38,7 +36,6 @@ extension GenresResponseDTO {
         }
     }
 }
-
 
 extension GenresResponseDTO {
     func toDomain() -> GenresPage {

@@ -9,7 +9,7 @@ import UIKit
 
 class UIRatingView: UIView {
     
-    private let _imageView: UIImageView = {
+    private let starImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(systemName: "star.fill")
         view.tintColor = UIColor(named: ColorType.active.rawValue)
@@ -17,7 +17,7 @@ class UIRatingView: UIView {
         return view
     }()
     
-    private let _ratingLabel: UITitleLabel = {
+    private let ratingLabel: UITitleLabel = {
         let view = UITitleLabel()
         view.text = "4.8"
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -27,7 +27,7 @@ class UIRatingView: UIView {
     var ratingValue: Double? {
         didSet {
             guard let value = ratingValue else { return }
-            _ratingLabel.text = "\(value)"
+            ratingLabel.text = "\(value)"
         }
     }
     
@@ -42,22 +42,22 @@ class UIRatingView: UIView {
     }
     
     private func setup() {
-        addSubview(_imageView)
-        addSubview(_ratingLabel)
+        addSubview(starImageView)
+        addSubview(ratingLabel)
         self.translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = UIColor(named: ColorType.primary.rawValue)
         
         NSLayoutConstraint.activate([
-            _imageView.leftAnchor.constraint(equalTo: self.leftAnchor),
-            _imageView.topAnchor.constraint(equalTo: self.topAnchor),
-            _imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            _imageView.heightAnchor.constraint(equalToConstant: 24),
-            _imageView.widthAnchor.constraint(equalToConstant: 24),
+            starImageView.leftAnchor.constraint(equalTo: self.leftAnchor),
+            starImageView.topAnchor.constraint(equalTo: self.topAnchor),
+            starImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            starImageView.heightAnchor.constraint(equalToConstant: 24),
+            starImageView.widthAnchor.constraint(equalToConstant: 24),
             
-            _ratingLabel.topAnchor.constraint(equalTo: self.topAnchor),
-            _ratingLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            _ratingLabel.leftAnchor.constraint(equalTo: _imageView.rightAnchor, constant: 8),
-            _ratingLabel.rightAnchor.constraint(equalTo: self.rightAnchor)
+            ratingLabel.topAnchor.constraint(equalTo: self.topAnchor),
+            ratingLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            ratingLabel.leftAnchor.constraint(equalTo: starImageView.rightAnchor, constant: 8),
+            ratingLabel.rightAnchor.constraint(equalTo: self.rightAnchor)
         ])
     }
 }

@@ -1,0 +1,19 @@
+disabled_rules:
+    - identifier_name
+    - colon
+    - comma
+    - control_statement
+    - switch_case_alignment
+    - trailing_whitespace
+    - nesting
+    
+opt_in_rules:
+    - empty_count
+
+excluded:
+    - Carthage
+    - Pods
+
+line_length:
+    warning: 165
+    error: 200

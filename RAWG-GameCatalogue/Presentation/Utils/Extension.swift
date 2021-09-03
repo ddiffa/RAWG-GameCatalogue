@@ -8,7 +8,6 @@
 import UIKit
 
 extension UINavigationItem {
-    
     func titleMode(_ title: String, mode: LargeTitleDisplayMode) {
         self.title = title
         self.largeTitleDisplayMode = mode
@@ -23,7 +22,6 @@ let dateFormatter: DateFormatter = {
     formatter.locale = Locale(identifier: "en_US_POSIX")
     return formatter
 }()
-
 
 extension Date {
     func getYear() -> String {
@@ -62,11 +60,11 @@ extension String {
     }
 }
 
-extension Data  {
+extension Data {
     public func downsample(to frameSize: CGSize, scale: CGFloat) throws -> UIImage {
         let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
         
-        return try self.withUnsafeBytes{ (unsafeRawBufferPointer: UnsafeRawBufferPointer) -> UIImage in
+        return try self.withUnsafeBytes { (unsafeRawBufferPointer: UnsafeRawBufferPointer) -> UIImage in
             let unsafeBufferPointer = unsafeRawBufferPointer.bindMemory(to: UInt8.self)
             guard let unsafePointer = unsafeBufferPointer.baseAddress else {throw ImageRenderingError.unableToCreateThumbnail}
             
@@ -88,4 +86,14 @@ private func createThumbnail(from imageSource: CGImageSource, size: CGSize, scal
         kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels] as CFDictionary
     guard let thumbnail = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options) else { throw ImageRenderingError.unableToCreateThumbnail }
     return UIImage(cgImage: thumbnail)
+}
+
+extension Error {
+    func getErrorMessage() -> String {
+        if self.isInternetConnectionError {
+            return NSLocalizedString("No internet connection, Please try again", comment: "")
+        } else {
+            return NSLocalizedString("Failed loading games data, Please Check your connection and try again", comment: "")
+        }
+    }
 }

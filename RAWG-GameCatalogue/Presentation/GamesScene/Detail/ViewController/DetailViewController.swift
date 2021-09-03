@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol DetailGameDelegate {
+protocol DetailGameDelegate: AnyObject {
     func setThumbnailImage(detailGame: DetailGame?)
 }
 
@@ -50,7 +50,7 @@ class DetailViewController: UICustomViewControllerWithScrollView {
 
     override func setUpView() {
         super.setUpView()
-        isHiddenLargeTitle = true
+        isPrefersLargeTitle = false
         containerView.addSubview(headerView)
         containerView.addSubview(screenShootView)
         containerView.addSubview(ratingView)

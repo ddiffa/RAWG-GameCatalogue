@@ -27,20 +27,36 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
         return view
     }()
     
-    lazy var _loadingView: UILoadingView = {
+    private lazy var loadingView: UILoadingView = {
         let view = UILoadingView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-        
-    var isHiddenLargeTitle: Bool = false {
+    
+    var isPrefersLargeTitle: Bool = true {
         didSet {
-            self.navigationController?.navigationBar.prefersLargeTitles = isHiddenLargeTitle
-            if isHiddenLargeTitle {
-                navigationItem.rightBarButtonItem = nil
-            }
+            setUpNavigationBar()
         }
     }
+    
+    var hasScrolled: Bool = false
+    
+    private var alphaProfileMenu: CGFloat {
+        let magicalSafeAreaTop: CGFloat = UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.safeAreaInsets.top ?? 0
+        let offset = scrollView.contentOffset.y + (magicalSafeAreaTop - (navigationController?.navigationBar.frame.height ?? 0))
+        let alpha: CGFloat = 1 - ((offset) / magicalSafeAreaTop)
+        return alpha
+    }
+    
+    private let profileImage = UIImage(systemName: "person.crop.circle")
+    
+    private lazy var profileButton: UIBarButtonItem = {
+        let view = UIBarButtonItem(image: profileImage,
+                        style: .plain,
+                        target: self,
+                        action: #selector(didTapRightButtonItem))
+        return view
+    }()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -55,32 +71,30 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
     
     func setUpView() {
         view.backgroundColor = UIColor(named: ColorType.primary.rawValue)
-        view.addSubview(_loadingView)
+        view.addSubview(loadingView)
         view.addSubview(scrollView)
         scrollView.delegate = self
         scrollView.addSubview(containerView)
-        
-        if (navigationController?.navigationBar.frame.height ?? 0) <= 96 {
-            self.navigationItem.rightBarButtonItem = nil
-        } else {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle"), style: .plain, target: self, action: #selector(didTapRightButtonItem))
-        }
     }
     
     func setUpLayoutConstraint() {
-        
-        let centerYAnchor = NSLayoutConstraint.init(item: _loadingView, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0)
+        let centerYAnchor = NSLayoutConstraint
+            .init(item: loadingView,
+                  attribute: .centerY,
+                  relatedBy: .equal,
+                  toItem: view,
+                  attribute: .centerY,
+                  multiplier: 1.0,
+                  constant: 0)
         
         NSLayoutConstraint.activate([
             centerYAnchor,
-            _loadingView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-            _loadingView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            
+            loadingView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            loadingView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             scrollView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             scrollView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            
             containerView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0),
             containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
             containerView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
@@ -88,44 +102,31 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
         ])
     }
     
-    @objc func didTapRightButtonItem() {
-
-    }
+    @objc func didTapRightButtonItem() {}
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !isHiddenLargeTitle {
-            let magicalSafeAreaTop: CGFloat = UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.safeAreaInsets.top ?? 0
-            
-            let offset = scrollView.contentOffset.y + (magicalSafeAreaTop - (navigationController?.navigationBar.frame.height ?? 0) )
-            
-            let alpha: CGFloat = 1 - ((offset) / magicalSafeAreaTop)
-            
-            if alpha > 0.9 {
-                self.navigationController?.navigationBar.prefersLargeTitles = true
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle"), style: .plain, target: self, action: #selector(didTapRightButtonItem))
-            } else {
-                self.navigationController?.navigationBar.prefersLargeTitles = false
-                navigationItem.rightBarButtonItem = nil
-            }
+        if isPrefersLargeTitle && alphaProfileMenu > 0.9 {
+            hasScrolled = false
+            self.navigationController?.navigationBar.prefersLargeTitles = true
+            self.navigationItem.rightBarButtonItem = profileButton
+        } else {
+            hasScrolled = true
+            self.navigationController?.navigationBar.prefersLargeTitles = false
+            navigationItem.rightBarButtonItem = nil
         }
     }
     
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        
-    }
-    
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        
-    }
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {}
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {}
     
     func hideLoading() {
-        _loadingView.isHidden = true
+        loadingView.isHidden = true
         scrollView.isHidden = false
     }
     
     func showLoading() {
-        _loadingView.isHidden = false
+        loadingView.isHidden = false
         scrollView.isHidden = true
     }
     
@@ -144,6 +145,16 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
         
         showAlert(message: error) {
             completion()
+        }
+    }
+    
+    private func setUpNavigationBar() {
+        self.navigationController?.navigationBar.prefersLargeTitles = isPrefersLargeTitle
+        
+        if isPrefersLargeTitle && alphaProfileMenu > 0.9 {
+            self.navigationItem.rightBarButtonItem = profileButton
+        } else {
+            navigationItem.rightBarButtonItem = nil
         }
     }
 }

@@ -15,7 +15,7 @@ class ImageDownloader: Operation {
     private var game: Game?
     private var genre: Genre?
     private var detailGame: DetailGame?
-    private var detailGameDelegate: DetailGameDelegate?
+    private weak var detailGameDelegate: DetailGameDelegate?
     private var containerSize: CGSize
     private var type: ImageDownloaderType = .none
     
@@ -42,7 +42,6 @@ class ImageDownloader: Operation {
         if isCancelled {
             return
         }
-        
         
         if type == .genre {
             
@@ -76,7 +75,6 @@ class ImageDownloader: Operation {
     }
     
     private func handleGameImage(_ imageData: Data) {
-        
         if isCancelled {
             return
         }
@@ -91,7 +89,6 @@ class ImageDownloader: Operation {
     }
     
     private func handleGenreImage(_ imageData: Data) {
-        
         if isCancelled {
             return
         }
@@ -106,7 +103,6 @@ class ImageDownloader: Operation {
     }
     
     private func handleDetailGameImage(_ imageData: Data) {
-        
         if isCancelled {
             return
         }
@@ -122,12 +118,9 @@ class ImageDownloader: Operation {
         setImageDetailGame()
     }
     
-    
     private func setImageDetailGame() {
         DispatchQueue.main.async {
             self.detailGameDelegate?.setThumbnailImage(detailGame: self.detailGame)
         }
     }
 }
-
-

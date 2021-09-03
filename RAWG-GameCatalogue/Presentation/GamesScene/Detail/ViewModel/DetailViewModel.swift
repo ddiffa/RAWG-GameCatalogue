@@ -32,7 +32,6 @@ final class DefaultDetailGamesViewModel: DetailGamesViewModel {
     let loading: Observable<Bool> = Observable(true)
     let error: Observable<String> = Observable("")
     
-    
     private var gamesLoadTask: Cancellable? { willSet { gamesLoadTask?.cancel() } }
     
     init(detailGamesUseCase: DetailGamesUseCase) {
@@ -54,9 +53,7 @@ final class DefaultDetailGamesViewModel: DetailGamesViewModel {
     }
     
     private func handle(error: Error) {
-        self.error.value = error.isInternetConnectionError ?
-            NSLocalizedString("No internet connection", comment: "") :
-            NSLocalizedString("Failed loading games data", comment: "")
+        self.error.value = error.getErrorMessage()
     }
 }
 
@@ -80,9 +77,8 @@ extension DefaultDetailGamesViewModel {
                                                                 containerSize: containerSize)
         backgroundDownloaderImage.startDownloadImage(indexPath: indexPath) { downloader in
             downloader.completionBlock = {
-                if downloader.isCancelled  { return }
-                
-                DispatchQueue.main.async {
+                if downloader.isCancelled { return }
+                DispatchQueue.main.async { 
                     self.pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)
                 }
             }

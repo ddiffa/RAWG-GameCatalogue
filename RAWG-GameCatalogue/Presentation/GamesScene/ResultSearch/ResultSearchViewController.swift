@@ -7,15 +7,17 @@
 
 import UIKit
 
-protocol ResultSearchDelegate {
-    func updateSearchResult()
-}
-
 class ResultSearchViewController: UICustomViewControllerWithScrollView {
     
+    private let emptyLabel: UIDescriptionLabel = {
+        let view = UIDescriptionLabel()
+        view.text = "No Result"
+        view.textAlignment = .center
+        return view
+    }()
+
     var gamesContainer: UIView = {
         let view = UIView()
-        
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -25,11 +27,13 @@ class ResultSearchViewController: UICustomViewControllerWithScrollView {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        isPrefersLargeTitle = false
     }
     
     override func setUpView() {
         super.setUpView()
         containerView.addSubview(gamesContainer)
+        containerView.addSubview(emptyLabel)
         if let gamesViewController = gamesViewController {
             gamesViewController.delegate = self
             
@@ -40,7 +44,7 @@ class ResultSearchViewController: UICustomViewControllerWithScrollView {
                 gamesViewController.view.leftAnchor.constraint(equalTo: gamesContainer.leftAnchor),
                 gamesViewController.view.rightAnchor.constraint(equalTo: gamesContainer.rightAnchor),
                 gamesViewController.view.topAnchor.constraint(equalTo: gamesContainer.topAnchor),
-                gamesViewController.view.bottomAnchor.constraint(equalTo: gamesContainer.bottomAnchor),
+                gamesViewController.view.bottomAnchor.constraint(equalTo: gamesContainer.bottomAnchor)
             ])
         }
 
@@ -49,6 +53,9 @@ class ResultSearchViewController: UICustomViewControllerWithScrollView {
     override func setUpLayoutConstraint() {
         super.setUpLayoutConstraint()
         NSLayoutConstraint.activate([
+            emptyLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            emptyLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            
             gamesContainer.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
             gamesContainer.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 0),
             gamesContainer.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: 0),
@@ -72,5 +79,9 @@ extension ResultSearchViewController: GamesViewControllerDelegate {
     
     func getRootNavigationController() -> UINavigationController? {
         return rootNavigationController
+    }
+    
+    func onEmptySearchResult(_ isEmpty: Bool) {
+        emptyLabel.isHidden = !isEmpty
     }
 }

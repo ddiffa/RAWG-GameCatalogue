@@ -24,7 +24,6 @@ class AboutViewController: UICustomViewControllerWithScrollView {
         return view
     }()
     
-    
     private lazy var profileImage: UIImageView = {
         let view = UIImageView()
         view.layer.borderWidth = 1
@@ -39,12 +38,12 @@ class AboutViewController: UICustomViewControllerWithScrollView {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        isPrefersLargeTitle = false
         navigationItem.titleMode("About Me", mode: .never)
     }
     
     override func setUpView() {
         super.setUpView()
-        isHiddenLargeTitle = true
         containerView.addSubview(profileImage)
         containerView.addSubview(nameLabel)
         containerView.addSubview(descLabel)

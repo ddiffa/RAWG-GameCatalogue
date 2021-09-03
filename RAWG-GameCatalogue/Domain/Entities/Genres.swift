@@ -27,7 +27,6 @@ class Genre: Equatable, Identifiable {
     }
 }
 
-
 class GenresPage: Equatable {
     static func == (lhs: GenresPage, rhs: GenresPage) -> Bool {
         return false

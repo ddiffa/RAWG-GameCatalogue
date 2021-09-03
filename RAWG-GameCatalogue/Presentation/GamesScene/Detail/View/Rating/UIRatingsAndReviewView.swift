@@ -89,7 +89,6 @@ class UIRatingsAndReviewView: UIView {
             ratingView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
             ratingView.topAnchor.constraint(equalTo: self.headersLabel.bottomAnchor, constant: 24),
             
-            
             reviewCount.leftAnchor.constraint(equalTo: self.ratingLabel.rightAnchor, constant: 16),
             reviewCount.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
             reviewCount.topAnchor.constraint(equalTo: self.ratingLabel.bottomAnchor, constant: 2)

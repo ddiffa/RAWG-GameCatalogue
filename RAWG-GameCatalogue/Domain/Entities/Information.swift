@@ -21,7 +21,7 @@ class Information {
             Information(key: "Developers", value: ""),
             Information(key: "Released", value: ""),
             Information(key: "Playtime", value: ""),
-            Information(key: "Platforms", value: ""),
+            Information(key: "Platforms", value: "")
         ]
     }
 }

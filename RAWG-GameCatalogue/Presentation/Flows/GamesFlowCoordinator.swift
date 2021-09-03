@@ -21,7 +21,6 @@ final class GamesFlowCoordinator {
     private weak var navigationController: UINavigationController?
     private let dependencies: GamesFlowCoordinatorDependencies
     
-    
     init(navigationController: UINavigationController,
          dependencies: GamesFlowCoordinatorDependencies) {
         self.navigationController = navigationController

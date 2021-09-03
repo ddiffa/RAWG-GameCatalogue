@@ -6,6 +6,5 @@ target 'RAWG-GameCatalogue' do
   use_frameworks!
 
   # Pods for RAWG-GameCatalogue
-  pod 'SwiftLint'
   pod 'Cosmos', '~> 23.0'
 end
