@@ -18,7 +18,7 @@ final class DefaultGenresRepository {
 
 extension DefaultGenresRepository: GenresRepository {
     
-    func fetchGenres(completion: @escaping (Result<GenresPage, Error>) -> Void) -> Cancelable? {
+    func fetchGenres(completion: @escaping (Result<GenresPage, Error>) -> Void) -> Cancellable? {
         
         let task = RepositoryTask()
         let endpoint = APIEndpoints.fetchGenresData()

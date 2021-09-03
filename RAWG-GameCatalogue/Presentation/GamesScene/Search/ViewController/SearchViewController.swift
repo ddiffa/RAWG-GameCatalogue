@@ -27,13 +27,13 @@ class SearchViewController: UICustomViewControllerWithScrollView {
         return view
     }()
     
-    let browseGenresLabel: UIHeaderLabel = {
+    private let browseGenresLabel: UIHeaderLabel = {
         let view = UIHeaderLabel()
         view.text = "Browse Genres"
         return view
     }()
     
-    private lazy var _searchViewController: UISearchController = {
+    private lazy var searchViewController: UISearchController = {
         let view = UISearchController(searchResultsController: resultSearchViewController)
         view.searchResultsUpdater = self
         view.searchBar.delegate = self
@@ -41,11 +41,9 @@ class SearchViewController: UICustomViewControllerWithScrollView {
         return view
     }()
     
-    //MARK: - Properties
     var viewModel: SearchViewModel?
     var resultSearchViewController: ResultSearchViewController?
     
-    //MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let viewModel = viewModel else {
@@ -66,7 +64,7 @@ class SearchViewController: UICustomViewControllerWithScrollView {
     override func setUpView() {
         super.setUpView()
         isHiddenLargeTitle = false
-        navigationItem.searchController = _searchViewController
+        navigationItem.searchController = searchViewController
         navigationItem.titleMode("Search", mode: .automatic)
         containerView.addSubview(browseGenresLabel)
         containerView.addSubview(genreCollectionView)

@@ -9,7 +9,6 @@ import UIKit
 
 class BrowseGamesViewController: UICustomViewControllerWithScrollView {
     
-    // MARK: - Initialization Views
     let descLabel: UILabel = {
         let view = UILabel()
         view.text = "From modern multi-player action games to classics you can you can find here."
@@ -36,7 +35,6 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
     var gamesViewController: GamesViewController?
     var viewModel: BrowseGamesViewModel?
     
-    // MARK: - View Controller Lifecyle
     override func setUpView() {
         super.setUpView()
         isHiddenLargeTitle = false

@@ -8,7 +8,7 @@
 import Foundation
 
 protocol GenresUseCase {
-    func execute(completion: @escaping (Result<GenresPage, Error>) -> Void) -> Cancelable?
+    func execute(completion: @escaping (Result<GenresPage, Error>) -> Void) -> Cancellable?
 }
 
 final class DefaultGenresUseCase: GenresUseCase {
@@ -18,7 +18,7 @@ final class DefaultGenresUseCase: GenresUseCase {
         self.genresRepository = genresRepository
     }
     
-    func execute(completion: @escaping (Result<GenresPage, Error>) -> Void) -> Cancelable? {
+    func execute(completion: @escaping (Result<GenresPage, Error>) -> Void) -> Cancellable? {
         return genresRepository.fetchGenres(completion: completion)
     }
 }

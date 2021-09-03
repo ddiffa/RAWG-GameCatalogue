@@ -9,5 +9,5 @@ import Foundation
 
 protocol GenresRepository {
     @discardableResult
-    func fetchGenres(completion: @escaping (Result<GenresPage, Error>) -> Void) -> Cancelable?
+    func fetchGenres(completion: @escaping (Result<GenresPage, Error>) -> Void) -> Cancellable?
 }

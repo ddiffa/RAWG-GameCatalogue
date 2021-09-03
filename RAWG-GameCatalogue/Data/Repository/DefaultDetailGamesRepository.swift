@@ -15,7 +15,7 @@ final class DefaultDetailGamesRepository {
 
 extension DefaultDetailGamesRepository: DetailGamesRepository {
     
-    func fetchGameDetail(gameID: String, completion: @escaping (Result<DetailGame, Error>) -> Void) -> Cancelable? {
+    func fetchGameDetail(gameID: String, completion: @escaping (Result<DetailGame, Error>) -> Void) -> Cancellable? {
         let task = RepositoryTask()
         let endpoint = APIEndpoints.fetchDetailGames(id: gameID)
         

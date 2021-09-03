@@ -19,7 +19,6 @@ protocol GamesViewModelInput {
                             containerSize: CGSize,
                             completion: @escaping()-> Void)
     func toggleSuspendOperations(isSuspended: Bool)
-    func cancelDownloadImage()
 }
 
 protocol GamesViewModelOutput {
@@ -34,9 +33,9 @@ protocol GamesViewModel: GamesViewModelInput, GamesViewModelOutput {}
 final class DefaultGamesViewModel: GamesViewModel {
     private let searchGamesUseCase: SearchGamesUseCase
     private let actions: GamesViewModelAction?
-    private let _pendingOpearions = PendingOperations()
+    private let pendingOpearions = PendingOperations()
     
-    private var gamesLoadTask: Cancelable? { willSet { gamesLoadTask?.cancel() } }
+    private var gamesLoadTask: Cancellable? { willSet { gamesLoadTask?.cancel() } }
     
     let items: Observable<[Game]> = Observable([])
     let loading: Observable<Bool> = Observable(false)
@@ -54,11 +53,11 @@ final class DefaultGamesViewModel: GamesViewModel {
         
         if !query.search.isEmpty {
             gamesLoadTask?.cancel()
-            _pendingOpearions.downloadInProgress.removeAll()
-            _pendingOpearions.downloadQueue.cancelAllOperations()
+            pendingOpearions.downloadInProgress.removeAll()
+            pendingOpearions.downloadQueue.cancelAllOperations()
         }
         
-        gamesLoadTask = searchGamesUseCase.execute(requestValue: .init(query: query, page: 1)) { result in
+        gamesLoadTask = searchGamesUseCase.execute(requestValue: .init(query: query)) { result in
             switch result {
                 case .success(let data):
                     self.items.value = data.games
@@ -92,7 +91,7 @@ extension DefaultGamesViewModel {
                             indexPath: IndexPath,
                             containerSize: CGSize,
                             completion: @escaping () -> Void) {
-        guard _pendingOpearions.downloadInProgress[indexPath] == nil else { return }
+        guard pendingOpearions.downloadInProgress[indexPath] == nil else { return }
         let backgroundDownloaderImage = BackgroundDownloadImage()
         backgroundDownloaderImage.downloader = ImageDownloader(game: game, containerSize: containerSize)
         backgroundDownloaderImage.startDownloadImage(indexPath: indexPath) { downloader in
@@ -100,7 +99,7 @@ extension DefaultGamesViewModel {
                 if downloader.isCancelled  { return }
                 
                 DispatchQueue.main.async {
-                    self._pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)
+                    self.pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)
                     if downloader.isCancelled {
                         return
                     }
@@ -111,10 +110,6 @@ extension DefaultGamesViewModel {
     }
     
     func toggleSuspendOperations(isSuspended: Bool) {
-        _pendingOpearions.downloadQueue.isSuspended = isSuspended
-    }
-    
-    func cancelDownloadImage() {
-        _pendingOpearions.downloadInProgress.removeAll()
+        pendingOpearions.downloadQueue.isSuspended = isSuspended
     }
 }

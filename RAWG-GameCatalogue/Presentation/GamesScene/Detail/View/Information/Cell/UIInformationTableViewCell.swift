@@ -16,13 +16,13 @@ class UIInformationTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let _keyLabel: UIDescriptionLabel = {
+    private let keyLabel: UIDescriptionLabel = {
         let view = UIDescriptionLabel()
         
         return view
     }()
     
-    private let _valueLabel: UITitleLabel = {
+    private let valueLabel: UITitleLabel = {
         let view = UITitleLabel()
         view.font = UIFont.boldSystemFont(ofSize: 16)
         view.numberOfLines = 0
@@ -33,14 +33,14 @@ class UIInformationTableViewCell: UITableViewCell {
     var titleText: String? {
         didSet {
             guard let text = titleText else {  return }
-            _keyLabel.text = text
+            keyLabel.text = text
         }
     }
     
     var valueText: String? {
         didSet {
             guard let text = valueText else {  return }
-            _valueLabel.text = text
+            valueLabel.text = text
         }
     }
     
@@ -56,23 +56,23 @@ class UIInformationTableViewCell: UITableViewCell {
     }
     
     private func addView() {
-        contentView.addSubview(_keyLabel)
-        contentView.addSubview(_valueLabel)
+        contentView.addSubview(keyLabel)
+        contentView.addSubview(valueLabel)
         contentView.addSubview(separator)
     }
     
     private func setUpLayoutConstraint() {
         NSLayoutConstraint.activate([
-            _keyLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            _keyLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
-            _keyLabel.bottomAnchor.constraint(equalTo: separator.topAnchor, constant: -6),
-            _keyLabel.widthAnchor.constraint(equalToConstant: 180),
+            keyLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            keyLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+            keyLabel.bottomAnchor.constraint(equalTo: separator.topAnchor, constant: -6),
+            keyLabel.widthAnchor.constraint(equalToConstant: 180),
             
-            _valueLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            _valueLabel.leftAnchor.constraint(equalTo: _keyLabel.rightAnchor, constant: 8),
-            _valueLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16.0),
+            valueLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            valueLabel.leftAnchor.constraint(equalTo: keyLabel.rightAnchor, constant: 8),
+            valueLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16.0),
             
-            separator.topAnchor.constraint(equalTo: _valueLabel.bottomAnchor, constant: 6),
+            separator.topAnchor.constraint(equalTo: valueLabel.bottomAnchor, constant: 6),
             separator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             separator.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
             separator.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16)

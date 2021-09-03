@@ -25,15 +25,15 @@ protocol DetailGamesViewModel: DetailGamesViewModelInput, DetailGamesViewModelOu
 final class DefaultDetailGamesViewModel: DetailGamesViewModel {
     private let detailGamesUseCase: DetailGamesUseCase
     
-    private let _backgroundDownloaderImage: BackgroundDownloadImage = BackgroundDownloadImage()
-    private let _pendingOpearions = PendingOperations()
+    private let backgroundDownloaderImage: BackgroundDownloadImage = BackgroundDownloadImage()
+    private let pendingOpearions = PendingOperations()
     
     let items: Observable<DetailGame?> = Observable(nil)
     let loading: Observable<Bool> = Observable(true)
     let error: Observable<String> = Observable("")
     
     
-    private var gamesLoadTask: Cancelable? { willSet { gamesLoadTask?.cancel() } }
+    private var gamesLoadTask: Cancellable? { willSet { gamesLoadTask?.cancel() } }
     
     init(detailGamesUseCase: DetailGamesUseCase) {
         self.detailGamesUseCase = detailGamesUseCase
@@ -72,25 +72,25 @@ extension DefaultDetailGamesViewModel {
     
     func startDownloadImage(delegate: DetailGameDelegate, containerSize: CGSize) {
         let indexPath = IndexPath.init(index: 0)
-        guard _pendingOpearions.downloadInProgress[indexPath] == nil,
+        guard pendingOpearions.downloadInProgress[indexPath] == nil,
               let data = items.value else { return }
         
-        _backgroundDownloaderImage.downloader = ImageDownloader(detailGame: data,
+        backgroundDownloaderImage.downloader = ImageDownloader(detailGame: data,
                                                                 delegate: delegate,
                                                                 containerSize: containerSize)
-        _backgroundDownloaderImage.startDownloadImage(indexPath: indexPath) { downloader in
+        backgroundDownloaderImage.startDownloadImage(indexPath: indexPath) { downloader in
             downloader.completionBlock = {
                 if downloader.isCancelled  { return }
                 
                 DispatchQueue.main.async {
-                    self._pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)
+                    self.pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)
                 }
             }
         }
     }
     
     func toggleSuspendOperations(isSuspended: Bool) {
-        _pendingOpearions.downloadQueue.isSuspended = isSuspended
+        pendingOpearions.downloadQueue.isSuspended = isSuspended
     }
 
 }

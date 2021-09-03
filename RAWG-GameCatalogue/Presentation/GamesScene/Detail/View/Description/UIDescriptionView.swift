@@ -9,13 +9,13 @@ import UIKit
 
 class UIDescriptionView: UIView {
     
-    private let _headersLabel: UIHeaderLabel = {
+    private let headersLabel: UIHeaderLabel = {
         let view = UIHeaderLabel()
         view.text = "Description"
         return view
     }()
     
-    private let _descriptionLabel: UIDescriptionLabel = {
+    private let descriptionLabel: UIDescriptionLabel = {
         let view = UIDescriptionLabel()
         view.numberOfLines = 0
         return view
@@ -24,7 +24,7 @@ class UIDescriptionView: UIView {
     var descriptionText: String? {
         didSet {
             guard let text = descriptionText else { return }
-            _descriptionLabel.text = text.html2String
+            descriptionLabel.text = text.html2String
         }
     }
     
@@ -40,19 +40,19 @@ class UIDescriptionView: UIView {
     
     private func setup() {
         self.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(_headersLabel)
-        addSubview(_descriptionLabel)
+        addSubview(headersLabel)
+        addSubview(descriptionLabel)
         backgroundColor = UIColor(named: ColorType.primary.rawValue)
         
         NSLayoutConstraint.activate([
-            _headersLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
-            _headersLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
-            _headersLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
+            headersLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
+            headersLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
+            headersLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
             
-            _descriptionLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
-            _descriptionLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
-            _descriptionLabel.topAnchor.constraint(equalTo: _headersLabel.bottomAnchor, constant: 8),
-            _descriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            descriptionLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
+            descriptionLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
+            descriptionLabel.topAnchor.constraint(equalTo: headersLabel.bottomAnchor, constant: 8),
+            descriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
         ])
     }
 }

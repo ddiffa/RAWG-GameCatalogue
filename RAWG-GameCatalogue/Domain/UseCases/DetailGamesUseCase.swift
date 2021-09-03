@@ -9,7 +9,7 @@ import Foundation
 
 protocol DetailGamesUseCase {
     func execute(gamesID: String,
-                 completion: @escaping (Result<DetailGame, Error>) -> Void) -> Cancelable?
+                 completion: @escaping (Result<DetailGame, Error>) -> Void) -> Cancellable?
 }
 
 final class DefaultDetailGamesUseCase: DetailGamesUseCase {
@@ -19,7 +19,7 @@ final class DefaultDetailGamesUseCase: DetailGamesUseCase {
         self.detailGameRepository = detailGameRepository
     }
     
-    func execute(gamesID: String, completion: @escaping (Result<DetailGame, Error>) -> Void) -> Cancelable? {
+    func execute(gamesID: String, completion: @escaping (Result<DetailGame, Error>) -> Void) -> Cancellable? {
         return detailGameRepository.fetchGameDetail(gameID: gamesID, completion: completion)
     }
 }

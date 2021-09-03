@@ -11,13 +11,13 @@ class UIInformationView: UIView {
     
     private var informations: [Information] = Information.initialData()
     
-    private let _headersLabel: UIHeaderLabel = {
+    private let headersLabel: UIHeaderLabel = {
         let view = UIHeaderLabel()
         view.text = "Information"
         return view
     }()
     
-    private lazy var _informationTableView: UICustomTableView = {
+    private lazy var informationTableView: UICustomTableView = {
         let view = UICustomTableView()
         view.register(UIInformationTableViewCell.self, forCellReuseIdentifier: UIInformationTableViewCell.identifier)
         view.delegate = self
@@ -66,25 +66,25 @@ class UIInformationView: UIView {
     
     private func setup() {
         self.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(_headersLabel)
-        addSubview(_informationTableView)
+        addSubview(headersLabel)
+        addSubview(informationTableView)
         
         backgroundColor = UIColor(named: ColorType.primary.rawValue)
         
         NSLayoutConstraint.activate([
-            _headersLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
-            _headersLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
-            _headersLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
+            headersLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
+            headersLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
+            headersLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
             
-            _informationTableView.topAnchor.constraint(equalTo: _headersLabel.bottomAnchor, constant: 16),
-            _informationTableView.bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor, constant: -16),
-            _informationTableView.leftAnchor.constraint(equalTo: self.leftAnchor),
-            _informationTableView.rightAnchor.constraint(equalTo: self.rightAnchor)
+            informationTableView.topAnchor.constraint(equalTo: headersLabel.bottomAnchor, constant: 16),
+            informationTableView.bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor, constant: -16),
+            informationTableView.leftAnchor.constraint(equalTo: self.leftAnchor),
+            informationTableView.rightAnchor.constraint(equalTo: self.rightAnchor)
         ])
     }
     
     func reloadData() {
-        _informationTableView.reloadData()
+        informationTableView.reloadData()
     }
 }
 

@@ -6,34 +6,35 @@
 //
 
 import UIKit
+
 enum ImageDownloaderType {
     case game, detail, genre, none
 }
 
 class ImageDownloader: Operation {
-    private var _game: Game?
-    private var _genre: Genre?
-    private var _detailGame: DetailGame?
-    private var _detailGameDelegate: DetailGameDelegate?
-    private var _containerSize: CGSize
+    private var game: Game?
+    private var genre: Genre?
+    private var detailGame: DetailGame?
+    private var detailGameDelegate: DetailGameDelegate?
+    private var containerSize: CGSize
     private var type: ImageDownloaderType = .none
     
     init(game: Game, containerSize: CGSize) {
-        _game = game
-        _containerSize = containerSize
+        self.game = game
+        self.containerSize = containerSize
         type = .game
     }
     
     init(genre: Genre, containerSize: CGSize) {
-        _genre = genre
-        _containerSize = containerSize
+        self.genre = genre
+        self.containerSize = containerSize
         type = .genre
     }
     
     init(detailGame: DetailGame, delegate: DetailGameDelegate, containerSize: CGSize) {
-        _detailGame = detailGame
-        _detailGameDelegate = delegate
-        _containerSize = containerSize
+        self.detailGame = detailGame
+        self.detailGameDelegate = delegate
+        self.containerSize = containerSize
         type = .detail
     }
     
@@ -45,8 +46,8 @@ class ImageDownloader: Operation {
         
         if type == .genre {
             
-            guard let url = _genre?.imageBackground, let imageData = try? Data(contentsOf: url) else {
-                _genre?.state = .failed
+            guard let url = self.genre?.imageBackground, let imageData = try? Data(contentsOf: url) else {
+                self.genre?.state = .failed
                 return
             }
             
@@ -54,8 +55,8 @@ class ImageDownloader: Operation {
         }
         
         if type == .game {
-            guard let url = _game?.imagePath, let imageData = try? Data(contentsOf: url) else {
-                _game?.state = .failed
+            guard let url = self.game?.imagePath, let imageData = try? Data(contentsOf: url) else {
+                self.game?.state = .failed
                 return
             }
             
@@ -63,10 +64,10 @@ class ImageDownloader: Operation {
         }
         
         if type == .detail {
-            guard let urlString = _detailGame?.backgroundImage,
+            guard let urlString = self.detailGame?.backgroundImage,
                   let url = URL(string:  urlString),
                   let imageData = try? Data(contentsOf: url) else {
-                _detailGame?.state = .failed
+                self.detailGame?.state = .failed
                 setImageDetailGame()
                 return
             }
@@ -81,11 +82,11 @@ class ImageDownloader: Operation {
         }
         
         if !imageData.isEmpty {
-            _game?.image = try? imageData.downsample(to: _containerSize, scale: 1)
-            _game?.state = .downloaded
+            self.game?.image = try? imageData.downsample(to: self.containerSize, scale: 1)
+            self.game?.state = .downloaded
         } else {
-            _game?.image = nil
-            _game?.state = .failed
+            self.game?.image = nil
+            self.game?.state = .failed
         }
     }
     
@@ -96,11 +97,11 @@ class ImageDownloader: Operation {
         }
         
         if !imageData.isEmpty {
-            _genre?.image = try? imageData.downsample(to: _containerSize, scale: 1)
-            _genre?.state = .downloaded
+            self.genre?.image = try? imageData.downsample(to: self.containerSize, scale: 1)
+            self.genre?.state = .downloaded
         } else {
-            _genre?.image = nil
-            _genre?.state = .failed
+            self.genre?.image = nil
+            self.genre?.state = .failed
         }
     }
     
@@ -111,11 +112,11 @@ class ImageDownloader: Operation {
         }
         
         if !imageData.isEmpty {
-            _detailGame?.image = try? imageData.downsample(to: _containerSize, scale: 1)
-            _detailGame?.state = .downloaded
+            self.detailGame?.image = try? imageData.downsample(to: self.containerSize, scale: 1)
+            self.detailGame?.state = .downloaded
         } else {
-            _detailGame?.image = nil
-            _detailGame?.state = .failed
+            self.detailGame?.image = nil
+            self.detailGame?.state = .failed
         }
         
         setImageDetailGame()
@@ -124,7 +125,7 @@ class ImageDownloader: Operation {
     
     private func setImageDetailGame() {
         DispatchQueue.main.async {
-            self._detailGameDelegate?.setThumbnailImage(detailGame: self._detailGame)
+            self.detailGameDelegate?.setThumbnailImage(detailGame: self.detailGame)
         }
     }
 }

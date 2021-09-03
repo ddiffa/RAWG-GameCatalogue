@@ -8,7 +8,7 @@
 import Foundation
 
 
-class RepositoryTask: Cancelable {
+class RepositoryTask: Cancellable {
     var networkTask: NetworkCancellable?
     var isCancelled: Bool = false
     

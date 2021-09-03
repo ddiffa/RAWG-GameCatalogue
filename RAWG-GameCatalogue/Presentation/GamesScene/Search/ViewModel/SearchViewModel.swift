@@ -19,7 +19,6 @@ protocol SearchViewModelInput {
     func didSelectItem(navController: UINavigationController, genreID: String, genre: String)
     func startDownloadImage(genre: Genre, indexPath: IndexPath, containerSize: CGSize, completion: @escaping()-> Void)
     func toggleSuspendOperations(isSuspended: Bool)
-    func cancelOperations()
 }
 
 protocol SearchViewModelOutput {
@@ -32,12 +31,12 @@ protocol SearchViewModel: SearchViewModelInput, SearchViewModelOutput {}
 
 
 final class DefaultSearchViewModel: SearchViewModel {
-    let _pendingOpearions = PendingOperations()
+    let pendingOpearions = PendingOperations()
     
     private let genresUseCase: GenresUseCase
     private let actions: SearchViewModelActions?
     
-    private var genresLoadTask: Cancelable? { willSet { genresLoadTask?.cancel() } }
+    private var genresLoadTask: Cancellable? { willSet { genresLoadTask?.cancel() } }
     
     let items: Observable<[Genre]> = Observable([])
     let error: Observable<String> = Observable("")
@@ -84,7 +83,7 @@ extension DefaultSearchViewModel {
     }
     
     func startDownloadImage(genre: Genre, indexPath: IndexPath, containerSize: CGSize, completion: @escaping () -> Void) {
-        guard _pendingOpearions.downloadInProgress[indexPath] == nil else { return }
+        guard pendingOpearions.downloadInProgress[indexPath] == nil else { return }
         
         let downloader = ImageDownloader(genre: genre, containerSize: containerSize)
         
@@ -92,21 +91,17 @@ extension DefaultSearchViewModel {
             if downloader.isCancelled  { return }
             
             DispatchQueue.main.async {
-                self._pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)
+                self.pendingOpearions.downloadInProgress.removeValue(forKey: indexPath)
                 completion()
             }
         }
         
-        _pendingOpearions.downloadInProgress[indexPath] = downloader
-        _pendingOpearions.downloadQueue.addOperation(downloader)
+        pendingOpearions.downloadInProgress[indexPath] = downloader
+        pendingOpearions.downloadQueue.addOperation(downloader)
     }
     
     func toggleSuspendOperations(isSuspended: Bool) {
-        _pendingOpearions.downloadQueue.isSuspended = isSuspended
-    }
-    
-    func cancelOperations() {
-        _pendingOpearions.downloadQueue.cancelAllOperations()
+        pendingOpearions.downloadQueue.isSuspended = isSuspended
     }
 
 }

@@ -9,14 +9,14 @@ import UIKit
 import Cosmos
 class UIRatingsAndReviewView: UIView {
     
-    private let _headersLabel: UIHeaderLabel = {
+    private let headersLabel: UIHeaderLabel = {
         let view = UIHeaderLabel()
         view.text = "Ratings and Review"
         
         return view
     }()
     
-    private let _ratingView: CosmosView = {
+    private let ratingView: CosmosView = {
         let view = CosmosView()
         view.rating = 0.0
         view.settings.starSize = 24
@@ -29,7 +29,7 @@ class UIRatingsAndReviewView: UIView {
         return view
     }()
     
-    private let _ratingLabel: UITitleLabel = {
+    private let ratingLabel: UITitleLabel = {
         let view = UITitleLabel()
         view.text = "0.0"
         view.font = UIFont.boldSystemFont(ofSize: 48)
@@ -37,7 +37,7 @@ class UIRatingsAndReviewView: UIView {
         return view
     }()
     
-    private let _reviewCount: UIDescriptionLabel = {
+    private let reviewCount: UIDescriptionLabel = {
         let view = UIDescriptionLabel()
         return view
     }()
@@ -45,14 +45,14 @@ class UIRatingsAndReviewView: UIView {
     var reviewCountValue: Int? {
         didSet {
             guard let value = reviewCountValue else { return }
-            _reviewCount.text = "\(value) reviews"
+            reviewCount.text = "\(value) reviews"
         }
     }
     var ratingValue: Double? {
         didSet {
             guard let value = ratingValue else { return }
-            _ratingLabel.text = "\(value)"
-            _ratingView.rating = value
+            ratingLabel.text = "\(value)"
+            ratingView.rating = value
         }
     }
     
@@ -68,31 +68,31 @@ class UIRatingsAndReviewView: UIView {
     
     private func setup() {
         self.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(_headersLabel)
-        addSubview(_ratingView)
-        addSubview(_ratingLabel)
-        addSubview(_reviewCount)
+        addSubview(headersLabel)
+        addSubview(ratingView)
+        addSubview(ratingLabel)
+        addSubview(reviewCount)
         
         backgroundColor = UIColor(named: ColorType.primary.rawValue)
         
         NSLayoutConstraint.activate([
-            _headersLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
-            _headersLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
-            _headersLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
+            headersLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
+            headersLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
+            headersLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
             
-            _ratingLabel.topAnchor.constraint(equalTo: _headersLabel.bottomAnchor, constant: 16),
-            _ratingLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            _ratingLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
-            _ratingLabel.widthAnchor.constraint(equalToConstant: 110),
+            ratingLabel.topAnchor.constraint(equalTo: self.headersLabel.bottomAnchor, constant: 16),
+            ratingLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            ratingLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
+            ratingLabel.widthAnchor.constraint(equalToConstant: 110),
             
-            _ratingView.leftAnchor.constraint(equalTo: self._ratingLabel.rightAnchor, constant: 16),
-            _ratingView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
-            _ratingView.topAnchor.constraint(equalTo: _headersLabel.bottomAnchor, constant: 24),
+            ratingView.leftAnchor.constraint(equalTo: self.ratingLabel.rightAnchor, constant: 16),
+            ratingView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
+            ratingView.topAnchor.constraint(equalTo: self.headersLabel.bottomAnchor, constant: 24),
             
             
-            _reviewCount.leftAnchor.constraint(equalTo: _ratingLabel.rightAnchor, constant: 16),
-            _reviewCount.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
-            _reviewCount.topAnchor.constraint(equalTo: _ratingView.bottomAnchor, constant: 2)
+            reviewCount.leftAnchor.constraint(equalTo: self.ratingLabel.rightAnchor, constant: 16),
+            reviewCount.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
+            reviewCount.topAnchor.constraint(equalTo: self.ratingLabel.bottomAnchor, constant: 2)
         ])
     }
 }

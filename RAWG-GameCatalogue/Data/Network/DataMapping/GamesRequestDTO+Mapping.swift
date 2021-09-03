@@ -8,7 +8,6 @@
 import Foundation
 
 struct GamesRequestDTO: Encodable {
-    let page: Int
     let ordering: String
     let genres: String
     let search: String
