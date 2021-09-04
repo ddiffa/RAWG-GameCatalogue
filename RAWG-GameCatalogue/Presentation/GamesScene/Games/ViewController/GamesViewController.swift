@@ -85,9 +85,11 @@ class GamesViewController: UIViewController, Alertable {
         guard !error.isEmpty else {
             return
         }
-        
-        showAlert(message: error) {
-            self.viewModel?.fetchData(genre: self.genre, searchQueary: self.searchQuery)
+        showAlert(title: "Something went wrong",
+                  message: error,
+                  actionTitle: "Try Again") {
+            self.viewModel?.fetchData(genre: self.genre,
+                                      searchQueary: self.searchQuery)
         }
     }
     

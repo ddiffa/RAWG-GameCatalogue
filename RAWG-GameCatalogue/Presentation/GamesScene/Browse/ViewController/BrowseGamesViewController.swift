@@ -77,7 +77,7 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if !hasScrolled {
-            isPrefersLargeTitle = true
+            state = .main
         }
         navigationItem.titleMode("Browse Games", mode: .automatic)
         gamesViewController?.resumeOperations()

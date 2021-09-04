@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ProfileStorage {
-    func fetchProfileData(completion: @escaping(Result<Profile, Error>) -> Void)
+    func fetchProfileData(completion: @escaping(Profile?) -> Void)
     func replaceProfileData(profile: Profile,
                             completion: @escaping() -> Void)
 }

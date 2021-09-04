@@ -13,4 +13,5 @@ enum ColorType: String {
     case active = "ActiveColor"
     case unactive = "UnactiveColor"
     case disable = "DisableColor"
+    case textField = "TextFieldColor"
 }

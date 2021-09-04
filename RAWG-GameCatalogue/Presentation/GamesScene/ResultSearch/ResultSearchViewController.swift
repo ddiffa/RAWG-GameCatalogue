@@ -27,7 +27,7 @@ class ResultSearchViewController: UICustomViewControllerWithScrollView {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        isPrefersLargeTitle = false
+        state = .seeAll
     }
     
     override func setUpView() {

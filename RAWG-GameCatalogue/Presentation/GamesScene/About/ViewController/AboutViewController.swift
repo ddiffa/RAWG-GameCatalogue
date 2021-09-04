@@ -9,7 +9,7 @@ import UIKit
 
 class AboutViewController: UICustomViewControllerWithScrollView {
     
-    let nameLabel: UIHeaderLabel = {
+    private let nameLabel: UIHeaderLabel = {
         let view = UIHeaderLabel()
         view.text = "Diffa Dwi Desyawan"
         view.textColor = .white
@@ -17,9 +17,9 @@ class AboutViewController: UICustomViewControllerWithScrollView {
         return view
     }()
     
-    let descLabel: UIDescriptionLabel = {
+    private let descLabel: UIDescriptionLabel = {
         let view = UIDescriptionLabel()
-        view.text = "Learner @ Apple Academy Indonesia"
+        view.text = "Learner @ Apple Developer Academy Indonesia"
         view.textAlignment = .center
         return view
     }()
@@ -36,10 +36,27 @@ class AboutViewController: UICustomViewControllerWithScrollView {
         return view
     }()
     
+    var viewModel: AboutProfileViewModel?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        isPrefersLargeTitle = false
+        state = .about
         navigationItem.titleMode("About Me", mode: .never)
+        bind()
+        viewModel?.fetchData()
+    }
+    
+    private func bind() {
+        viewModel?.profile.observe(on: self) { [weak self] in
+            self?.updateView(profile: $0)
+        }
+        
+        viewModel?.isLoading.observe(on: self) { [weak self] in
+            self?.updateLoading($0)
+        }
+        
+        viewModel?.isUpdated.observe(on: self) { [weak self] in self?.showToast(isUpdated: $0)
+        }
     }
     
     override func setUpView() {
@@ -65,5 +82,34 @@ class AboutViewController: UICustomViewControllerWithScrollView {
             descLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -16),
             descLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8)
         ])
+    }
+    
+    override func didTapRightButtonItem() {
+        let vc = EditProfileViewController()
+        vc.delegate = self
+        vc.profile = viewModel?.profile.value
+        self.present(vc, animated: true)
+    }
+    
+    private func updateView(profile: Profile?) {
+        guard let profile = profile else { return }
+        self.nameLabel.text = profile.fullName
+        self.descLabel.text = profile.jobTitle
+        self.profileImage.image = UIImage(data: profile.profileImage)
+    }
+    
+    private func showToast(isUpdated: Bool) {
+        if isUpdated {
+            showAlert(title: "Success",
+                      message: "Your profile has been updated",
+                      actionTitle: "Ok",
+                      completion: { self.viewModel?.closeAlertUpdate() })
+        }
+    }
+}
+
+extension AboutViewController: EditProfileDelegate {
+    func updateProfile(profile: Profile) {
+        viewModel?.didSaveButton(profile: profile)
     }
 }

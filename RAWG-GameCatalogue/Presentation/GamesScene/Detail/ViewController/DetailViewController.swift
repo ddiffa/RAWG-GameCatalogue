@@ -50,7 +50,7 @@ class DetailViewController: UICustomViewControllerWithScrollView {
 
     override func setUpView() {
         super.setUpView()
-        isPrefersLargeTitle = false
+        state = .detail
         containerView.addSubview(headerView)
         containerView.addSubview(screenShootView)
         containerView.addSubview(ratingView)

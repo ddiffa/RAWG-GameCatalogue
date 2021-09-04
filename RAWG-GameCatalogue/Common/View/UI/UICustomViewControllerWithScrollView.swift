@@ -7,7 +7,13 @@
 
 import UIKit
 
-class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelegate, Alertable {
+enum ViewControllerState {
+    case main, detail, about, seeAll
+}
+
+class UICustomViewControllerWithScrollView: UIViewController,
+                                            UIScrollViewDelegate,
+                                            Alertable {
     
     lazy var scrollView: UIScrollView = {
         let view = UIScrollView(frame: .zero)
@@ -32,14 +38,13 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    var isPrefersLargeTitle: Bool = true {
+        
+    var hasScrolled: Bool = false
+    var state: ViewControllerState = .main {
         didSet {
             setUpNavigationBar()
         }
     }
-    
-    var hasScrolled: Bool = false
     
     private var alphaProfileMenu: CGFloat {
         let magicalSafeAreaTop: CGFloat = UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.safeAreaInsets.top ?? 0
@@ -55,6 +60,14 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
                         style: .plain,
                         target: self,
                         action: #selector(didTapRightButtonItem))
+        return view
+    }()
+    
+    private lazy var editProfileButton: UIBarButtonItem = {
+        let view = UIBarButtonItem(title: "Edit",
+                                   style: .plain,
+                                   target: self,
+                                   action: #selector(didTapRightButtonItem))
         return view
     }()
     
@@ -105,14 +118,16 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
     @objc func didTapRightButtonItem() {}
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if isPrefersLargeTitle && alphaProfileMenu > 0.9 {
-            hasScrolled = false
-            self.navigationController?.navigationBar.prefersLargeTitles = true
-            self.navigationItem.rightBarButtonItem = profileButton
-        } else {
-            hasScrolled = true
-            self.navigationController?.navigationBar.prefersLargeTitles = false
-            navigationItem.rightBarButtonItem = nil
+        if state == .main {
+            if alphaProfileMenu > 0.9 {
+                hasScrolled = false
+                self.navigationController?.navigationBar.prefersLargeTitles = true
+                self.navigationItem.rightBarButtonItem = profileButton
+            } else {
+                hasScrolled = true
+                self.navigationController?.navigationBar.prefersLargeTitles = false
+                navigationItem.rightBarButtonItem = nil
+            }
         }
     }
     
@@ -143,15 +158,30 @@ class UICustomViewControllerWithScrollView: UIViewController, UIScrollViewDelega
             return
         }
         
-        showAlert(message: error) {
+        showAlert(title: "Something went wrong",
+                  message: error,
+                  actionTitle: "Try Again") {
             completion()
         }
     }
     
     private func setUpNavigationBar() {
-        self.navigationController?.navigationBar.prefersLargeTitles = isPrefersLargeTitle
+        self.navigationController?.navigationBar.prefersLargeTitles = state == .main
         
-        if isPrefersLargeTitle && alphaProfileMenu > 0.9 {
+        switch state {
+            case .main:
+                setUpMainBarItem()
+            case .about:
+                navigationItem.rightBarButtonItem = editProfileButton
+            case .detail:
+                navigationItem.rightBarButtonItem = nil
+            case .seeAll:
+                navigationItem.rightBarButtonItem = nil
+        }
+    }
+    
+    private func setUpMainBarItem() {
+        if alphaProfileMenu > 0.9 {
             self.navigationItem.rightBarButtonItem = profileButton
         } else {
             navigationItem.rightBarButtonItem = nil

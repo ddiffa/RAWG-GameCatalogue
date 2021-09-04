@@ -76,7 +76,7 @@ class SearchViewController: UICustomViewControllerWithScrollView {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if !hasScrolled {
-            isPrefersLargeTitle = true
+            state = .main
         }
         navigationItem.titleMode("Search", mode: .automatic)
         viewModel?.toggleSuspendOperations(isSuspended: false)

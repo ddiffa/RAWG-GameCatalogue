@@ -11,25 +11,20 @@ import CoreData
 final class UserDefaultsProfileStorage {
     private let userDefaults: UserDefaultsStorage
     
-    init(userDefaults: UserDefaultsStorage) {
+    init(userDefaults: UserDefaultsStorage = UserDefaultsStorage.shared) {
         self.userDefaults = userDefaults
     }
 }
 
 extension UserDefaultsProfileStorage: ProfileStorage {
-    func fetchProfileData(completion: @escaping (Result<Profile, Error>) -> Void) {
+    func fetchProfileData(completion: @escaping (Profile?) -> Void) {
         let profile = userDefaults.loadKey(key: .profile)
         
         guard let profile = profile else {
-            let error = NSError(domain: "id.hellodiffa",
-                                code: -1,
-                                userInfo: [NSLocalizedDescriptionKey: "Could not fetch data"])
-            completion(
-                .failure(UserDefaultsStorageError.readError(error)))
+            completion(nil)
             return
         }
-        
-        completion(.success(profile))
+        completion(profile)
     }
     
     func replaceProfileData(profile: Profile, completion: @escaping () -> Void) {

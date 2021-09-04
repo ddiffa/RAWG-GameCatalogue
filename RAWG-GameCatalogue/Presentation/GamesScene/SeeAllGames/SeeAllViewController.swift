@@ -20,7 +20,7 @@ class SeeAllViewController: UICustomViewControllerWithScrollView {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        isPrefersLargeTitle = false
+        state = .seeAll
         navigationItem.titleMode(titleString ?? "", mode: .never)
     }
     

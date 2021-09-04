@@ -31,6 +31,10 @@ final class GamesSceneDIContainer {
         return DefaultDetailGamesUseCase(detailGameRepository: makeDetailGamesRepository())
     }
     
+    func makeProfileUseCase() -> ProfileUseCase {
+        return DefaultProfileUseCase(profileRepository: makeProfileRepository())
+    }
+    
     // MARK: - Repository
     func makeGamesRepository() -> GamesRepository {
         return DefaultGamesRepository(dataTransferService: dependencies.apiDataTransferService)
@@ -42,6 +46,10 @@ final class GamesSceneDIContainer {
     
     func makeDetailGamesRepository() -> DetailGamesRepository {
         return DefaultDetailGamesRepository(dataTransferService: dependencies.apiDataTransferService)
+    }
+    
+    func makeProfileRepository() -> ProfileRepository {
+        return DefaultProfileRepository(userDefaultsProfileStorage: makeProfileUserDefaults())
     }
     
     // MARK: - ViewModel
@@ -61,6 +69,10 @@ final class GamesSceneDIContainer {
         return DefaultBrowseGamesViewModel(actions: actions)
     }
     
+    func makeProfileViewModel() -> AboutProfileViewModel {
+        return DefaultAboutProfileViewModel(profileUseCase: makeProfileUseCase())
+    }
+    // MARK: - View Controller
     func makeBrowseGamesViewController() -> UIViewController {
         let vc = BrowseGamesViewController()
         let navController = UINavigationController(rootViewController: vc)
@@ -101,16 +113,20 @@ final class GamesSceneDIContainer {
     func makeMainTabBarViewController() -> MainTabBarViewController {
         let viewControllers: [UIViewController] = [makeBrowseGamesViewController(), makeSearchViewController()]
         return MainTabBarViewController.create(with: viewControllers)
-        
-    }
-    
-    func makeAboutViewController() -> AboutViewController {
-        return AboutViewController()
     }
     
     // MARK: - Flow Coordinators
     func makeGamesFlowCoordinator(navigationController: UINavigationController) -> GamesFlowCoordinator {
         return GamesFlowCoordinator(navigationController: navigationController, dependencies: self)
+    }
+    
+    // MARK: - Persistent
+    func makeProfileUserDefaults() -> UserDefaultsProfileStorage {
+        return UserDefaultsProfileStorage()
+    }
+    
+    func makeCoreDataStorage() -> CoreDataFavoriteGamesStorage {
+        return CoreDataFavoriteGamesStorage()
     }
 }
 
@@ -136,5 +152,11 @@ extension GamesSceneDIContainer: GamesFlowCoordinatorDependencies {
     
     func makeResultSearchViewController() -> ResultSearchViewController {
         return ResultSearchViewController()
+    }
+    
+    func makeAboutProfileViewController() -> AboutViewController {
+        let vc = AboutViewController()
+        vc.viewModel = makeProfileViewModel()
+        return vc
     }
 }

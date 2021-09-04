@@ -7,11 +7,6 @@
 
 import Foundation
 
-enum UserDefaultsStorageError: Error {
-    case readError(Error)
-    case saveError(Error)
-}
-
 enum UserDefaultsDataKey: String {
     case profileImage = "profile_image"
     case fullName = "full_name"
@@ -19,7 +14,7 @@ enum UserDefaultsDataKey: String {
 }
 
 enum UserDefaultsKey: String {
-    case profile = "profile"
+    case profile = "profile_key"
 }
 
 final class UserDefaultsStorage {
@@ -45,8 +40,3 @@ final class UserDefaultsStorage {
     }
 
 }
-
-
-
-
-

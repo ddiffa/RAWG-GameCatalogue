@@ -15,6 +15,8 @@ protocol GamesFlowCoordinatorDependencies {
     func makeGamesDetailViewController(gamesID: String) -> DetailViewController
     
     func makeResultSearchViewController() -> ResultSearchViewController
+    
+    func makeAboutProfileViewController() -> AboutViewController
 }
 
 final class GamesFlowCoordinator {
@@ -28,7 +30,7 @@ final class GamesFlowCoordinator {
     }
     
     private func showAboutScene() {
-        let vc = AboutViewController()
+        let vc = dependencies.makeAboutProfileViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
