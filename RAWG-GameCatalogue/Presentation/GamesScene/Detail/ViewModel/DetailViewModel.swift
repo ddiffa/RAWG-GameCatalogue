@@ -12,12 +12,15 @@ protocol DetailGamesViewModelInput {
     func startDownloadImage(delegate: DetailGameDelegate,
                             containerSize: CGSize)
     func toggleSuspendOperations(isSuspended: Bool)
+    func toggleFavoriteButton()
 }
 
 protocol DetailGamesViewModelOutput {
     var items: Observable<DetailGame?> { get }
     var loading: Observable<Bool> { get }
     var error: Observable<String> { get }
+    var isFavorite: Observable<Bool> { get }
+    var message: Observable<String> { get }
 }
 
 protocol DetailGamesViewModel: DetailGamesViewModelInput, DetailGamesViewModelOutput {}
@@ -29,8 +32,10 @@ final class DefaultDetailGamesViewModel: DetailGamesViewModel {
     private let pendingOpearions = PendingOperations()
     
     let items: Observable<DetailGame?> = Observable(nil)
-    let loading: Observable<Bool> = Observable(true)
+    let loading: Observable<Bool> = Observable(false)
     let error: Observable<String> = Observable("")
+    let isFavorite: Observable<Bool> = Observable(false)
+    let message: Observable<String> = Observable("")
     
     private var gamesLoadTask: Cancellable? { willSet { gamesLoadTask?.cancel() } }
     
@@ -45,10 +50,55 @@ final class DefaultDetailGamesViewModel: DetailGamesViewModel {
             switch result {
                 case .success(let data):
                     self.items.value = data
+                    self.findById(gamesID: Int(gamesID) ?? 0)
                 case .failure(let error):
                     self.handle(error: error)
             }
             self.loading.value = false
+        }
+    }
+    
+    private func saveFavorite() {
+        if let game = items.value {
+            detailGamesUseCase.saveToFavoriteGames(detailGame: game) { result in
+                switch result {
+                    case .success(_):
+                        self.isFavorite.value.toggle()
+                        self.message.value = "Success added data to favorite"
+                    case .failure(_):
+                        self.error.value = "Can't save data to favorite"
+                }
+            }
+        }
+    }
+    
+    private func deleteFromFavorite() {
+        if let game = items.value,
+           let id = game.id {
+            detailGamesUseCase.deleteFromFavoriteGames(gameID: Int(id)) { result in
+                switch result {
+                    case .success(_):
+                        self.isFavorite.value.toggle()
+                        self.message.value = "Success deleted data from favorite"
+                    case .failure(_):
+                        self.error.value = "Can't delete data from favorite"
+                }
+            }
+        }
+    }
+    
+    private func findById(gamesID: Int) {
+        detailGamesUseCase.findFavoriteGamesById(gameID: gamesID) { result in
+            switch result {
+                case .success(let data):
+                    if data > 0 {
+                        self.isFavorite.value = true
+                    } else {
+                        self.isFavorite.value = false
+                    }
+                case .failure(let error):
+                    self.error.value = error.localizedDescription
+            }
         }
     }
     
@@ -61,10 +111,6 @@ extension DefaultDetailGamesViewModel {
     
     func viewDidLoad(gamesID: String) {
         self.fetch(gamesID: gamesID)
-    }
-    
-    func didSelectWeb(webLink: String) {
-        
     }
     
     func startDownloadImage(delegate: DetailGameDelegate, containerSize: CGSize) {
@@ -88,5 +134,12 @@ extension DefaultDetailGamesViewModel {
     func toggleSuspendOperations(isSuspended: Bool) {
         pendingOpearions.downloadQueue.isSuspended = isSuspended
     }
-
+    
+    func toggleFavoriteButton() {
+        if !self.isFavorite.value {
+            saveFavorite()
+        } else {
+            deleteFromFavorite()
+        }
+    }
 }

@@ -8,15 +8,16 @@
 import UIKit
 
 final class UICustomImageView: UIView {
- 
-    let thumbnail: UIImageView = {
+    
+    // MARK: - Views
+    private let thumbnail: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleToFill
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    let activityIndicator: UIActivityIndicatorView = {
+    private let activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.hidesWhenStopped = true
         view.color = .gray
@@ -24,6 +25,14 @@ final class UICustomImageView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
+    // MARK: - Properties
+    var image: UIImage? {
+        didSet {
+            guard let image = image else { return }
+            thumbnail.image = image
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

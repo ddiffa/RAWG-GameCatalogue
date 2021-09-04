@@ -28,7 +28,7 @@ final class GamesSceneDIContainer {
     }
     
     func makeDetailGamesUseCase() -> DetailGamesUseCase {
-        return DefaultDetailGamesUseCase(detailGameRepository: makeDetailGamesRepository())
+        return DefaultDetailGamesUseCase(gamesRepository: makeGamesRepository())
     }
     
     func makeProfileUseCase() -> ProfileUseCase {
@@ -37,15 +37,12 @@ final class GamesSceneDIContainer {
     
     // MARK: - Repository
     func makeGamesRepository() -> GamesRepository {
-        return DefaultGamesRepository(dataTransferService: dependencies.apiDataTransferService)
+        return DefaultGamesRepository(dataTransferService: dependencies.apiDataTransferService,
+                                      coreDataFavoriteStorage: makeCoreDataStorage())
     }
     
     func makeGenresRepository() -> GenresRepository {
         return DefaultGenresRepository(dataTransferService: dependencies.apiDataTransferService)
-    }
-    
-    func makeDetailGamesRepository() -> DetailGamesRepository {
-        return DefaultDetailGamesRepository(dataTransferService: dependencies.apiDataTransferService)
     }
     
     func makeProfileRepository() -> ProfileRepository {

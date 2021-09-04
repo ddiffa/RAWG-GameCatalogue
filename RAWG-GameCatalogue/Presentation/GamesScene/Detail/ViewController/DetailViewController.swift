@@ -13,6 +13,7 @@ protocol DetailGameDelegate: AnyObject {
 
 class DetailViewController: UICustomViewControllerWithScrollView {
     
+    // MARK: - Views
     let headerView: UIHeaderImageView = {
         let view = UIHeaderImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -36,9 +37,11 @@ class DetailViewController: UICustomViewControllerWithScrollView {
         return view
     }()
     
+    // MARK: - Properties
     var viewModel: DetailGamesViewModel?
     var gamesID: String?
     
+    // MARK: - View Controller Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.isScrollEnabled = true
@@ -80,15 +83,33 @@ class DetailViewController: UICustomViewControllerWithScrollView {
         ])
     }
     
+    override func didTapRightButtonItem() {
+        viewModel?.toggleFavoriteButton()
+    }
+    
     private func bind() {
         viewModel?.items.observe(on: self) { [weak self] in
             guard let data = $0 else { return }
             self?.setUpValue(data)
         }
+        
         viewModel?.error.observe(on: self) { [weak self] in
-            self?.showError($0, completion: { self?.viewModel?.viewDidLoad(gamesID: self?.gamesID ?? "") })
+            self?.showError($0) {
+                self?.viewModel?.viewDidLoad(gamesID: self?.gamesID ?? "")
+            }
         }
-        viewModel?.loading.observe(on: self) { [weak self] in self?.updateLoading($0) }
+        
+        viewModel?.loading.observe(on: self) { [weak self] in
+            self?.updateLoading($0)
+        }
+        
+        viewModel?.isFavorite.observe(on: self) { [weak self] in
+            self?.updateFavoriteButton($0)
+        }
+        
+        viewModel?.message.observe(on: self) { [weak self] in
+            self?.showFavoriteMessage($0)
+        }
     }
     
     private func setUpValue(_ data: DetailGame) {
@@ -112,6 +133,15 @@ class DetailViewController: UICustomViewControllerWithScrollView {
         screenShootView.descriptionText = data.description
     }
     
+    func showFavoriteMessage(_ message: String) {
+        if !message.isEmpty {
+            showAlert(title: "Success",
+                      message: message,
+                      actionTitle: "Ok") {
+                
+            }
+        }
+    }
 }
 
 extension DetailViewController: DetailGameDelegate {

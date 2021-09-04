@@ -14,7 +14,7 @@ enum ViewControllerState {
 class UICustomViewControllerWithScrollView: UIViewController,
                                             UIScrollViewDelegate,
                                             Alertable {
-    
+    // MARK: - Views
     lazy var scrollView: UIScrollView = {
         let view = UIScrollView(frame: .zero)
         view.backgroundColor = UIColor(named: ColorType.primary.rawValue)
@@ -38,7 +38,37 @@ class UICustomViewControllerWithScrollView: UIViewController,
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
+    private lazy var profileButton: UIBarButtonItem = {
+        let profileImage = UIImage(systemName: "person.crop.circle")
+        let view = UIBarButtonItem(image: profileImage,
+                                   style: .plain,
+                                   target: self,
+                                   action: #selector(didTapRightButtonItem))
+        return view
+    }()
+    
+    private lazy var editProfileButton: UIBarButtonItem = {
+        let view = UIBarButtonItem(title: "Edit",
+                                   style: .plain,
+                                   target: self,
+                                   action: #selector(didTapRightButtonItem))
+        return view
+    }()
+    
+    private let heartImage = UIImage(systemName: "suit.heart")
+    private let heartFillImage = UIImage(systemName: "suit.heart.fill")
+    
+    private lazy var favoriteButton: UIBarButtonItem = {
+        let view = UIBarButtonItem(image: heartImage,
+                                   style: .plain,
+                                   target: self,
+                                   action: #selector(didTapRightButtonItem))
         
+        return view
+    }()
+    
+    // MARK: - Properties
     var hasScrolled: Bool = false
     var state: ViewControllerState = .main {
         didSet {
@@ -53,24 +83,7 @@ class UICustomViewControllerWithScrollView: UIViewController,
         return alpha
     }
     
-    private let profileImage = UIImage(systemName: "person.crop.circle")
-    
-    private lazy var profileButton: UIBarButtonItem = {
-        let view = UIBarButtonItem(image: profileImage,
-                        style: .plain,
-                        target: self,
-                        action: #selector(didTapRightButtonItem))
-        return view
-    }()
-    
-    private lazy var editProfileButton: UIBarButtonItem = {
-        let view = UIBarButtonItem(title: "Edit",
-                                   style: .plain,
-                                   target: self,
-                                   action: #selector(didTapRightButtonItem))
-        return view
-    }()
-    
+    // MARK: - View Controller Lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
@@ -165,6 +178,14 @@ class UICustomViewControllerWithScrollView: UIViewController,
         }
     }
     
+    func updateFavoriteButton(_ isFavorite: Bool) {
+        if isFavorite {
+            favoriteButton.image = heartFillImage
+        } else {
+            favoriteButton.image = heartImage
+        }
+    }
+    
     private func setUpNavigationBar() {
         self.navigationController?.navigationBar.prefersLargeTitles = state == .main
         
@@ -174,7 +195,7 @@ class UICustomViewControllerWithScrollView: UIViewController,
             case .about:
                 navigationItem.rightBarButtonItem = editProfileButton
             case .detail:
-                navigationItem.rightBarButtonItem = nil
+                navigationItem.rightBarButtonItem = favoriteButton
             case .seeAll:
                 navigationItem.rightBarButtonItem = nil
         }

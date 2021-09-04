@@ -17,6 +17,7 @@ final class CoreDataFavoriteGamesStorage {
 }
 
 extension CoreDataFavoriteGamesStorage: FavoriteGamesStorage {
+    
     func fetchAllFavoriteGames(completion: @escaping (Result<[Game], Error>) -> Void) {
         coreDataStorage.performBackgroundTask { context in
             do {
@@ -32,7 +33,8 @@ extension CoreDataFavoriteGamesStorage: FavoriteGamesStorage {
         }
     }
     
-    func saveRecentGames(game: DetailGame, completion: @escaping (Result<Game, Error>) -> Void) {
+    func saveRecentGames(game: DetailGame,
+                         completion: @escaping (Result<Game, Error>) -> Void) {
         coreDataStorage.performBackgroundTask { context in
             do {
                 let entity = FavoriteGames(game: game, insertInto: context)
@@ -44,15 +46,43 @@ extension CoreDataFavoriteGamesStorage: FavoriteGamesStorage {
         }
     }
     
-    func deleteFromFavorite(game: FavoriteGames, completion: @escaping (Result<[Game], Error>) -> Void) {
+    func deleteFromFavorite(gameID: Int,
+                            completion: @escaping (Result<Game, Error>) -> Void) {
         coreDataStorage.performBackgroundTask { context in
             do {
-                context.delete(game)
-                try context.save()
+                let request: NSFetchRequest = FavoriteGames.fetchRequest()
+                request.predicate = NSPredicate(format: "(id = %@)", "\(gameID)")
+                request.sortDescriptors = [NSSortDescriptor(key: #keyPath(FavoriteGames.createdAt),
+                                                            ascending: false)]
+                let result = try context.fetch(request).first
+                
+                if let result = result {
+                    context.delete(result)
+                    try context.save()
+                    completion(.success(result.toDomain()))
+                } else {
+                    completion(.failure(CoreDataStorageError.deleteError(NSError())))
+                }
             } catch {
                 completion(.failure(CoreDataStorageError.deleteError(error)))
             }
         }
     }
     
+    func findByID(gameID: Int,
+                  completion: @escaping (Result<Int, Error>) -> Void) {
+        coreDataStorage.performBackgroundTask { context in
+            do {
+                let request: NSFetchRequest = FavoriteGames.fetchRequest()
+                request.predicate = NSPredicate(format: "(id = %@)", "\(gameID)")
+                request.sortDescriptors = [NSSortDescriptor(key: #keyPath(FavoriteGames.createdAt),
+                                                            ascending: false)]
+                let result = try context.count(for: request)
+                
+                completion(.success(result))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+    }
 }

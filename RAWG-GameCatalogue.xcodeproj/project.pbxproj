@@ -13,7 +13,6 @@
 		943A654626E0EFE800091B4F /* DetailGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943A654526E0EFE800091B4F /* DetailGame.swift */; };
 		943A654826E0F2A800091B4F /* DetailGamesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943A654726E0F2A800091B4F /* DetailGamesRepository.swift */; };
 		943A654A26E0F2F000091B4F /* DetailGamesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943A654926E0F2F000091B4F /* DetailGamesUseCase.swift */; };
-		943A654C26E0F39C00091B4F /* DefaultDetailGamesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943A654B26E0F39C00091B4F /* DefaultDetailGamesRepository.swift */; };
 		943A654E26E1048200091B4F /* UIDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943A654D26E1048200091B4F /* UIDescriptionView.swift */; };
 		943A655026E1049100091B4F /* UIRatingsAndReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943A654F26E1049100091B4F /* UIRatingsAndReviewView.swift */; };
 		943A655226E1049D00091B4F /* UIInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943A655126E1049D00091B4F /* UIInformationView.swift */; };
@@ -112,7 +111,6 @@
 		943A654526E0EFE800091B4F /* DetailGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGame.swift; sourceTree = "<group>"; };
 		943A654726E0F2A800091B4F /* DetailGamesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGamesRepository.swift; sourceTree = "<group>"; };
 		943A654926E0F2F000091B4F /* DetailGamesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGamesUseCase.swift; sourceTree = "<group>"; };
-		943A654B26E0F39C00091B4F /* DefaultDetailGamesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultDetailGamesRepository.swift; sourceTree = "<group>"; };
 		943A654D26E1048200091B4F /* UIDescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDescriptionView.swift; sourceTree = "<group>"; };
 		943A654F26E1049100091B4F /* UIRatingsAndReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIRatingsAndReviewView.swift; sourceTree = "<group>"; };
 		943A655126E1049D00091B4F /* UIInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIInformationView.swift; sourceTree = "<group>"; };
@@ -486,15 +484,15 @@
 				94ED70D026D2880800E2C94A /* UICustomCollectionView.swift */,
 				943A653C26E0E67000091B4F /* UICustomImageView.swift */,
 				94ED70B726D2330900E2C94A /* UICustomTableView.swift */,
+				94D5818426E3A6E000FBEEAA /* UICustomTextField.swift */,
 				94ED70EC26D2CF3600E2C94A /* UICustomViewControllerWithScrollView.swift */,
 				94ED70BD26D23E6600E2C94A /* UIDescriptionLabel.swift */,
 				943CE6C826D15F800010AE19 /* UIHeaderLabel.swift */,
+				94D5818626E3B2CB00FBEEAA /* UIHeaderSegue.swift */,
 				94ED70EA26D2CB9B00E2C94A /* UILoadingView.swift */,
 				94ED70C126D23F6700E2C94A /* UIRatingView.swift */,
 				94ED70BB26D23C6E00E2C94A /* UISeparatorView.swift */,
 				94ED70BF26D23EC100E2C94A /* UITitleLabel.swift */,
-				94D5818426E3A6E000FBEEAA /* UICustomTextField.swift */,
-				94D5818626E3B2CB00FBEEAA /* UIHeaderSegue.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -756,7 +754,6 @@
 			isa = PBXGroup;
 			children = (
 				94F6288B26D028EC00BAF79D /* Utility */,
-				943A654B26E0F39C00091B4F /* DefaultDetailGamesRepository.swift */,
 				94F6288E26D0293400BAF79D /* DefaultGamesRepository.swift */,
 				9491448926DFF5E700979BE6 /* DefaultGenresRepository.swift */,
 				94D5818E26E3BF8300FBEEAA /* DefaultProfileRepository.swift */,
@@ -1001,7 +998,6 @@
 				94D5816926E35F9400FBEEAA /* CoreDataStorage.swift in Sources */,
 				94F6287526D0142200BAF79D /* EndPoint.swift in Sources */,
 				94D5817C26E36B4000FBEEAA /* Profile.swift in Sources */,
-				943A654C26E0F39C00091B4F /* DefaultDetailGamesRepository.swift in Sources */,
 				94F6289C26D02BC300BAF79D /* GameQuery.swift in Sources */,
 				943CE6C926D15F800010AE19 /* UIHeaderLabel.swift in Sources */,
 				94F6289726D02B7400BAF79D /* UseCase.swift in Sources */,

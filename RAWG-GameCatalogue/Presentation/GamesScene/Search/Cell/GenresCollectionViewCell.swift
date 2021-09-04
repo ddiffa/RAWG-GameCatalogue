@@ -37,9 +37,9 @@ class GenresCollectionViewCell: UICollectionViewCell {
     var image: UIImage? {
         didSet {
             guard let value = image else { return }
-            thumbnailView.thumbnail.image = value
+            thumbnailView.image = value
         
-            if thumbnailView.thumbnail.image != nil {
+            if thumbnailView.image != nil {
                 thumbnailView.hideLoading()
             }
         }

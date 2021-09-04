@@ -9,6 +9,7 @@ import UIKit
 
 class UIHeaderImageView: UIView {
     
+    // MARK: - Views
     private let thumbnailView: UICustomImageView = {
         let view = UICustomImageView()
         return view
@@ -26,6 +27,7 @@ class UIHeaderImageView: UIView {
         return view
     }()
     
+    // MARK: - Properties
     var titleText: String? {
         didSet {
             guard let data = titleText else { return }
@@ -43,13 +45,13 @@ class UIHeaderImageView: UIView {
     var image: UIImage? {
         didSet {
             guard let data = image else {
-                thumbnailView.thumbnail.image = UIImage(named: "error")
+                thumbnailView.image = UIImage(named: "error")
                 thumbnailView.hideLoading()
                 return
             }
-            thumbnailView.thumbnail.image = data
+            thumbnailView.image = data
             
-            if thumbnailView.thumbnail.image != nil {
+            if thumbnailView.image != nil {
                 thumbnailView.hideLoading()
             }
         }

@@ -10,6 +10,7 @@ import UIKit
 class GamesTableViewCell: UITableViewCell {
     static let identifier = "GamesTableViewCell"
     
+    // MARK: - Views
     let thumbnailView: UICustomImageView = {
         let view = UICustomImageView()
 
@@ -41,6 +42,7 @@ class GamesTableViewCell: UITableViewCell {
         return view
     }()
     
+    // MARK: - Properties
     var game: Game? {
         didSet {
             guard let game = game else {
@@ -103,7 +105,7 @@ class GamesTableViewCell: UITableViewCell {
         
         titleLabel.text = game.name
         ratingView.ratingValue = game.rating
-        thumbnailView.thumbnail.image = game.image
+        thumbnailView.image = game.image
         yearAndCategoryLabel.text = "\(game.released ?? "1997") | \(game.genres ?? "-")"
         
         if game.state != .new {
@@ -111,7 +113,7 @@ class GamesTableViewCell: UITableViewCell {
         }
         
         if game.state == .failed {
-            thumbnailView.thumbnail.image = UIImage(named: "error")
+            thumbnailView.image = UIImage(named: "error")
         }
     }
     
