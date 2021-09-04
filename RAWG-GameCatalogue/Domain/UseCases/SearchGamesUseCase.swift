@@ -8,8 +8,11 @@
 import Foundation
 
 protocol SearchGamesUseCase {
+    @discardableResult
     func execute(requestValue: SearchGamesUseCaseRequestValue,
                  completion: @escaping (Result<GamesPage, Error>) -> Void) -> Cancellable?
+    
+    func fetchAllFavoriteGames(completion:@escaping (Result<[Game], Error>) -> Void)
 }
 
 final class DefaultSearchGamesUseCase: SearchGamesUseCase {
@@ -23,6 +26,10 @@ final class DefaultSearchGamesUseCase: SearchGamesUseCase {
                  completion: @escaping (Result<GamesPage, Error>) -> Void) -> Cancellable? {
         return gamesRepository.fetchGameList(query: requestValue.query,
                                              completion: completion)
+    }
+    
+    func fetchAllFavoriteGames(completion: @escaping (Result<[Game], Error>) -> Void) {
+        return gamesRepository.fetchAllFavoriteGames(completion: completion)
     }
 }
 

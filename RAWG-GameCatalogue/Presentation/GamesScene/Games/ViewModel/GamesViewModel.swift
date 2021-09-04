@@ -13,6 +13,7 @@ struct GamesViewModelAction {
 
 protocol GamesViewModelInput {
     func fetchData(genre: String, searchQueary: String)
+    func fetchFavoritesData()
     func didSelectItem(navController: UINavigationController, at gamesID: String)
     func startDownloadImage(game: Game,
                             indexPath: IndexPath,
@@ -65,6 +66,20 @@ final class DefaultGamesViewModel: GamesViewModel {
         }
     }
     
+    private func fetchFavoriteGames() {
+        self.loading.value = true
+        
+        searchGamesUseCase.fetchAllFavoriteGames { result in
+            switch result {
+                case .success(let data):
+                    self.items.value = data
+                case .failure(_):
+                    self.error.value = "Error when fetching favorite games"
+            }
+            self.loading.value = false
+        }
+    }
+    
     private func handle(error: Error) {
         self.error.value = error.getErrorMessage()
     }
@@ -72,6 +87,10 @@ final class DefaultGamesViewModel: GamesViewModel {
 }
 
 extension DefaultGamesViewModel {
+    
+    func fetchFavoritesData() {
+        fetchFavoriteGames()
+    }
     
     func fetchData(genre: String, searchQueary: String) {
         fetch(query: .init(ordering: "-metacritic", genres: genre, search: searchQueary))

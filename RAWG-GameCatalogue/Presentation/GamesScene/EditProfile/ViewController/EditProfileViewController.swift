@@ -13,6 +13,7 @@ protocol EditProfileDelegate: AnyObject {
 
 class EditProfileViewController: UIViewController {
     
+    // MARK: - Views
     private let profileImage: UIImageView = {
         let view = UIImageView()
         view.layer.borderWidth = 1
@@ -65,9 +66,11 @@ class EditProfileViewController: UIViewController {
         return view
     }()
     
+    // MARK: - Properties
     weak var delegate: EditProfileDelegate?
     var profile: Profile?
     
+    // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: ColorType.primary.rawValue)

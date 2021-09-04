@@ -9,6 +9,7 @@ import UIKit
 
 class UIDescriptionView: UIView {
     
+    // MARK: - Views
     private let headersLabel: UIHeaderLabel = {
         let view = UIHeaderLabel()
         view.text = "Description"
@@ -21,6 +22,7 @@ class UIDescriptionView: UIView {
         return view
     }()
     
+    // MARK: - Properties
     var descriptionText: String? {
         didSet {
             guard let text = descriptionText else { return }

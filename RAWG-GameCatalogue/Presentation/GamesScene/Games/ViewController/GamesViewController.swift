@@ -7,6 +7,10 @@
 
 import UIKit
 
+enum GamesViewControllerState {
+    case search, favorite, none
+}
+
 protocol GamesViewControllerDelegate: AnyObject {
     func onLoading(_ isLoading: Bool)
     func getRootNavigationController() -> UINavigationController?
@@ -14,7 +18,8 @@ protocol GamesViewControllerDelegate: AnyObject {
 }
 
 class GamesViewController: UIViewController, Alertable {
-
+    
+    // MARK: - Views
     lazy var gamesTableView: UICustomTableView = {
         let view = UICustomTableView()
         view.register(GamesTableViewCell.self, forCellReuseIdentifier: GamesTableViewCell.identifier)
@@ -24,6 +29,7 @@ class GamesViewController: UIViewController, Alertable {
         return view
     }()
     
+    // MARK: - Properties
     var viewModel: GamesViewModel?
     weak var delegate: GamesViewControllerDelegate?
     var genre: String = ""
@@ -36,14 +42,15 @@ class GamesViewController: UIViewController, Alertable {
         }
     }
     
-    var isSearchGames: Bool = false
+    var state: GamesViewControllerState = .none
     
+    // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
         setUpLayoutConstraint()
         bind()
-        if !isSearchGames {
+        if state == .none {
             viewModel?.fetchData(genre: genre, searchQueary: searchQuery)
         }
     }
@@ -56,7 +63,8 @@ class GamesViewController: UIViewController, Alertable {
     private func bind() {
         viewModel?.items.observe(on: self) { [weak self] _ in self?.updateItems()}
         viewModel?.error.observe(on: self) { [weak self] in self?.showError($0)}
-        viewModel?.loading.observe(on: self) { [weak self] in self?.delegate?.onLoading($0)}
+        viewModel?.loading.observe(on: self) { [weak self] in self?.delegate?.onLoading($0)
+        }
     }
     
     private func setUpView() {
@@ -85,11 +93,16 @@ class GamesViewController: UIViewController, Alertable {
         guard !error.isEmpty else {
             return
         }
+        
         showAlert(title: "Something went wrong",
                   message: error,
                   actionTitle: "Try Again") {
-            self.viewModel?.fetchData(genre: self.genre,
-                                      searchQueary: self.searchQuery)
+            if self.state == .favorite {
+                self.viewModel?.fetchFavoritesData()
+            } else {
+                self.viewModel?.fetchData(genre: self.genre,
+                                          searchQueary: self.searchQuery)
+            }
         }
     }
     
@@ -104,6 +117,12 @@ class GamesViewController: UIViewController, Alertable {
     func clearData() {
         viewModel?.items.value.removeAll()
         updateItems()
+    }
+    
+    func fetchFavoriteGames() {
+        if state == .favorite {
+            viewModel?.fetchFavoritesData()
+        }
     }
 }
 

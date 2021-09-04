@@ -84,7 +84,9 @@ class DetailViewController: UICustomViewControllerWithScrollView {
     }
     
     override func didTapRightButtonItem() {
-        viewModel?.toggleFavoriteButton()
+        if !(viewModel?.loading.value ?? false) {
+            viewModel?.toggleFavoriteButton()
+        }
     }
     
     private func bind() {

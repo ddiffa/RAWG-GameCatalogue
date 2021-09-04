@@ -10,6 +10,7 @@ import UIKit
 class GenresCollectionViewCell: UICollectionViewCell {
     static let identifier: String = "GenresCollectionViewCell"
     
+    // MARK: - Views
     private let thumbnailView: UICustomImageView = {
         let view = UICustomImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -27,6 +28,7 @@ class GenresCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    // MARK: - Properties
     var title: String? {
         didSet {
             guard let value = title else { return }
@@ -45,6 +47,7 @@ class GenresCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    // MARK: - View Lifecycle
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setUpView()

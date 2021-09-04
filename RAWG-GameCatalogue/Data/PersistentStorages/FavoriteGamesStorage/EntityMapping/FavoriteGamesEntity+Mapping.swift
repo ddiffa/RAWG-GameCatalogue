@@ -13,7 +13,7 @@ extension FavoriteGames {
         self.init(context: context)
         id = game.id ?? 0
         name = game.name ?? ""
-        image = game.image?.jpegData(compressionQuality: 80)
+        image = game.backgroundImage ?? ""
         rating = game.rating ?? 0.0
         genre = game.genres ?? ""
         released = game.released
@@ -22,17 +22,12 @@ extension FavoriteGames {
 }
 extension FavoriteGames {
     func toDomain() -> Game {
-        let game = Game(id: Int(id),
-                        name: name,
-                        imagePath: "",
-                        released: released,
-                        rating: rating,
-                        description: "",
-                        genres: genre)
-        if let imageData = image {
-            game.image = UIImage(data: imageData)
-        }
-        game.createdAt = createdAt
-        return game
+        return .init(id: Int(id),
+                     name: name,
+                     imagePath: image,
+                     released: released,
+                     rating: rating,
+                     description: nil,
+                     genres: genre)
     }
 }

@@ -7,8 +7,10 @@
 
 import UIKit
 import Cosmos
+
 class UIRatingsAndReviewView: UIView {
     
+    // MARK: - Views
     private let headersLabel: UIHeaderLabel = {
         let view = UIHeaderLabel()
         view.text = "Ratings and Review"
@@ -42,6 +44,7 @@ class UIRatingsAndReviewView: UIView {
         return view
     }()
     
+    // MARK: - Properties
     var reviewCountValue: Int? {
         didSet {
             guard let value = reviewCountValue else { return }

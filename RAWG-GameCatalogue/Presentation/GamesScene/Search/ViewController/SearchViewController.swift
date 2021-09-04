@@ -9,6 +9,7 @@ import UIKit
 
 class SearchViewController: UICustomViewControllerWithScrollView {
     
+    // MARK: - Views
     lazy var genreCollectionView: UICustomCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -41,9 +42,11 @@ class SearchViewController: UICustomViewControllerWithScrollView {
         return view
     }()
     
+    // MARK: - Properties
     var viewModel: SearchViewModel?
     var resultSearchVC: ResultSearchViewController?
     
+    // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let viewModel = viewModel else {

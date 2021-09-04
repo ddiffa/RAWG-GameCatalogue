@@ -9,6 +9,7 @@ import UIKit
 
 class AboutViewController: UICustomViewControllerWithScrollView {
     
+    // MARK: - Views
     private let nameLabel: UIHeaderLabel = {
         let view = UIHeaderLabel()
         view.text = "Diffa Dwi Desyawan"
@@ -20,6 +21,7 @@ class AboutViewController: UICustomViewControllerWithScrollView {
     private let descLabel: UIDescriptionLabel = {
         let view = UIDescriptionLabel()
         view.text = "Learner @ Apple Developer Academy Indonesia"
+        view.numberOfLines = 0
         view.textAlignment = .center
         return view
     }()
@@ -36,8 +38,10 @@ class AboutViewController: UICustomViewControllerWithScrollView {
         return view
     }()
     
+    // MARK: - Properties
     var viewModel: AboutProfileViewModel?
     
+    // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         state = .about

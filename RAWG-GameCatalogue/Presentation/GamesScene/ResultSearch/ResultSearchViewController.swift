@@ -9,10 +9,10 @@ import UIKit
 
 class ResultSearchViewController: UICustomViewControllerWithScrollView {
     
-    private let emptyLabel: UIDescriptionLabel = {
-        let view = UIDescriptionLabel()
+    // MARK: - Views
+    private let emptyLabel: UINoResultView = {
+        let view = UINoResultView()
         view.text = "No Result"
-        view.textAlignment = .center
         return view
     }()
 
@@ -22,9 +22,11 @@ class ResultSearchViewController: UICustomViewControllerWithScrollView {
         return view
     }()
     
+    // MARK: - Properties
     var gamesViewController: GamesViewController?
     var rootNavigationController: UINavigationController?
     
+    // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         state = .seeAll
@@ -53,8 +55,8 @@ class ResultSearchViewController: UICustomViewControllerWithScrollView {
     override func setUpLayoutConstraint() {
         super.setUpLayoutConstraint()
         NSLayoutConstraint.activate([
-            emptyLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            emptyLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             gamesContainer.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
             gamesContainer.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 0),

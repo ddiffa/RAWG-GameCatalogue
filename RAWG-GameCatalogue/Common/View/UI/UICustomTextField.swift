@@ -9,6 +9,7 @@ import UIKit
 
 class UICustomTextField: UIView {
     
+    // MARK: - Views
     private let titleLabel: UIDescriptionLabel = {
         let view = UIDescriptionLabel()
         return view
@@ -28,6 +29,7 @@ class UICustomTextField: UIView {
         return view
     }()
     
+    // MARK: - Properties
     var header: String? {
         didSet {
             guard let header = header else { return }
@@ -46,6 +48,7 @@ class UICustomTextField: UIView {
         return textField.text
     }
     
+    // MARK: - View Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpView()

@@ -51,6 +51,11 @@ final class GamesFlowCoordinator {
         return action
     }
     
+    func makeActionsFavorite() -> FavoriteViewModelActions {
+        let action = FavoriteViewModelActions(showAboutScene: showAboutScene)
+        return action
+    }
+    
     private func showGamesDetails(gamesID: String) {
         let vc = dependencies.makeGamesDetailViewController(gamesID: gamesID)
         navigationController?.pushViewController(vc, animated: true)

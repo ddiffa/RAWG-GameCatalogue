@@ -9,6 +9,7 @@ import UIKit
 
 class UIRatingView: UIView {
     
+    // MARK: - Views
     private let starImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(systemName: "star.fill")
@@ -24,6 +25,7 @@ class UIRatingView: UIView {
         return view
     }()
     
+    // MARK: - Properties
     var ratingValue: Double? {
         didSet {
             guard let value = ratingValue else { return }
@@ -31,6 +33,7 @@ class UIRatingView: UIView {
         }
     }
     
+    // MARK: - View Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()

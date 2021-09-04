@@ -1,16 +1,24 @@
 //
-//  SeeAllViewController.swift
+//  FavoriteViewController.swift
 //  RAWG-GameCatalogue
 //
-//  Created by Diffa Desyawan on 22/08/21.
+//  Created by Diffa Desyawan on 05/09/21.
 //
+
+import Foundation
 
 import UIKit
 
-class SeeAllViewController: UICustomViewControllerWithScrollView {
+class FavoriteViewController: UICustomViewControllerWithScrollView {
     
     // MARK: - Views
-    let gamesContainer: UIView = {
+    private let emptyLabel: UINoResultView = {
+        let view = UINoResultView()
+        view.text = "You don't have\nFavorite Games yet."
+        return view
+    }()
+    
+    var gamesContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -18,21 +26,21 @@ class SeeAllViewController: UICustomViewControllerWithScrollView {
     
     // MARK: - Properties
     var gamesViewController: GamesViewController?
-    var titleString: String?
+    var viewModel: FavoriteViewModel?
     
-    // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        state = .seeAll
-        navigationItem.titleMode(titleString ?? "", mode: .never)
+        
+        navigationItem.titleMode("Favorites", mode: .automatic)
     }
     
     override func setUpView() {
         super.setUpView()
         containerView.addSubview(gamesContainer)
+        containerView.addSubview(emptyLabel)
         if let gamesViewController = gamesViewController {
             gamesViewController.delegate = self
-            
+            gamesViewController.state = .favorite
             gamesViewController.view.translatesAutoresizingMaskIntoConstraints = false
             gamesContainer.addSubview(gamesViewController.view)
             
@@ -45,28 +53,33 @@ class SeeAllViewController: UICustomViewControllerWithScrollView {
         }
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        gamesViewController?.suspendOperations()
+    override func setUpLayoutConstraint() {
+        super.setUpLayoutConstraint()
+        NSLayoutConstraint.activate([
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            gamesContainer.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+            gamesContainer.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 0),
+            gamesContainer.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: 0),
+            gamesContainer.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -16)
+        ])
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        gamesViewController?.resumeOperations()
+        if !hasScrolled {
+            state = .main
+        }
+        gamesViewController?.fetchFavoriteGames()
     }
     
-    override func setUpLayoutConstraint() {
-        super.setUpLayoutConstraint()
-        NSLayoutConstraint.activate([
-            gamesContainer.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
-            gamesContainer.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 0),
-            gamesContainer.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: 0),
-            gamesContainer.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor)
-        ])
+    override func didTapRightButtonItem() {
+        viewModel?.didTapProfileMenu()
     }
 }
 
-extension SeeAllViewController: GamesViewControllerDelegate {
+extension FavoriteViewController: GamesViewControllerDelegate {
     func onLoading(_ isLoading: Bool) {
         self.updateLoading(isLoading)
     }
@@ -76,6 +89,6 @@ extension SeeAllViewController: GamesViewControllerDelegate {
     }
     
     func onEmptySearchResult(_ isEmpty: Bool) {
-        
+        emptyLabel.isHidden = !isEmpty
     }
 }

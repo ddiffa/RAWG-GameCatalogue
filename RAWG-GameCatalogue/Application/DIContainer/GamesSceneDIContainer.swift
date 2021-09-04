@@ -69,6 +69,11 @@ final class GamesSceneDIContainer {
     func makeProfileViewModel() -> AboutProfileViewModel {
         return DefaultAboutProfileViewModel(profileUseCase: makeProfileUseCase())
     }
+    
+    func makeFavoriteViewModel(actions: FavoriteViewModelActions) -> FavoriteViewModel {
+        return DefaultFavoriteViewModel(actions: actions)
+    }
+    
     // MARK: - View Controller
     func makeBrowseGamesViewController() -> UIViewController {
         let vc = BrowseGamesViewController()
@@ -93,12 +98,13 @@ final class GamesSceneDIContainer {
         return navController
     }
     
-    func makeResultSearchVC(gamesActions: GamesViewModelAction, rootNavController: UINavigationController) -> ResultSearchViewController {
+    func makeResultSearchVC(gamesActions: GamesViewModelAction,
+                            rootNavController: UINavigationController) -> ResultSearchViewController {
         let vc = ResultSearchViewController()
         vc.rootNavigationController = rootNavController
         vc.gamesViewController = makeGamesViewController()
         vc.gamesViewController?.viewModel = makeGamesViewModel(actions: gamesActions)
-        vc.gamesViewController?.isSearchGames  = true
+        vc.gamesViewController?.state  = .search
         return vc
     }
     
@@ -108,8 +114,23 @@ final class GamesSceneDIContainer {
     }
     
     func makeMainTabBarViewController() -> MainTabBarViewController {
-        let viewControllers: [UIViewController] = [makeBrowseGamesViewController(), makeSearchViewController()]
+        let viewControllers: [UIViewController] = [makeBrowseGamesViewController(),
+                                                   makeFavoriteViewController(),
+                                                   makeSearchViewController()
+        ]
         return MainTabBarViewController.create(with: viewControllers)
+    }
+    
+    func makeFavoriteViewController() -> UIViewController {
+        let vc = FavoriteViewController()
+        let navController = UINavigationController(rootViewController: vc)
+        navController.navigationBar.prefersLargeTitles = true
+        let appFlowCoordinator = makeGamesFlowCoordinator(navigationController: navController)
+        
+        vc.gamesViewController = makeGamesViewController()
+        vc.gamesViewController?.viewModel = makeGamesViewModel(actions: appFlowCoordinator.makeActionsGames())
+        vc.viewModel = makeFavoriteViewModel(actions: appFlowCoordinator.makeActionsFavorite())
+        return navController
     }
     
     // MARK: - Flow Coordinators

@@ -11,8 +11,12 @@ class MainTabBarViewController: UITabBarController {
     
     private var _viewControllers: [UIViewController] = []
     
-    private let titles: [String] = ["Browse", "Search"]
-    private let images: [String] = ["gamecontroller.fill", "magnifyingglass"]
+    private let titles: [String] = ["Browse",
+                                    "Favorites",
+                                    "Search"]
+    private let images: [String] = ["gamecontroller.fill",
+                                    "suit.heart.fill",
+                                    "magnifyingglass"]
     
     static func create(with viewControllers: [UIViewController]) -> MainTabBarViewController {
         let view = MainTabBarViewController()

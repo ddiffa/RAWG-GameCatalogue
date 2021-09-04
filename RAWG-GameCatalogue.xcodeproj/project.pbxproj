@@ -55,6 +55,9 @@
 		94D5818F26E3BF8300FBEEAA /* DefaultProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D5818E26E3BF8300FBEEAA /* DefaultProfileRepository.swift */; };
 		94D5819126E3BF9400FBEEAA /* ProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D5819026E3BF9400FBEEAA /* ProfileRepository.swift */; };
 		94D5819426E3D0D800FBEEAA /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D5819326E3D0D800FBEEAA /* ImagePicker.swift */; };
+		94D5819726E3EF5000FBEEAA /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D5819626E3EF5000FBEEAA /* FavoriteViewController.swift */; };
+		94D5819B26E3F25800FBEEAA /* FavoriteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D5819A26E3F25800FBEEAA /* FavoriteViewModel.swift */; };
+		94D5819D26E3FB0200FBEEAA /* UINoResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D5819C26E3FB0200FBEEAA /* UINoResultView.swift */; };
 		94ED70B526D231AE00E2C94A /* GamesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ED70B426D231AE00E2C94A /* GamesTableViewCell.swift */; };
 		94ED70B826D2330900E2C94A /* UICustomTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ED70B726D2330900E2C94A /* UICustomTableView.swift */; };
 		94ED70BC26D23C6E00E2C94A /* UISeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ED70BB26D23C6E00E2C94A /* UISeparatorView.swift */; };
@@ -153,6 +156,9 @@
 		94D5818E26E3BF8300FBEEAA /* DefaultProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultProfileRepository.swift; sourceTree = "<group>"; };
 		94D5819026E3BF9400FBEEAA /* ProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRepository.swift; sourceTree = "<group>"; };
 		94D5819326E3D0D800FBEEAA /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		94D5819626E3EF5000FBEEAA /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
+		94D5819A26E3F25800FBEEAA /* FavoriteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewModel.swift; sourceTree = "<group>"; };
+		94D5819C26E3FB0200FBEEAA /* UINoResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINoResultView.swift; sourceTree = "<group>"; };
 		94ED70B426D231AE00E2C94A /* GamesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesTableViewCell.swift; sourceTree = "<group>"; };
 		94ED70B726D2330900E2C94A /* UICustomTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICustomTableView.swift; sourceTree = "<group>"; };
 		94ED70BB26D23C6E00E2C94A /* UISeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISeparatorView.swift; sourceTree = "<group>"; };
@@ -470,6 +476,31 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
+		94D5819526E3EF2C00FBEEAA /* Favorite */ = {
+			isa = PBXGroup;
+			children = (
+				94D5819926E3F24100FBEEAA /* ViewModel */,
+				94D5819826E3F23900FBEEAA /* ViewController */,
+			);
+			path = Favorite;
+			sourceTree = "<group>";
+		};
+		94D5819826E3F23900FBEEAA /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				94D5819626E3EF5000FBEEAA /* FavoriteViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		94D5819926E3F24100FBEEAA /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				94D5819A26E3F25800FBEEAA /* FavoriteViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		94ED70B326D2319D00E2C94A /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -493,6 +524,7 @@
 				94ED70C126D23F6700E2C94A /* UIRatingView.swift */,
 				94ED70BB26D23C6E00E2C94A /* UISeparatorView.swift */,
 				94ED70BF26D23EC100E2C94A /* UITitleLabel.swift */,
+				94D5819C26E3FB0200FBEEAA /* UINoResultView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -532,10 +564,11 @@
 		94ED70D926D2A3D400E2C94A /* GamesScene */ = {
 			isa = PBXGroup;
 			children = (
-				94D5818126E3A69100FBEEAA /* EditProfile */,
 				94ED70E426D2BEB000E2C94A /* About */,
 				94F6286626D007BB00BAF79D /* Browse */,
 				94ED70DF26D2A4B600E2C94A /* Detail */,
+				94D5818126E3A69100FBEEAA /* EditProfile */,
+				94D5819526E3EF2C00FBEEAA /* Favorite */,
 				94C6853026E0C0FB009547A9 /* Games */,
 				94ED70C926D2680200E2C94A /* ResultSearch */,
 				94F6286A26D007FE00BAF79D /* Search */,
@@ -1019,6 +1052,7 @@
 				94ED70E126D2A4C300E2C94A /* DetailViewController.swift in Sources */,
 				943A655026E1049100091B4F /* UIRatingsAndReviewView.swift in Sources */,
 				943CE6C626D157850010AE19 /* Extension.swift in Sources */,
+				94D5819B26E3F25800FBEEAA /* FavoriteViewModel.swift in Sources */,
 				94ED70BC26D23C6E00E2C94A /* UISeparatorView.swift in Sources */,
 				94D5819426E3D0D800FBEEAA /* ImagePicker.swift in Sources */,
 				94ED70B826D2330900E2C94A /* UICustomTableView.swift in Sources */,
@@ -1044,6 +1078,7 @@
 				94F6284626D004A900BAF79D /* AppDelegate.swift in Sources */,
 				94F6287C26D020D900BAF79D /* ConnectionError.swift in Sources */,
 				94D5816E26E360E500FBEEAA /* FavoriteGamesStorage.swift in Sources */,
+				94D5819D26E3FB0200FBEEAA /* UINoResultView.swift in Sources */,
 				94D5818026E3A18B00FBEEAA /* UserDefaultsProfileStorage.swift in Sources */,
 				94F6289926D02B9C00BAF79D /* SearchGamesUseCase.swift in Sources */,
 				9491449126E0081C00979BE6 /* DetailGamesResponseDTO+Mapping.swift in Sources */,
@@ -1056,6 +1091,7 @@
 				943A655526E10AA700091B4F /* UIInformationTableViewCell.swift in Sources */,
 				9491448A26DFF5E700979BE6 /* DefaultGenresRepository.swift in Sources */,
 				943A654826E0F2A800091B4F /* DetailGamesRepository.swift in Sources */,
+				94D5819726E3EF5000FBEEAA /* FavoriteViewController.swift in Sources */,
 				94D5818526E3A6E000FBEEAA /* UICustomTextField.swift in Sources */,
 				94ED70E626D2BEBD00E2C94A /* AboutViewController.swift in Sources */,
 				94ED70C026D23EC100E2C94A /* UITitleLabel.swift in Sources */,

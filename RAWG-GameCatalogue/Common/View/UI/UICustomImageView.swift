@@ -34,6 +34,7 @@ final class UICustomImageView: UIView {
         }
     }
     
+    // MARK: - View Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()

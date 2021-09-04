@@ -9,8 +9,7 @@ import UIKit
 
 class UIInformationView: UIView {
     
-    private var informations: [Information] = Information.initialData()
-    
+    // MARK: - Views
     private let headersLabel: UIHeaderLabel = {
         let view = UIHeaderLabel()
         view.text = "Information"
@@ -24,6 +23,9 @@ class UIInformationView: UIView {
         view.dataSource = self
         return view
     }()
+    
+    // MARK: - Properties
+    private var informations: [Information] = Information.initialData()
     
     var developers: String? {
         didSet {

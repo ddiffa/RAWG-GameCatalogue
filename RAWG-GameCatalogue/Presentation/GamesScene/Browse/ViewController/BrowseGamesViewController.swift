@@ -9,6 +9,7 @@ import UIKit
 
 class BrowseGamesViewController: UICustomViewControllerWithScrollView {
     
+    // MARK: - Views
     let descLabel: UILabel = {
         let view = UILabel()
         view.text = "From modern multi-player action games to classics you can find here."
@@ -32,9 +33,11 @@ class BrowseGamesViewController: UICustomViewControllerWithScrollView {
         return view
     }()
     
+    // MARK: - Properties
     var gamesViewController: GamesViewController?
     var viewModel: BrowseGamesViewModel?
     
+    // MARK: - View Controller Lifecycle
     override func setUpView() {
         super.setUpView()
         containerView.addSubview(descLabel)

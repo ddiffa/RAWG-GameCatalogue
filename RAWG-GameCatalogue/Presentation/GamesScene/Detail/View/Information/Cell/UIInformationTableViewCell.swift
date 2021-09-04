@@ -10,6 +10,7 @@ import UIKit
 class UIInformationTableViewCell: UITableViewCell {
     static let identifier = "UIInformationTableViewCell"
     
+    // MARK: - Views
     private let separator: UISeparatorView = {
         let view = UISeparatorView()
         
@@ -30,6 +31,7 @@ class UIInformationTableViewCell: UITableViewCell {
         return view
     }()
     
+    // MARK: - Properties
     var titleText: String? {
         didSet {
             guard let text = titleText else {  return }

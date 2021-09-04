@@ -14,6 +14,7 @@ protocol UIHeaderSegueDelegate: AnyObject {
 
 class UIHeaderSegue: UIView {
     
+    // MARK: - Views
     private lazy var navigationBar: UINavigationBar = {
         let view = UINavigationBar()
         view.barTintColor = UIColor(named: ColorType.tabBar.rawValue)
@@ -40,22 +41,13 @@ class UIHeaderSegue: UIView {
         return view
     }()
     
+    // MARK: - Properties
     var title: String? {
         didSet {
             guard let title = title else { return }
             navigationItem.title = title
         }
     }
-    
-    private let hStack: UIStackView = {
-        let view = UIStackView()
-        view.spacing = 16
-        view.alignment = .center
-        view.axis = .horizontal
-        view.distribution = .equalCentering
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
     
     weak var delegate: UIHeaderSegueDelegate?
     

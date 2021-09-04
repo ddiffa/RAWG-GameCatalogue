@@ -25,7 +25,13 @@ class Game: Equatable, Identifiable {
     var state: DownloadState = .new
     var createdAt: Date?
     
-    init(id: Identifier, name: String?, imagePath: String?, released: String?, rating: Double?, description: String?, genres: String?) {
+    init(id: Identifier,
+         name: String?,
+         imagePath: String?,
+         released: String?,
+         rating: Double?,
+         description: String?,
+         genres: String?) {
         self.id = id
         self.name = name
         let url = imagePath ?? ""
@@ -34,6 +40,25 @@ class Game: Equatable, Identifiable {
         self.rating = rating
         self.description = description
         self.genres = genres
+    }
+    
+    init(id: Identifier,
+         name: String?,
+         image: UIImage,
+         released: String?,
+         rating: Double?,
+         genres: String?,
+         createdAt: Date?) {
+        self.id = id
+        self.name = name
+        self.image = image
+        self.rating = rating
+        self.released = released
+        self.genres = genres
+        self.imagePath = nil
+        self.description = nil
+        state = .downloaded
+        self.createdAt = createdAt
     }
 }
 
