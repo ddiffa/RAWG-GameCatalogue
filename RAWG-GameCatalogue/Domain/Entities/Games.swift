@@ -23,6 +23,7 @@ class Game: Equatable, Identifiable {
     
     var image: UIImage?
     var state: DownloadState = .new
+    var createdAt: Date?
     
     init(id: Identifier, name: String?, imagePath: String?, released: String?, rating: Double?, description: String?, genres: String?) {
         self.id = id
